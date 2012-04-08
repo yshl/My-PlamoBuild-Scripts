@@ -1,0 +1,12 @@
+diff -ur mozilla-release-orig/layout/xul/base/src/nsXULTooltipListener.h mozilla-release/layout/xul/base/src/nsXULTooltipListener.h
+--- mozilla-release-orig/layout/xul/base/src/nsXULTooltipListener.h	2012-03-13 10:37:06.000000000 +0900
++++ mozilla-release/layout/xul/base/src/nsXULTooltipListener.h	2012-04-02 00:50:39.402438339 +0900
+@@ -112,7 +112,7 @@
+ 
+   // various constants for tooltips
+   enum {
+-    kTooltipMouseMoveTolerance = 7,    // 7 pixel tolerance for mousemove event
++    kTooltipMouseMoveTolerance = 7    // 7 pixel tolerance for mousemove event
+   };
+ 
+   // flag specifying if the tooltip has already been displayed by a MouseMove

@@ -1,0 +1,13 @@
+diff -ur maxima-5.26.0-orig/src/numerical/slatec/xerprn.lisp maxima-5.26.0/src/numerical/slatec/xerprn.lisp
+--- maxima-5.26.0-orig/src/numerical/slatec/xerprn.lisp	2011-08-01 13:39:52.000000000 +0900
++++ maxima-5.26.0/src/numerical/slatec/xerprn.lisp	2012-04-03 20:22:11.867419919 +0900
+@@ -18,7 +18,8 @@
+ 
+ 
+ (let* ((newlin "$$"))
+-  (declare (type (simple-array character (2)) newlin) (ignorable newlin))
++  #-ecl(declare (type (simple-array character (2)) newlin) (ignorable newlin))
++  #+ecl(declare (ignorable newlin))
+   (defun xerprn (prefix npref messg nwrap)
+     (declare (type (f2cl-lib:integer4) nwrap npref)
+              (type (simple-array character (*)) messg prefix))

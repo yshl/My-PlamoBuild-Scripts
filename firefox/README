@@ -1,0 +1,5 @@
+・APNG パッチを当てた libpng 1.4 のパッケージを作成、インストールした後
+  firefox のパッケージを作成する事。
+・libpng 1.4 のパッケージ名は libpng14 です。
+  libpng12.so を残すためにパッケージ名を別にしていますが、
+  libpng.so や libpng.a は 1.4 で上書きされます。

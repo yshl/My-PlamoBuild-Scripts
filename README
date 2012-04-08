@@ -1,0 +1,5 @@
+Plamo Linux 4.73 パッケージ作成スクリプト集
+
+既存パッケージの PlamoBuild スクリプトをいじるか、
+make_PlamoBuild_new.py ( ftp://plamo.linet.gr.jp/pub/Plamo-src/admin/ )
+で作成したものをいじるかして作りました。

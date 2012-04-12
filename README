@@ -1,5 +1,4 @@
-Plamo Linux 4.73 パッケージ作成スクリプト集
+個人的 Plamo Linux 4.73 パッケージ作成スクリプト集
 
-既存パッケージの PlamoBuild スクリプトをいじるか、
-make_PlamoBuild_new.py ( ftp://plamo.linet.gr.jp/pub/Plamo-src/admin/ )
-で作成したものをいじるかして作りました。
+個人的にインストールしているソフトウェアの Plamo Linux ( http://plamo.linet.gr.jp/drupal6/ ) 用パッケージを作成するシェルスクリプトです。
+既存パッケージの PlamoBuild スクリプトをいじったり、 make_PlamoBuild_new.py ( ftp://plamo.linet.gr.jp/pub/Plamo-src/admin/ ) で作成したものをいじったりして作った物です。

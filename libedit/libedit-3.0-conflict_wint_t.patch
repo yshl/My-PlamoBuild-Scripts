@@ -1,0 +1,11 @@
+diff -ur libedit-20120311-3.0-orig/src/terminal.c libedit-20120311-3.0/src/terminal.c
+--- libedit-20120311-3.0-orig/src/terminal.c	2012-03-11 18:54:58.000000000 +0900
++++ libedit-20120311-3.0/src/terminal.c	2012-04-15 02:37:22.291404639 +0900
+@@ -52,6 +52,7 @@
+ #include <stdlib.h>
+ #include <unistd.h>
+ #include <limits.h>
++#include <wchar.h>
+ #ifdef HAVE_TERMCAP_H
+ #include <termcap.h>
+ #endif

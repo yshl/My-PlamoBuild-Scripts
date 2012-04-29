@@ -1,0 +1,5 @@
+・Firefox-12.0
+  configure 時に --enable-system-cairo を指定すると
+  `cairo_null_surface_create' was not declared in this scope
+  `cairo_surface_attach_snapshot' was not declared in this scope
+  というエラーが出るため、--disable-system-cairo に変更

@@ -1,0 +1,78 @@
+diff -ur xlife-5.0/Imakefile xlife-5.0-p1/Imakefile
+--- xlife-5.0/Imakefile	1995-05-25 21:49:40.000000000 +0900
++++ xlife-5.0-p1/Imakefile	2011-01-30 23:54:31.154329528 +0900
+@@ -104,7 +104,7 @@
+ lifesearchdumb:	search.o interact.o dumbtty.o
+ 	$(CC) $(CFLAGS) -o lifesearchdumb search.o interact.o dumbtty.o
+ lifesearch:	search.o interact.o cursestty.o
+-	$(CC) $(CFLAGS) -o lifesearch search.o interact.o cursestty.o -L/usr/local/lib -lcurses -ltermcap
++	$(CC) $(CFLAGS) -o lifesearch search.o interact.o cursestty.o -L/usr/local/lib -lcurses
+ 
+ TAGS: $(SRCS)
+ 	etags $(SRCS)
+diff -ur xlife-5.0/cell.c xlife-5.0-p1/cell.c
+--- xlife-5.0/cell.c	1995-06-03 01:46:00.000000000 +0900
++++ xlife-5.0-p1/cell.c	2011-01-30 21:01:19.938915419 +0900
+@@ -393,9 +393,9 @@
+ #endif /* STATEBITS > 1 */
+     {
+ 	register u32bits live1 = ptr->twostate.live1;
+-	register u32bits long live2 = ptr->twostate.live2;
+-	register u32bits long olive1 = ptr->twostate.olive1;
+-	register u32bits long olive2 = ptr->twostate.olive2;
++	register u32bits live2 = ptr->twostate.live2;
++	register u32bits olive1 = ptr->twostate.olive1;
++	register u32bits olive2 = ptr->twostate.olive2;
+ 
+ 	displayline(live1,x,y,olive1);
+ 	displayline(live1>>8,x,++y,olive1>>8);
+diff -ur xlife-5.0/cursor_data.h xlife-5.0-p1/cursor_data.h
+--- xlife-5.0/cursor_data.h	1995-05-09 05:20:26.000000000 +0900
++++ xlife-5.0-p1/cursor_data.h	2011-01-30 21:09:39.082435183 +0900
+@@ -2,7 +2,7 @@
+ #define cursor_data_height 16
+ #define cursor_data_x_hot 7
+ #define cursor_data_y_hot 7
+-static unsigned char cursor_data_bits[] = {
++static char cursor_data_bits[] = {
+    0x60, 0x03, 0x60, 0x03, 0x60, 0x03, 0x60, 0x03, 0x60, 0x03, 0x7f, 0x7f,
+    0x7f, 0x7f, 0x00, 0x00, 0x7f, 0x7f, 0x7f, 0x7f, 0x60, 0x03, 0x60, 0x03,
+    0x60, 0x03, 0x60, 0x03, 0x60, 0x03, 0x00, 0x00};
+diff -ur xlife-5.0/cursor_mask.h xlife-5.0-p1/cursor_mask.h
+--- xlife-5.0/cursor_mask.h	1995-05-09 05:21:32.000000000 +0900
++++ xlife-5.0-p1/cursor_mask.h	2011-01-30 21:09:07.776165326 +0900
+@@ -1,6 +1,6 @@
+ #define cursor_mask_width 16
+ #define cursor_mask_height 16
+-static unsigned char cursor_mask_bits[] = {
++static char cursor_mask_bits[] = {
+    0xe0, 0x03, 0xe0, 0x03, 0xe0, 0x03, 0xe0, 0x03, 0xe0, 0x03, 0xff, 0x7f,
+    0xff, 0x7f, 0xff, 0x7f, 0xff, 0x7f, 0xff, 0x7f, 0xe0, 0x03, 0xe0, 0x03,
+    0xe0, 0x03, 0xe0, 0x03, 0xe0, 0x03, 0x00, 0x00};
+diff -ur xlife-5.0/data.h xlife-5.0-p1/data.h
+--- xlife-5.0/data.h	1995-11-27 05:51:32.000000000 +0900
++++ xlife-5.0-p1/data.h	2011-01-30 23:48:39.445180860 +0900
+@@ -84,8 +84,9 @@
+ GLOBAL void setcolor(int val, unsigned long x, unsigned long y);
+ 
+ /* UNIX interface */
+-extern int sys_nerr, errno;
+-extern char *sys_errlist[];
++#include <errno.h>
++extern int sys_nerr;
++extern const char * const sys_errlist[];
+ #define SYSERR sys_errlist[(errno > sys_nerr? 0 : errno)]
+ 
+ /* X I/O state information */
+diff -ur xlife-5.0/lifeconv.c xlife-5.0-p1/lifeconv.c
+--- xlife-5.0/lifeconv.c	1992-12-29 04:32:45.000000000 +0900
++++ xlife-5.0-p1/lifeconv.c	2011-01-30 23:59:03.067496646 +0900
+@@ -126,8 +126,6 @@
+     xmin = XMAX; ymin = YMAX; xmax = 0; ymax = 0;
+     while (fgets(buf, BUFSIZ, ifp) != (char *)NULL)
+     {
+-	extern char	*strchr();
+-
+ 	if (buf[0] == '#')
+ 	{
+ 	    xoff = yoff = 0;

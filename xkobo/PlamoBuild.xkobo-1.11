@@ -188,6 +188,7 @@ if [ $opt_package -eq 1 ] ; then
       export LDFLAGS='-Wl,--as-needed'
       export PATH=$PATH:/usr/X11R7/bin
       make install DESTDIR=$P HSCORE_DIR=$P/$hscore_dir
+      chmod 777 $P/$hscore_dir
     fi
   done
 ######################################################################

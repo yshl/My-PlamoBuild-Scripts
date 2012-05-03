@@ -184,7 +184,8 @@ if [ $opt_package -eq 1 ] ; then
     if [ -f Makefile ] ; then
       export LDFLAGS='-Wl,--as-needed'
       #make install DESTDIR=$P
-      install2 sl $P/usr/bin/
+      mkdir -p $P/usr/bin
+      cp sl $P/usr/bin/
     fi
   done
 ######################################################################

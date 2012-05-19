@@ -1,0 +1,21 @@
+diff -ur qwt-6.0.1-orig/qwtconfig.pri qwt-6.0.1/qwtconfig.pri
+--- qwt-6.0.1-orig/qwtconfig.pri	2011-08-01 23:33:53.000000000 +0900
++++ qwt-6.0.1/qwtconfig.pri	2012-05-15 23:12:09.487576902 +0900
+@@ -19,7 +19,7 @@
+ QWT_INSTALL_PREFIX = $$[QT_INSTALL_PREFIX]
+ 
+ unix {
+-    QWT_INSTALL_PREFIX    = /usr/local/qwt-$$QWT_VERSION
++    QWT_INSTALL_PREFIX    = $$[QT_INSTALL_PREFIX]
+ }
+ 
+ win32 {
+@@ -27,7 +27,7 @@
+ }
+ 
+ QWT_INSTALL_DOCS      = $${QWT_INSTALL_PREFIX}/doc
+-QWT_INSTALL_HEADERS   = $${QWT_INSTALL_PREFIX}/include
++QWT_INSTALL_HEADERS   = $${QWT_INSTALL_PREFIX}/include/qwt
+ QWT_INSTALL_LIBS      = $${QWT_INSTALL_PREFIX}/lib
+ 
+ ######################################################################

@@ -1,0 +1,15 @@
+diff -ur elmerfem-orig/elmerparam/src/Makefile.in elmerfem/elmerparam/src/Makefile.in
+--- elmerfem-orig/elmerparam/src/Makefile.in	2012-05-01 21:36:15.000000000 +0900
++++ elmerfem/elmerparam/src/Makefile.in	2012-05-14 03:10:18.477527244 +0900
+@@ -660,9 +660,9 @@
+ 
+ 
+ @UPPERCASEMODS_TRUE@install-exec-local:
+-@UPPERCASEMODS_TRUE@	$(INSTALL) ELMERPARAM.mod $(includedir)
++@UPPERCASEMODS_TRUE@	$(INSTALL) ELMERPARAM.mod $(DESTDIR)$(includedir)
+ @UPPERCASEMODS_FALSE@install-exec-local:
+-@UPPERCASEMODS_FALSE@	$(INSTALL) elmerparam.mod $(includedir)
++@UPPERCASEMODS_FALSE@	$(INSTALL) elmerparam.mod $(DESTDIR)$(includedir)
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.
+ .NOEXPORT:

@@ -1,0 +1,28 @@
+diff -ur elmerfem/ElmerGUI/ElmerGUI.pri build32/ElmerGUI/ElmerGUI.pri
+--- elmerfem/ElmerGUI/ElmerGUI.pri	2012-05-01 21:38:52.000000000 +0900
++++ build32/ElmerGUI/ElmerGUI.pri	2012-05-20 22:31:23.610733392 +0900
+@@ -8,9 +8,9 @@
+ # Optional components (undefine or comment out to exclude from compilation):
+ #------------------------------------------------------------------------------
+ DEFINES += EG_QWT      # Use QWT for convergence monitor?
+-DEFINES += EG_VTK      # Use VTK for postprocessing?
++#DEFINES += EG_VTK      # Use VTK for postprocessing?
+ DEFINES += EG_MATC     # Use MATC for internal operations in postprocessing?
+-DEFINES += EG_OCC      # Use OpenCASCADE 6.3 for importing CAD files? Needs VTK.
++#DEFINES += EG_OCC      # Use OpenCASCADE 6.3 for importing CAD files? Needs VTK.
+ DEFINES -= EG_PYTHONQT # Use PythonQt for scripting in post processor?
+ 
+ #------------------------------------------------------------------------------
+@@ -54,9 +54,9 @@
+ # QWT library:
+ #------------------------------------------------------------------------------
+ unix {
+-  QWT_INCLUDEPATH = /usr/include/qwt-qt4
+-  QWT_LIBPATH = /usr/lib
+-  QWT_LIBS = -lqwt-qt4
++  QWT_INCLUDEPATH = /usr/lib/qt/include/qwt
++  QWT_LIBPATH = /usr/lib/qt/lib
++  QWT_LIBS = -lqwt
+ }
+ 
+ win32 {

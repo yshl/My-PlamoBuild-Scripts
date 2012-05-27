@@ -22,3 +22,34 @@
  	done
  
  install-strip:
+--- mpich2-1.4.1p1/src/env/Makefile.in	2011-09-02 03:55:45.000000000 +0900
++++ build32/src/env/Makefile.in	2012-05-27 17:23:25.220284376 +0900
+@@ -135,21 +135,21 @@
+ #
+ # 
+ install-preamble:
+-	@if [ "@prefix@" != ${DESTDIR}${prefix} -o \
++	@if [ "@prefix@" != ${prefix} -o \
+ 	      "@includedir@" != ${includedir} -o \
+ 	      "@libdir@" != ${libdir} ] ; then \
+ 	      echo "Updating the compilation script for the new paths"; \
+ 	      for pg in mpicc mpicxx mpif90 mpif77 ; do \
+ 	         if [ ! -s $${pg} ] ; then continue ; fi ; \
+-	         sed -e 's%includedir=.*%includedir='${DESTDIR}${includedir}% \
+-	           -e 's%libdir=.*%libdir='${DESTDIR}${libdir}% \
+-		   -e 's%prefix=.*%prefix='${DESTDIR}${prefix}% $${pg} > $${pg}.new ;\
++	         sed -e 's%includedir=.*%includedir='${includedir}% \
++	           -e 's%libdir=.*%libdir='${libdir}% \
++		   -e 's%prefix=.*%prefix='${prefix}% $${pg} > $${pg}.new ;\
+ 		 if [ ! -s $${pg}.orig ] ; then mv -f $${pg} $${pg}.orig ; fi;\
+ 		 mv -f $${pg}.new $${pg} ;\
+ 	         if [ ! -s $${pg}.conf ] ; then continue ; fi ; \
+-	         sed -e 's%includedir=.*%includedir='${DESTDIR}${includedir}% \
+-	           -e 's%libdir=.*%libdir='${DESTDIR}${libdir}% \
+-		   -e 's%prefix=.*%prefix='${DESTDIR}${prefix}% \
++	         sed -e 's%includedir=.*%includedir='${includedir}% \
++	           -e 's%libdir=.*%libdir='${libdir}% \
++		   -e 's%prefix=.*%prefix='${prefix}% \
+ 		   $${pg}.conf > $${pg}.conf.new ;\
+ 		 if [ ! -s $${pg}.conf.orig ] ; then \
+ 		    mv -f $${pg}.conf $${pg}.conf.orig ; fi;\

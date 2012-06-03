@@ -1,0 +1,30 @@
+diff -Nur qt4-x11-4.5.0-orig/src/gui/text/qfontengine_ft.cpp qt4-x11-4.5.0/src/gui/text/qfontengine_ft.cpp
+--- qt4-x11-4.5.0-orig/src/gui/text/qfontengine_ft.cpp	2009-04-25 20:22:01.000000000 +0900
++++ qt4-x11-4.5.0/src/gui/text/qfontengine_ft.cpp	2009-04-25 20:23:40.000000000 +0900
+@@ -621,7 +621,7 @@
+ #endif
+     defaultFormat = Format_None;
+     canUploadGlyphsToServer = false;
+-    embeddedbitmap = false;
++    embeddedbitmap = true;
+ }
+ 
+ QFontEngineFT::~QFontEngineFT()
+diff -Nur qt4-x11-4.5.0-orig/src/gui/text/qfontengine_x11.cpp qt4-x11-4.5.0/src/gui/text/qfontengine_x11.cpp
+--- qt4-x11-4.5.0-orig/src/gui/text/qfontengine_x11.cpp	2009-04-25 20:22:01.000000000 +0900
++++ qt4-x11-4.5.0/src/gui/text/qfontengine_x11.cpp	2009-04-25 20:23:56.000000000 +0900
+@@ -1085,6 +1085,14 @@
+     }
+ #endif
+ 
++#ifdef FC_EMBEDDED_BITMAP
++    {
++        FcBool b;
++        if (FcPatternGetBool(pattern, FC_EMBEDDED_BITMAP, 0, &b) == FcResultMatch)
++            embeddedbitmap = b;
++    }
++#endif
++
+     GlyphFormat defaultFormat = Format_None;
+ 
+ #ifndef QT_NO_XRENDER

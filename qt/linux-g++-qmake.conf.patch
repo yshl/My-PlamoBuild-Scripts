@@ -1,0 +1,49 @@
+*** qt-everywhere-opensource-src-4.6.3/mkspecs/linux-g++-64/qmake.conf	2010-06-02 11:03:08.000000000 +0900
+--- build/mkspecs/linux-g++-64/qmake.conf	2011-01-26 13:44:57.000000000 +0900
+***************
+*** 17,23 ****
+  include(../common/g++.conf)
+  include(../common/linux.conf)
+  
+! QMAKE_LIBDIR_X11      = /usr/X11R6/lib64
+! QMAKE_LIBDIR_OPENGL   = /usr/X11R6/lib64
+  
+  load(qt_config)
+--- 17,23 ----
+  include(../common/g++.conf)
+  include(../common/linux.conf)
+  
+! QMAKE_LIBDIR_X11      = /usr/X11R7/lib
+! QMAKE_LIBDIR_OPENGL   = /usr/X11R7/lib
+  
+  load(qt_config)
+
+*** qt-everywhere-opensource-src-4.6.3/mkspecs/common/linux.conf	2010-06-02 11:03:08.000000000 +0900
+--- build/mkspecs/common/linux.conf	2011-01-26 13:54:59.000000000 +0900
+***************
+*** 7,18 ****
+  
+  QMAKE_INCDIR          =
+  QMAKE_LIBDIR          =
+! QMAKE_INCDIR_X11      = /usr/X11R6/include
+! QMAKE_LIBDIR_X11      = /usr/X11R6/lib
+  QMAKE_INCDIR_QT       = $$[QT_INSTALL_HEADERS]
+  QMAKE_LIBDIR_QT       = $$[QT_INSTALL_LIBS]
+! QMAKE_INCDIR_OPENGL   = /usr/X11R6/include
+! QMAKE_LIBDIR_OPENGL   = /usr/X11R6/lib
+  QMAKE_INCDIR_OPENGL_ES1 = $$QMAKE_INCDIR_OPENGL
+  QMAKE_LIBDIR_OPENGL_ES1 = $$QMAKE_LIBDIR_OPENGL
+  QMAKE_INCDIR_OPENGL_ES1CL = $$QMAKE_INCDIR_OPENGL
+--- 7,18 ----
+  
+  QMAKE_INCDIR          =
+  QMAKE_LIBDIR          =
+! QMAKE_INCDIR_X11      = /usr/X11R7/include
+! QMAKE_LIBDIR_X11      = /usr/X11R7/lib
+  QMAKE_INCDIR_QT       = $$[QT_INSTALL_HEADERS]
+  QMAKE_LIBDIR_QT       = $$[QT_INSTALL_LIBS]
+! QMAKE_INCDIR_OPENGL   = /usr/X11R7/include
+! QMAKE_LIBDIR_OPENGL   = /usr/X11R7/lib
+  QMAKE_INCDIR_OPENGL_ES1 = $$QMAKE_INCDIR_OPENGL
+  QMAKE_LIBDIR_OPENGL_ES1 = $$QMAKE_LIBDIR_OPENGL
+  QMAKE_INCDIR_OPENGL_ES1CL = $$QMAKE_INCDIR_OPENGL

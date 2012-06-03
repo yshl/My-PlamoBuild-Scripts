@@ -1,0 +1,27 @@
+--- qwt-5.2.2/qwtconfig.pri	2011-08-01 18:28:22.000000000 +0900
++++ build/qwtconfig.pri	2011-09-07 04:24:17.000412497 +0900
+@@ -8,17 +8,18 @@
+ VERSION      = $${VER_MAJ}.$${VER_MIN}.$${VER_PAT}
+ 
+ unix {
+-    INSTALLBASE    = /usr/local/qwt-$$VERSION
++     INSTALLBASE    = $$[QT_INSTALL_PREFIX]
++     target.path    = $$[QT_INSTALL_LIBS] 
++     headers.path   = $$[QT_INSTALL_HEADERS]/qwt
++     doc.path       = $$[QT_INSTALL_DOCS] 
+ }
+-
+ win32 {
+     INSTALLBASE    = C:/Qwt-$$VERSION
++    target.path    = $$INSTALLBASE/lib
++    headers.path   = $$INSTALLBASE/include
++    doc.path       = $$INSTALLBASE/doc
+ }
+ 
+-target.path    = $$INSTALLBASE/lib
+-headers.path   = $$INSTALLBASE/include
+-doc.path       = $$INSTALLBASE/doc
+-
+ ######################################################################
+ # qmake internal options
+ ######################################################################

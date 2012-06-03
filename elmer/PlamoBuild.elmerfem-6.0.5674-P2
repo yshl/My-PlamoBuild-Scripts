@@ -5,11 +5,11 @@ pkgbase=elmerfem
 vers=6.0.5674
 # arch=x86_64
 arch=i586
-build=P1
+build=P2
 src="elmerfem"
 OPT_CONFIG='--with-64bits=no --with-blas=/usr/lib/blas_LINUX.a --with-lapack=/usr/lib/liblapack.a'
 DOCS='LICENSES'
-patchfiles='elmerparam-moddir.patch elmergui-qmake.patch'
+patchfiles='elmerparam-moddir.patch elmergui-qmake-P2.patch'
 compress=tgz
 
 ELMER_MODULES="matc umfpack mathlibs elmergrid meshgen2d eio hutiter fem post front elmerparam"

@@ -1,0 +1,18 @@
+--- graphviz-2.28.0.orig/config/config_perl.pl	2008-07-14 07:54:04.000000000 -0500
++++ graphviz-2.28.0/config/config_perl.pl	2011-10-17 16:31:04.262481854 -0500
+@@ -11,5 +11,14 @@
+ 	print "-I$archlib/CORE";
+ }
+ if ($ARGV[0] eq "PERL_INSTALL_DIR") {
+-	print "$Config{vendorarch}"
++
++	my $d;
++
++	foreach $d qw(installvendorarch vendorarch installsitearch sitearch) {
++		if (exists($Config{$d}) and defined($Config{$d}) and
++			($Config{$d} ne '') ) {
++			print "$Config{$d}";
++			last;
++		}
++	}
+ }

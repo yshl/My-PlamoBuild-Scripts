@@ -187,8 +187,8 @@ if [ $opt_package -eq 1 ] ; then
       export LDFLAGS='-Wl,--as-needed'
       make install DESTDIR=$P
     fi
-    mkdir -p $P/$installdir
-    cp -r junit* org $P/$installdir
+    mkdir -p $P/$installdir/lib
+    cp -r junit* org $P/$installdir/lib/
     mkdir -p $docdir/$src
     cp -r *.html *doc $docdir/$src
   done

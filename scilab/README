@@ -1,0 +1,9 @@
+・Java JDK 6 が必要となりますので、インストールしてください。
+・Plamo のパッケージのうち以下のものが必要です。多分。
+  gcc_fortran, ocaml, fftw, pcre, tcl, tk
+・My-PlamoBuild-Scripts の以下のパッケージも多分必要となるでしょう。
+  blas lapack suitesparse
+  hdf5 pvm matio
+  ant antlr beanshell checkstyle commonsbeanutils flexdock fop
+  gluegen hdf-java javahelp2 jeuclid jgoodies jgraphx jlatexmath
+  jogl jrosetta junit saxon6 skinlf

@@ -192,6 +192,11 @@ if [ $opt_package -eq 1 ] ; then
       mkdir -p $P/$installdir
       cp -r bin $P/$installdir
       cp -r lib $P/$installdir
+      mkdir -p $P/usr/${libdir}
+      for so in lib/LINUX/*.so
+      do
+        ln -s $installdir/$so $P/usr/${libdir}/
+      done
       cp -r include $P/$installdir
       mkdir -p $mandir
       cp -r man/man1 $mandir/

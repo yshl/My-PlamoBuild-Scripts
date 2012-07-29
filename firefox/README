@@ -1,3 +1,4 @@
+・パッチ shared-libs.patch は Plamo64 の Firefox 14.0.1 パッケージより取得
 ・パッチ explicit-template-instanciation.v2.diff は
   https://bugzilla.mozilla.org/show_bug.cgi?id=732340
   より取得

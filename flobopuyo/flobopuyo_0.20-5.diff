@@ -1,0 +1,698 @@
+--- flobopuyo-0.20.orig/debian/copyright
++++ flobopuyo-0.20/debian/copyright
+@@ -0,0 +1,42 @@
++This package was debianized by Uwe Hermann <uwe@debian.org> on
++Mon, 23 Aug 2004 18:08:03 +0200.
++
++It was downloaded from:
++
++   http://www.ios-software.com/?page=projet&quoi=29
++   (now http://www.fovea.cc/flobopuyo-en)
++
++Upstream Authors: 
++
++    Florent Boudet <flobo@ios-software.com>
++    Guillaume Borios <gyom@ios-software.com>
++    Jean-Christophe Hoelt <jeko@ios-software.com>
++
++Copyright: 
++
++    Copyright © 2004 Florent Boudet        <flobo@ios-software.com>
++    Copyright © 2004 Jean-Christophe Hoelt <jeko@ios-software.com>
++    Copyright © 2004 Guillaume Borios      <gyom@ios-software.com>
++
++License:
++
++    This package is free software; you can redistribute it and/or modify
++    it under the terms of the GNU General Public License as published by
++    the Free Software Foundation; either version 2 of the License, or
++    (at your option) any later version.
++ 
++    This package is distributed in the hope that it will be useful,
++    but WITHOUT ANY WARRANTY; without even the implied warranty of
++    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++    GNU General Public License for more details.
++ 
++    You should have received a copy of the GNU General Public License
++    along with this package; if not, write to the Free Software
++    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
++
++On Debian systems, the complete text of the GNU General
++Public License can be found in `/usr/share/common-licenses/GPL'.
++
++The Debian packaging is © 2008, Uwe Hermann <uwe@debian.org> and
++is licensed under the GPL, see above.
++
+--- flobopuyo-0.20.orig/debian/flobopuyo.desktop
++++ flobopuyo-0.20/debian/flobopuyo.desktop
+@@ -0,0 +1,13 @@
++[Desktop Entry]
++Type=Application
++Version=1.4
++Name=FloboPuyo
++Exec=flobopuyo
++Terminal=false
++Categories=Game;BlocksGame;
++Comment=A tetris-like game
++Comment[ca]=Un joc semblant al Tetris
++Comment[de]=Ein Tetris-ähnliches Spiel
++Comment[es]=Un juego parecido al Tetris
++Comment[pt]=Estilo Tetris
++Icon=flobopuyo
+--- flobopuyo-0.20.orig/debian/menu
++++ flobopuyo-0.20/debian/menu
+@@ -0,0 +1,3 @@
++?package(flobopuyo):needs="X11" section="Games/Blocks" \
++  title="FloboPuyo" command="/usr/games/flobopuyo" \
++  icon="/usr/share/pixmaps/flobopuyo.xpm"
+--- flobopuyo-0.20.orig/debian/rules
++++ flobopuyo-0.20/debian/rules
+@@ -0,0 +1,22 @@
++#!/usr/bin/make -f
++  
++DEB_INSTALL_MANPAGES_flobopuyo := man/flobopuyo.6
++
++DEB_MAKE_INSTALL_TARGET := install DESTDIR=$(CURDIR)/debian/flobopuyo
++
++CFLAGS = -DUSE_AUDIO=1
++
++include /usr/share/cdbs/1/rules/debhelper.mk
++include /usr/share/cdbs/1/class/makefile.mk
++include /usr/share/cdbs/1/rules/simple-patchsys.mk
++
++binary-post-install/flobopuyo::
++	cp debian/flobopuyo.desktop debian/flobopuyo/usr/share/applications
++	uudecode debian/flobopuyo.png.uuencode
++	cp debian/flobopuyo.xpm debian/flobopuyo.png debian/flobopuyo/usr/share/pixmaps	
++	# Remove ._bi crap to silence lintian.
++	rm -f debian/flobopuyo/usr/share/games/flobopuyo/sfx/._bi
++
++clean::
++	rm -f debian/flobopuyo.png
++
+--- flobopuyo-0.20.orig/debian/docs
++++ flobopuyo-0.20/debian/docs
+@@ -0,0 +1 @@
++TODO
+--- flobopuyo-0.20.orig/debian/watch
++++ flobopuyo-0.20/debian/watch
+@@ -0,0 +1,2 @@
++version=3
++http://www.ios-software.com/flobopuyo/flobopuyo-(.*)\.tgz
+--- flobopuyo-0.20.orig/debian/dirs
++++ flobopuyo-0.20/debian/dirs
+@@ -0,0 +1,2 @@
++usr/share/applications
++usr/share/pixmaps
+--- flobopuyo-0.20.orig/debian/control
++++ flobopuyo-0.20/debian/control
+@@ -0,0 +1,17 @@
++Source: flobopuyo
++Section: games
++Priority: optional
++Maintainer: Uwe Hermann <uwe@debian.org>
++Build-Depends: cdbs, debhelper (>= 5), libsdl-image1.2-dev, libsdl-mixer1.2-dev, libsdl1.2-dev, flex, bison, sharutils
++Standards-Version: 3.9.1
++Homepage: http://www.fovea.cc/flobopuyo-en
++
++Package: flobopuyo
++Architecture: any
++Depends: ${shlibs:Depends}, ${misc:Depends}
++Description: Clone of the PuyoPuyo game
++ The goal of FloboPuyo is to make groups of four or more Puyos (coloured
++ bubbles) to make them explode and send bad ghost Puyos to your opponent.
++ You win the game if your opponent reaches the top of the board. You can
++ play against computer or another human.
++
+--- flobopuyo-0.20.orig/debian/changelog
++++ flobopuyo-0.20/debian/changelog
+@@ -0,0 +1,78 @@
++flobopuyo (0.20-5) unstable; urgency=low
++
++  * Fix "FTBFS with binutils-gold" (Closes: #554359).
++    Thanks Fabrice Coutadeur <fabricesp@ubuntu.com> for the patch!
++  * Standards-Version: 3.9.1.
++     + Add Homepage field.
++  * debian/copyright: Minor updates, fix typos.
++  * 80_fix_typo.patch: Fix a typo to silence lintian.
++
++ -- Uwe Hermann <uwe@debian.org>  Sun, 13 Mar 2011 22:40:09 +0100
++
++flobopuyo (0.20-4) unstable; urgency=low
++
++  * Acknowledge NMU, thanks Chris Lamb (Closes: #478378).
++  * Re-enable audio, thanks Takeshi Hamasaki (Closes: #512321).
++  * Set proper window title, thanks Takeshi Hamasaki (Closes: #537352).
++
++ -- Uwe Hermann <uwe@debian.org>  Mon, 29 Nov 2010 15:49:14 +0100
++
++flobopuyo (0.20-3.1) unstable; urgency=medium
++
++  * Non-maintainer upload.
++  * Fix bashisms in debian/rules (Closes: #478378)
++  * Bump Standards-Version to 3.8.0
++
++ -- Chris Lamb <chris@chris-lamb.co.uk>  Sat, 07 Jun 2008 16:48:14 +0100
++
++flobopuyo (0.20-3) unstable; urgency=low
++
++  * The "lazy bastard" release.
++  * Acknowledge NMU, thanks Martin Michlmayr (Closes: #356878).
++  * Switch to cdbs (+ debhelper 5).
++  * Add new icon for flobopuyo (thanks Ubuntu!) + sharutils build-dependency.
++  * debian/menu:
++     + Move game to section Games/Blocks.
++     + Changed title: s/flobopuyo/FloboPuyo/.
++     + Use new icon.
++  * debian/watch: Add file.
++  * Drop manpage from debian/, it's shipped upstream now.
++  * Drop left-over patch file.
++  * Standards-Version: 3.7.3 (no changes required).
++  * Add .desktop file (Closes: #409866).
++  * Honor DEB_BUILD_OPTIONS=nostrip option (Closes: #436843).
++
++ -- Uwe Hermann <uwe@debian.org>  Tue, 15 Apr 2008 17:16:07 +0200
++
++flobopuyo (0.20-2.1) unstable; urgency=low
++
++  * NMU as part of the GCC 4.1 transition.
++  * Remove extra qualification from C++ header file (Closes: #356878).
++
++ -- Martin Michlmayr <tbm@cyrius.com>  Thu, 25 May 2006 23:08:25 +0200
++
++flobopuyo (0.20-2) unstable; urgency=low
++
++  * Recompile for the C++ transition.
++  * Standards-Version: 3.6.2.0 (no changes required).
++  * debian/copyright: Cosmetic changes.
++
++ -- Uwe Hermann <uwe@debian.org>  Sun, 16 Oct 2005 04:29:46 +0200
++
++flobopuyo (0.20-1) unstable; urgency=low
++
++  * New upstream release.
++  * The new release comes with a Makefile flag for turning DGA on/off.
++    By default it's off, so we can now run as non-root (Closes: #271446).
++  * Applied patch by Andreas Jochens which fixes a compile error on
++    amd64 with gcc-4.0 (Closes: #289218).
++
++ -- Uwe Hermann <uwe@debian.org>  Fri,  4 Mar 2005 16:53:54 +0100
++
++flobopuyo (0.13-1) unstable; urgency=low
++
++  * Initial Release (Closes: #267615).
++  * I wrote and added a manpage, as there was none upstream.
++
++ -- Uwe Hermann <uwe@debian.org>  Tue,  7 Sep 2004 00:13:24 +0200
++
+--- flobopuyo-0.20.orig/debian/compat
++++ flobopuyo-0.20/debian/compat
+@@ -0,0 +1 @@
++5
+--- flobopuyo-0.20.orig/debian/flobopuyo.xpm
++++ flobopuyo-0.20/debian/flobopuyo.xpm
+@@ -0,0 +1,280 @@
++/* XPM */
++static char *puyologo[] = {
++/* columns rows colors chars-per-pixel */
++"32 32 242 2",
++"   c black",
++".  c #0D0D0D",
++"X  c #000E1C",
++"o  c #151515",
++"O  c #181818",
++"+  c #001325",
++"@  c #00162A",
++"#  c #00192D",
++"$  c #001C33",
++"%  c #001E3A",
++"&  c #012136",
++"*  c #00223B",
++"=  c #0A273B",
++"-  c #0D2A3E",
++";  c gray13",
++":  c gray22",
++">  c #002442",
++",  c #002548",
++"<  c #022A45",
++"1  c #012C4A",
++"2  c #092A40",
++"3  c #0D2D4E",
++"4  c #012D52",
++"5  c #04304D",
++"6  c #043354",
++"7  c #00345A",
++"8  c #073A5E",
++"9  c #08355C",
++"0  c #0F3852",
++"q  c #09395D",
++"w  c #123348",
++"e  c #1C3749",
++"r  c #1C384B",
++"t  c #143953",
++"y  c #193C54",
++"u  c #003563",
++"i  c #033B63",
++"p  c #013C6B",
++"a  c #0D3C63",
++"s  c #0C3C69",
++"d  c #003E72",
++"f  c #233C4E",
++"g  c #00416E",
++"h  c #0B4064",
++"j  c #0D4369",
++"k  c #004274",
++"l  c #00447B",
++"z  c #044874",
++"x  c #00497E",
++"c  c #0C4777",
++"v  c #0E467A",
++"b  c #0F4B75",
++"n  c #0B4979",
++"m  c #0F517F",
++"M  c #12446C",
++"N  c #184363",
++"B  c #1F4B6B",
++"V  c #114575",
++"C  c #114974",
++"Z  c #134B7B",
++"A  c #194D73",
++"S  c #1B4E7D",
++"D  c #1A5179",
++"F  c #354D5E",
++"G  c #244761",
++"H  c #224D6B",
++"J  c #284E6A",
++"K  c #214E70",
++"L  c #2A506C",
++"P  c #225275",
++"I  c #2A5574",
++"U  c #295678",
++"Y  c #354F62",
++"T  c #375062",
++"R  c #3B5567",
++"E  c #38566A",
++"W  c #365A73",
++"Q  c #3B5B71",
++"!  c #414141",
++"~  c #415C6F",
++"^  c #495D6A",
++"/  c #596974",
++"(  c #586C7B",
++")  c gray38",
++"_  c #004782",
++"`  c #014B83",
++"'  c #014E8A",
++"]  c #045085",
++"[  c #02528B",
++"{  c #07588E",
++"}  c #0B5383",
++"|  c #08538B",
++" . c #0D588C",
++".. c #025392",
++"X. c #01569A",
++"o. c #045893",
++"O. c #045A9A",
++"+. c #0C5B94",
++"@. c #085C9B",
++"#. c #125282",
++"$. c #105789",
++"%. c #135A8B",
++"&. c #195383",
++"*. c #195789",
++"=. c #1B5984",
++"-. c #1B5C8C",
++";. c #135E96",
++":. c #055CA1",
++">. c #05609D",
++",. c #0D6097",
++"<. c #0A619B",
++"1. c #166297",
++"2. c #14619A",
++"3. c #15699F",
++"4. c #19649C",
++"5. c #1C699D",
++"6. c #0760A4",
++"7. c #0964A3",
++"8. c #0B65A9",
++"9. c #0F69A8",
++"0. c #1166A8",
++"q. c #1568A6",
++"w. c #146CAB",
++"e. c #196DA3",
++"r. c #1C6DA9",
++"t. c #1571AF",
++"y. c #1F74B2",
++"u. c #235987",
++"i. c #2E648F",
++"p. c #396380",
++"a. c #38678B",
++"s. c #3A698B",
++"d. c #326992",
++"f. c #3D7099",
++"g. c #2470A6",
++"h. c #2775A9",
++"j. c #2A72A6",
++"k. c #2874AB",
++"l. c #2D7AAE",
++"z. c #2579B4",
++"x. c #297BB5",
++"c. c #317BAC",
++"v. c #317EB3",
++"b. c #42739A",
++"n. c #4E7897",
++"m. c #4C7D9E",
++"M. c #577184",
++"N. c #577991",
++"B. c #667B8B",
++"V. c #667F90",
++"C. c #2F84BB",
++"Z. c #3481B5",
++"A. c #3280B8",
++"S. c #3B81B2",
++"D. c #3A86BE",
++"F. c #4083B3",
++"G. c #4588B5",
++"H. c #488AB7",
++"J. c #498BB8",
++"K. c #4F90BC",
++"L. c #5F85A1",
++"P. c #5291BB",
++"I. c #79838A",
++"U. c #758995",
++"Y. c #728A9C",
++"T. c #7A8890",
++"R. c #7F909C",
++"E. c #6B8FAA",
++"W. c #6E90A9",
++"Q. c #6296B7",
++"!. c #7190A7",
++"~. c #7D95A6",
++"^. c #468FC3",
++"/. c #5296C3",
++"(. c #5A9AC3",
++"). c #5B9FCB",
++"_. c #609DC6",
++"`. c #66A2CC",
++"'. c #69A5CD",
++"]. c #69A6D0",
++"[. c #71A6CA",
++"{. c #72A8CB",
++"}. c #78ACCD",
++"|. c #75AFD4",
++" X c #7AAED1",
++".X c #74B0D5",
++"XX c #7DB3D5",
++"oX c #88898A",
++"OX c #808D95",
++"+X c #889095",
++"@X c #949595",
++"#X c #8DA1B0",
++"$X c #93A4AF",
++"%X c #A2A4A5",
++"&X c #A4A8AB",
++"*X c #ABACAC",
++"=X c #A6B3BC",
++"-X c #B2B3B3",
++";X c #BCBDBD",
++":X c #85B5D4",
++">X c #89B7D5",
++",X c #8EB9D7",
++"<X c #8CBBDA",
++"1X c #91BDD9",
++"2X c #B8BEC2",
++"3X c #92C0DD",
++"4X c #9BC4DF",
++"5X c #B5CDDD",
++"6X c #A1C7E2",
++"7X c #A7CBE3",
++"8X c #ACCDE4",
++"9X c #ADD0E5",
++"0X c #B0CEE1",
++"qX c #B5D3E6",
++"wX c #B4D3E8",
++"eX c #BAD6E9",
++"rX c #BED9EA",
++"tX c #C1C1C2",
++"yX c #C8C8C8",
++"uX c #CAD2D8",
++"iX c #D2D2D3",
++"pX c #DFDFDF",
++"aX c #C4DCEB",
++"sX c #C9DFED",
++"dX c #D2DEE7",
++"fX c #CAE0EF",
++"gX c #CEE2F0",
++"hX c #D4E6F1",
++"jX c #DEEBF5",
++"kX c #E5E5E5",
++"lX c #E4E8EA",
++"zX c #EEEFEF",
++"xX c #EBEFF1",
++"cX c #E6F0F7",
++"vX c #E6F1F8",
++"bX c #EBF0F5",
++"nX c #EDF4F9",
++"mX c #F5F5F6",
++"MX c #F2F6F8",
++"NX c #F5F9FB",
++"BX c #FEFEFE",
++"VX c None",
++/* pixels */
++"VXVXVXVXVXVXVXVXVXX + $ $ % % % % % % > VXVXVXVXVXVXVXVXVXVXVXVX",
++"VXVXVXVXVXVXVXVX# , p _ _ _ ' _ d d d u u 4 4 1 , > VXVXVXVXVXVX",
++"VXVXVXVXVXVX$ , d ` _ _ ' _ ` ` ` _ _ _ _ l l l u , VXVXVXVXVXVX",
++"VXVXVXVXVX% l ....` | | | | | | | | | ' ' ` _ x l d 4 > VXVXVXVX",
++"VXVXVXVX, u X.O.@.+.+.;.1.4.4.4.4.4.;.+.+.[ [ ` _ _ p 1 VXVXVXVX",
++"VXVXVX, ` X.:.8.w.r.k.c.S.S.H.H.H.G.v.k.e.@.o.{ ' ` x p 1 VXVXVX",
++"VXVXVX7 X.:.8.w.z.D./.`. X>X,X,X,X>X X(.Z.w.>.O...[ _ l 4 1 VXVX",
++"VXVX4 d ..6.w.z.^.'.1XwXaXsXaXrXeXwX7X:X/.z.0.>.o.[ ' l k 1 VXVX",
++"VXVX7 _ X.0.y.D.].6XgXbXnXvXhXaXeXwX7X<X).C.t.<.X.[ ` l g K 1 VX",
++"VXVXu ..X.q.x./.<XgXMXNXNXnXNXNXgX3X<X.X.XcX3X7.O.[ ` l k K H * ",
++"VXVXk ' :.q.v._.7XjXNXNXNXBXBXBXNXeX'.`.NXBXNXaX5.[ x z k K A * ",
++"VX4 k ' @.r.v.'.8XjXMXMXNXBXBXBXBXvX}.5XNXBXBXBXdXx z k k H K , ",
++"VX> d ' ..2.c._.6XsXhXgXnXBXBXBXBXMX5XNXBXpX! kXuXz k g g H H 1 ",
++"VX* d _ ' +.j.P.:X8X8X4XhXBXzX%XNXNXNXBXBX@XO iX=Xp i i p B d 1 ",
++"VX% p k _ | 4.v.[.1X1XXX1XBX&X) mXkXzXzXkXO . tXB.8 a M j H d 1 ",
++"VX% 7 V l ` ;.j.K.{. X'.{.BX: o *XiX5XyXyX. ; &XE t G J A H d , ",
++"VX% 9 H n x } 1.c.K.K.K.P.kXoX. *X;XoX-X-X*X%X+Xw r F Q I J g < ",
++"VXVX3 1 D -.`  .5.e.Z.Z.Z.Q.iX@X-XI.w ^ I.+X/ r - r F Q I J p > ",
++"VXVX= 1 5 C $.] { ,.3.e.5.5.F.$XU.5 2 * * * & & - G F E H H 1 * ",
++"VXVX% 1 1 h D %.] { ,.<.,.{ } z 8 6 < * * * * - r F ^ W A < 1 # ",
++"VXVX$ 1 5 5 h m $.{ [ { { { ] z h 7 5 < < < 5 t E ( M.p.U < 1   ",
++"VXVXVX# < < 5 j b m  .[ [ ] x z g 8 7 7 7 q N E V.OXY.s.U < 1   ",
++"VXVXVX# 5 5 5 5 h b m  .] ] x k g i i h j P W N.OX#X!.s.0 < * VX",
++"VXVXVXVX# < 5 5 6 8 j =.-.-.-.m z g g g D s.m.E.W.E.m.u.5 < % VX",
++"VXVXVXVXVX$ 1 1 1 5 6 6 8 h h h 6 D n n &.d.b.b.c.d.i.M 1 * VXVX",
++"VXVXVXVXVXVX@ * 1 < 1 1 1 5 5 < 5 6 i Z &.*.-.*.&.&.a 3 1 % VXVX",
++"VXVXVXVXVXVXVXVX# % 1 1 1 < 5 5 1 6 i v v _ #.Z V a 4 1 % VXVXVX",
++"VXVXVXVXVXVXVXVXVXVXVXVXNXbXbXmX* d d S v S M q 9 3 1 1 > VXVXVX",
++"VXVXVXVXVXVXVXVXVXVXVXVXVXVXVXVXVXd d Z s 9 6 6 1 1 1 VXVXVXVXVX",
++"VXVXVXVXVXVXVXVXVXVXVXVXVXVXVXVX@ 1 1 4 5 5 5 1 1 $ $ VXVXVXVXVX",
++"VXVXVXVXVXVXVXVXVXVXVXVXVXVXVXVX+ 1 1 1 1 1 1 1 # VXVXVXVXVXVXVX",
++"VXVXVXVXVXVXVXVXVXVXVXVXVXVXVXVX+ 1 1 1 1 @ + @ VXVXVXVXVXVXVXVX"
++};
+--- flobopuyo-0.20.orig/debian/flobopuyo.png.uuencode
++++ flobopuyo-0.20/debian/flobopuyo.png.uuencode
+@@ -0,0 +1,75 @@
++begin 644 debian/flobopuyo.png
++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
++,`````$E%3D2N0F""
++`
++end
+--- flobopuyo-0.20.orig/debian/patches/70_fix_binutils_gold_error.patch
++++ flobopuyo-0.20/debian/patches/70_fix_binutils_gold_error.patch
+@@ -0,0 +1,14 @@
++http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=554359
++
++diff -pruN 0.20-4/Makefile 0.20-4ubuntu2/Makefile
++--- 0.20-4/Makefile	2004-10-08 23:41:12.000000000 +0100
+++++ 0.20-4ubuntu2/Makefile	2010-12-20 03:45:19.000000000 +0000
++@@ -110,7 +110,7 @@ CXXFLAGS=${CFLAGS}
++ all: prelude flobopuyo
++ 
++ flobopuyo: ${OBJFILES}
++-	@echo "[flobopuyo]" && g++ $(CFLAGS) $(LDFLAGS) -o flobopuyo -lSDL_mixer -lSDL_image ${OBJFILES}
+++	echo "[flobopuyo]" && g++ $(CFLAGS) -o flobopuyo ${OBJFILES} -lSDL_mixer -lSDL_image -lSDL $(LDFLAGS)
++ 	@echo "--------------------------------------"
++ 	@echo " Compilation finished"
++ 	@[ "x`cat WARNINGS | wc -l`" != "x0" ] && echo -e "--------------------------------------\n There have been some warnings:\n" && cat WARNINGS && rm -f WARNINGS && echo "--------------------------------------" || true
+--- flobopuyo-0.20.orig/debian/patches/30_datadir.patch
++++ flobopuyo-0.20/debian/patches/30_datadir.patch
+@@ -0,0 +1,11 @@
++--- main.cpp.orig	2006-04-21 23:09:02.000000000 +0200
+++++ main.cpp	2006-04-21 23:09:20.000000000 +0200
++@@ -7,7 +7,7 @@
++ #include "PuyoCommander.h"
++ 
++ #ifndef DATADIR
++-char *DATADIR = "data";
+++char *DATADIR = "/usr/share/games/flobopuyo";
++ #endif
++ 
++ char *dataFolder = "data";
+--- flobopuyo-0.20.orig/debian/patches/40_build_fixes.patch
++++ flobopuyo-0.20/debian/patches/40_build_fixes.patch
+@@ -0,0 +1,21 @@
++--- flobopuyo-0.20.orig/IosVector.cpp
+++++ flobopuyo-0.20/IosVector.cpp
++@@ -102,6 +102,6 @@
++ void IosVector::dumpVector() const {
++ 	fprintf(stderr, "Size: %d\n", getSize());
++ 	for (int i = 0, j = getSize() ; i < j ; i++)
++-		fprintf(stderr, "elt[%d]=%d ", i, (int)getElementAt(i));
+++		fprintf(stderr, "elt[%d]=%ld ", i, (long)getElementAt(i));
++ 	fprintf(stderr, "\n");
++ }
++--- flobopuyo-0.20.orig/PuyoGame.cpp
+++++ flobopuyo-0.20/PuyoGame.cpp
++@@ -45,7 +45,7 @@
++ 		return (PuyoState)newItem;
++ 	}
++ 	else
++-		return (PuyoState)(int)(sequenceItems.getElementAt(sequence));
+++		return (PuyoState)(long)(sequenceItems.getElementAt(sequence));
++ }
++ 
++ PuyoPuyo::PuyoPuyo(PuyoState state)
+--- flobopuyo-0.20.orig/debian/patches/20_makefile_prefix.patch
++++ flobopuyo-0.20/debian/patches/20_makefile_prefix.patch
+@@ -0,0 +1,11 @@
++--- Makefile.orig	2008-04-15 13:54:47.000000000 +0200
+++++ Makefile	2008-04-15 13:58:35.000000000 +0200
++@@ -12,7 +12,7 @@
++ DEBUG_MODE=false
++ 
++ # Unix/Linux settings
++-PREFIX=/usr/local
+++PREFIX=/usr
++ DATADIR=$(PREFIX)/share/games/flobopuyo
++ INSTALL_BINDIR=$(DESTDIR)/$(PREFIX)/games
++ INSTALL_DATADIR=$(DESTDIR)/$(DATADIR)
+--- flobopuyo-0.20.orig/debian/patches/60_set_window_title.patch
++++ flobopuyo-0.20/debian/patches/60_set_window_title.patch
+@@ -0,0 +1,10 @@
++--- flobopuyo-0.20.orig/PuyoCommander.cpp	2004-10-09 05:41:12.000000000 +0700
+++++ flobopuyo-0.20/PuyoCommander.cpp	2009-11-30 18:53:59.000000000 +0700
++@@ -666,6 +666,7 @@
++     
++     start_time = SDL_GetTicks ();
++     
+++    SDL_WM_SetCaption("FloboPuyo", "FloboPuyo");
++     audio_music_start (0);
++     
++     /*  PuyoStory *introStory = new PuyoStory(this, 0);
+--- flobopuyo-0.20.orig/debian/patches/10_extra_qualification.patch
++++ flobopuyo-0.20/debian/patches/10_extra_qualification.patch
+@@ -0,0 +1,12 @@
++diff -Naur flobopuyo-0.20.orig/PuyoGame.h flobopuyo-0.20/PuyoGame.h
++--- flobopuyo-0.20.orig/PuyoGame.h	2004-10-09 00:41:13.000000000 +0200
+++++ flobopuyo-0.20/PuyoGame.h	2006-03-14 22:24:10.000000000 +0100
++@@ -46,7 +46,7 @@
++     virtual ~PuyoPuyo() {};
++     PuyoState getPuyoState();
++     void setPuyoState(PuyoState state);
++-    bool PuyoPuyo::isFalling();
+++    bool isFalling();
++     int getPuyoX() const;
++     int getPuyoY() const;
++     void setPuyoXY(int X, int Y);
+--- flobopuyo-0.20.orig/debian/patches/80_fix_typo.patch
++++ flobopuyo-0.20/debian/patches/80_fix_typo.patch
+@@ -0,0 +1,13 @@
++Fix a typo to silence lintian.
++
++--- sofont.c.orig	2011-03-13 22:55:42.000000000 +0100
+++++ sofont.c	2011-03-13 22:55:50.000000000 +0100
++@@ -291,7 +291,7 @@
++ 	int     _Spacing[256];
++ 
++ 	if (!FontSurface) {
++-		fprintf (stderr, "SoFont recieved a NULL SDL_Surface\n");
+++		fprintf (stderr, "SoFont received a NULL SDL_Surface\n");
++ 		return 0;
++ 	}
++ 	font->picture = FontSurface;
+--- flobopuyo-0.20.orig/debian/patches/50_handle_nostrip.patch
++++ flobopuyo-0.20/debian/patches/50_handle_nostrip.patch
+@@ -0,0 +1,10 @@
++--- Makefile.orig	2008-04-15 16:43:36.000000000 +0200
+++++ Makefile	2008-04-15 16:43:42.000000000 +0200
++@@ -178,7 +178,6 @@
++ 	rm -f  .DS_Store */.DS_Store */*/.DS_Store .gdb_history
++ 
++ install: flobopuyo
++-	strip flobopuyo
++ 	mkdir -p ${INSTALL_BINDIR}
++ 	mkdir -p ${INSTALL_DATADIR}
++ 	cp -r data/* ${INSTALL_DATADIR}

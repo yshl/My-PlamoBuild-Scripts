@@ -1,0 +1,81 @@
+diff -ur SuiteSparse/CHOLMOD/Demo/Makefile build32/CHOLMOD/Demo/Makefile
+--- SuiteSparse/CHOLMOD/Demo/Makefile	2012-06-21 14:46:43.000000000 +0900
++++ build32/CHOLMOD/Demo/Makefile	2012-08-03 01:48:56.105936100 +0900
+@@ -84,7 +84,7 @@
+ else
+ 	( cd ../../CCOLAMD ; $(MAKE) library )
+ 	( cd ../../CAMD ; $(MAKE) library )
+-	( cd $(METIS_PATH) && $(MAKE) )
++	#( cd $(METIS_PATH) && $(MAKE) )
+ endif
+ #-------------------------------------------------------------------------------
+ 
+diff -ur SuiteSparse/CHOLMOD/Tcov/Makefile build32/CHOLMOD/Tcov/Makefile
+--- SuiteSparse/CHOLMOD/Tcov/Makefile	2012-06-21 11:58:11.000000000 +0900
++++ build32/CHOLMOD/Tcov/Makefile	2012-08-03 01:48:56.105936100 +0900
+@@ -1240,4 +1240,4 @@
+ #-------------------------------------------------------------------------------
+ 
+ $(METIS):
+-	( cd ../../metis-4.0/Lib && $(MAKE) )
++	#( cd ../../metis-4.0/Lib && $(MAKE) )
+diff -ur SuiteSparse/KLU/Tcov/Makefile build32/KLU/Tcov/Makefile
+--- SuiteSparse/KLU/Tcov/Makefile	2012-05-30 09:10:58.000000000 +0900
++++ build32/KLU/Tcov/Makefile	2012-08-03 01:48:56.105936100 +0900
+@@ -45,7 +45,7 @@
+ 	( cd ../../COLAMD && $(MAKE) library )
+ 	( cd ../../CAMD && $(MAKE) library )
+ 	( cd ../../CCOLAMD && $(MAKE) library )
+-	( cd ../../metis-4.0 && $(MAKE) )
++	#( cd ../../metis-4.0 && $(MAKE) )
+ 	( cd ../../CHOLMOD && $(MAKE) library )
+ 
+ purge: distclean
+diff -ur SuiteSparse/SPQR/Demo/Makefile build32/SPQR/Demo/Makefile
+--- SuiteSparse/SPQR/Demo/Makefile	2012-06-21 14:47:51.000000000 +0900
++++ build32/SPQR/Demo/Makefile	2012-08-03 01:51:34.288170814 +0900
+@@ -128,7 +128,7 @@
+ 	- ( cd ../../CAMD && $(MAKE) library )
+ 
+ $(METIS):
+-	( cd $(METIS_PATH) && $(MAKE) )
++	#( cd $(METIS_PATH) && $(MAKE) )
+ 
+ library: $(CLIB)
+ 
+diff -ur SuiteSparse/SPQR/Tcov/Makefile build32/SPQR/Tcov/Makefile
+--- SuiteSparse/SPQR/Tcov/Makefile	2012-05-29 04:13:13.000000000 +0900
++++ build32/SPQR/Tcov/Makefile	2012-08-03 01:48:56.105936100 +0900
+@@ -256,7 +256,7 @@
+ 	$(C) -c $<
+ 
+ $(METIS):
+-	( cd ../../metis-4.0/Lib && $(MAKE) )
++	#( cd ../../metis-4.0/Lib && $(MAKE) )
+ 
+ ../../CHOLMOD/Lib/libcholmod.a:
+ 	( cd ../../CHOLMOD && $(MAKE) library )
+diff -ur SuiteSparse/UMFPACK/Demo/Makefile build32/UMFPACK/Demo/Makefile
+--- SuiteSparse/UMFPACK/Demo/Makefile	2012-06-21 14:39:46.000000000 +0900
++++ build32/UMFPACK/Demo/Makefile	2012-08-03 01:48:56.105936100 +0900
+@@ -81,7 +81,7 @@
+ 	- ( cd ../../CAMD && $(MAKE) library )
+ 
+ $(METIS):
+-	( cd $(METIS_PATH) && $(MAKE) )
++	#( cd $(METIS_PATH) && $(MAKE) )
+ 
+ UMFPACK = ../Lib/libumfpack.a ../../AMD/Lib/libamd.a \
+     ../../SuiteSparse_config/libsuitesparseconfig.a \
+diff -ur SuiteSparse/UMFPACK/Tcov/Demo_Makefile build32/UMFPACK/Tcov/Demo_Makefile
+--- SuiteSparse/UMFPACK/Tcov/Demo_Makefile	2012-05-29 11:24:48.000000000 +0900
++++ build32/UMFPACK/Tcov/Demo_Makefile	2012-08-03 01:48:56.105936100 +0900
+@@ -38,7 +38,7 @@
+ 	( cd ../../CAMD && $(MAKE) library )
+ 
+ ../../metis-4.0/libmetis.a:
+-	( cd ../../metis-4.0/Lib && $(MAKE) )
++	#( cd ../../metis-4.0/Lib && $(MAKE) )
+ 
+ UMFPACK = ../Lib/libumfpack.a ../../AMD/Lib/libamd.a \
+     ../../CHOLMOD/Lib/libcholmod.a ../../COLAMD/Lib/libcolamd.a \

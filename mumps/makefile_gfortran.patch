@@ -1,0 +1,51 @@
+diff -ur MUMPS_4.10.0/Make.inc/Makefile.gfortran.SEQ build32/Make.inc/Makefile.gfortran.SEQ
+--- MUMPS_4.10.0/Make.inc/Makefile.gfortran.SEQ	2011-05-10 21:56:32.000000000 +0900
++++ build32/Make.inc/Makefile.gfortran.SEQ	2012-08-19 00:13:54.567004075 +0900
+@@ -18,15 +18,15 @@
+ #          Metis/ParMetis and SCOTCH/PT-SCOTCH (ver 5.1 and later) orderings are now available for MUMPS.
+ #
+ 
+-#SCOTCHDIR  = ${HOME}/scotch_5.1_esmumps
+-#ISCOTCH    = -I$(SCOTCHDIR)/include 
++SCOTCHDIR  = /usr
++ISCOTCH    = -I$(SCOTCHDIR)/include 
+ # You have to choose one among the following two lines depending on
+ # the type of analysis you want to perform. If you want to perform only
+ # sequential analysis choose the first (remember to add -Dscotch in the ORDERINGSF
+ # variable below); for both parallel and sequential analysis choose the second 
+ # line (remember to add -Dptscotch in the ORDERINGSF variable below)
+ 
+-#LSCOTCH    = -L$(SCOTCHDIR)/lib -lesmumps -lscotch -lscotcherr
++LSCOTCH    = -L$(SCOTCHDIR)/lib -lesmumps -lscotch -lscotcherr
+ #LSCOTCH    = -L$(SCOTCHDIR)/lib -lptesmumps -lptscotch -lptscotcherr
+ 
+ 
+@@ -34,7 +34,7 @@
+ IPORD    = -I$(topdir)/PORD/include/
+ LPORD    = -L$(LPORDDIR) -lpord
+ 
+-#LMETISDIR = /local/metis/
++LMETISDIR = /usr/metis/
+ #IMETIS    = # Should be provided if you use parmetis
+ 
+ # You have to choose one among the following two lines depending on
+@@ -43,7 +43,7 @@
+ # variable below); for both parallel and sequential analysis choose the second 
+ # line (remember to add -Dparmetis in the ORDERINGSF variable below)
+ 
+-#LMETIS    = -L$(LMETISDIR) -lmetis
++LMETIS    = -L$(LMETISDIR) -lmetis
+ #LMETIS    = -L$(LMETISDIR) -lparmetis -lmetis
+ 
+ # The following variables will be used in the compilation process.
+@@ -75,8 +75,8 @@
+ INCSEQ = -I$(topdir)/libseq
+ LIBSEQ  =  -L$(topdir)/libseq -lmpiseq
+ #LIBBLAS = -L/usr/lib/xmm/ -lf77blas -latlas
+-LIBBLAS = -L/local/BLAS -lblas
+-LIBOTHERS = -lpthread
++LIBBLAS = -L/usr/atlas/lib -lf77blas -latlas
++LIBOTHERS = -lpthread -lz -lrt
+ #Preprocessor defs for calling Fortran from C (-DAdd_ or -DAdd__ or -DUPPER)
+ CDEFS   = -DAdd_
+ 

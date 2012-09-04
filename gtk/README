@@ -1,0 +1,2 @@
+gtk+-2 から gdk_pixbuf が分離しました。
+gtk+-2 のアップデートには gdk_pixbuf, atk, glib, libelf アップデートする必要があります。

@@ -1,0 +1,3 @@
+GIMP のアップデートには、
+ babl, pcre, libelf, glib, atk, gtk+, gdk_pixbuf(gtk+ から分離), gegl, pango, librsvg
+のアップデートが必要です。

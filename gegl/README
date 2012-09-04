@@ -1,0 +1,2 @@
+gegl のアップデートには babl, glib, gdk_pixbuf のアップデートが必要です。
+rsvg を有効にするには librsvg のアップデートが必要です。

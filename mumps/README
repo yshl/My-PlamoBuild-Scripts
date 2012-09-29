@@ -1,0 +1,1 @@
+PlamoBuild.MUMPS の parallel 変数が yes の場合、並列計算、no の場合は逐次計算でビルドします。

@@ -1,3 +1,4 @@
+・Firefox 16.0.1 をビルドする前に nspr-4.9.2 と nss-3.13.5 以上をインストールしてください。
 ・パッチ shared-libs.patch は Plamo64 の Firefox 14.0.1 パッケージより取得
 ・パッチ explicit-template-instanciation.v2.diff は
   https://bugzilla.mozilla.org/show_bug.cgi?id=732340

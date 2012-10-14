@@ -1,15 +1,15 @@
 #!/bin/sh
 ##############################################################
-url='http://downloads.sourceforge.net/project/ftgl/FTGL%20Source/2.1.3%7Erc5/ftgl-2.1.3-rc5.tar.bz2'
+url='http://downloads.sourceforge.net/project/ftgl/FTGL%20Source/2.1.2/ftgl-2.1.2.tar.bz2'
 pkgbase=ftgl
-vers=2.1.3_rc5
+vers=2.1.2
 # arch=x86_64
 arch=i586
 build=P1
-src=ftgl-2.1.3~rc5
-OPT_CONFIG=''
-DOCS='AUTHORS COPYING ChangeLog INSTALL NEWS README TODO'
-patchfiles=''
+src=FTGL
+OPT_CONFIG='--enable-shared'
+DOCS='COPYING.txt HISTORY.txt README.txt license.txt'
+patchfiles='ftgl-2.1.2-extraqualifier.patch'
 compress=tgz
 ##############################################################
 
@@ -146,12 +146,14 @@ if [ $opt_config -eq 1 ] ; then
     #   sh ./autogen.sh
     # fi
 
-      if [ -x configure ] ; then
+      if [ -x unix/configure ] ; then
          export PKG_CONFIG_PATH=/usr/${libdir}/pkgconfig:/usr/share/pkgconfig:/opt/kde/${libdir}/pkgconfig
          export LDFLAGS='-Wl,--as-needed' 
          export CC="gcc -isystem /usr/include $target" 
          export CXX="g++ -isystem /usr/include $target "
+	 (cd unix;
          ./configure --prefix=/usr --libdir=/usr/${libdir} --sysconfdir=/etc --localstatedir=/var --mandir='${prefix}'/share/man ${OPT_CONFIG[$i]}
+	 )
       elif [ -f CMakeLists.txt ] ; then
          export PKG_CONFIG_PATH=/usr/${libdir}/pkgconfig:/usr/share/pkgconfig:/opt/kde/${libdir}/pkgconfig
          export LDFLAGS='-Wl,--as-needed' 
@@ -168,9 +170,9 @@ fi
 if [ $opt_build -eq 1 ] ; then
   for i in `seq 0 $((${#B[@]} - 1))` ; do
     cd ${B[$i]}
-    if [ -f Makefile ] ; then
+    if [ -f unix/Makefile ] ; then
       export LDFLAGS='-Wl,--as-needed'
-      make -j3
+      make -C unix -j3
     fi
   done
 fi
@@ -189,9 +191,9 @@ if [ $opt_package -eq 1 ] ; then
     for mk in `find . -name "[Mm]akefile" ` ; do
         sed -i -e 's|GCONFTOOL = /usr/bin/gconftool-2|GCONFTOOL = echo|' $mk
     done
-    if [ -f Makefile ] ; then
+    if [ -f unix/Makefile ] ; then
       export LDFLAGS='-Wl,--as-needed'
-      make install DESTDIR=$P
+      make -C unix install prefix=$P/usr libdir=$P/usr/${libdir}
     fi
   done
 ######################################################################

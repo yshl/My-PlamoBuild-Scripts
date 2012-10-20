@@ -1,0 +1,1 @@
+GNU Readline の version 5 と version 6 を共存させるため、version 5 のパッケージから静的ライブラリ、インクルードファイル、ドキュメントファイルを除いています。

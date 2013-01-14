@@ -194,8 +194,6 @@ if [ $opt_package -eq 1 ] ; then
     stalinpath=/usr/libexec/stalin
     mkdir -p $P/$stalinpath
     cp include/* $P/$stalinpath/
-    find $P/$stalinpath -perm 600 -exec chmod go+r {} \;
-    find $P/$stalinpath -perm 700 -exec chmod go+rx {} \;
     # command
     mkdir -p $P/usr/bin
     cat <<EOF > $P/usr/bin/stalin
@@ -206,6 +204,9 @@ EOF
     # manual
     mkdir -p $P/usr/share/man/man1
     cp stalin.1 $P/usr/share/man/man1/
+    # permission
+    find $P/ -perm 600 -exec chmod go+r {} \;
+    find $P/ -perm 700 -exec chmod go+rx {} \;
   done
 ######################################################################
 # * make install でコピーされないファイルがある場合はここに記述します。

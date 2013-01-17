@@ -7,3 +7,7 @@
   ant antlr beanshell checkstyle commonsbeanutils flexdock fop
   gluegen hdf-java javahelp2 jeuclid jgoodies jgraphx jlatexmath
   jogl jrosetta junit saxon6 skinlf
+・Scilab-5.4.0 では
+  ・新たに scirenderer, atpack-ng が必要です。
+  ・gluegen, jogl は version 2 が必要です。My-PlamoBuild-Scripts の jogamp に含まれています。
+  ・jgraphx-1.8.0.0 以上、flexdock-1.2.0 以上、jlatexmath-1.0.0 以上が必要です。

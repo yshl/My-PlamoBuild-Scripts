@@ -1,0 +1,2 @@
+octave の info を作成するには、texinfo のアップデートが必要です。
+texinfo-4.8 のままの場合は OPT_CONFIG に --disable-docs を追加してください。

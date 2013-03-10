@@ -1,1 +1,4 @@
-/usr/dmd2 にインストールするので /usr/dmd2/linux/bin をパスに追加してください。
+ver 2.062
+ /opt/dmd にインストールするので /opt/dmd/bin をパスに追加してください。
+ver 2.058
+ /usr/dmd2 にインストールするので /usr/dmd2/linux/bin をパスに追加してください。

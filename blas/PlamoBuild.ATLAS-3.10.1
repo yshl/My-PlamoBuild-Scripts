@@ -7,7 +7,12 @@ vers=3.10.1
 arch=i586
 build=P1
 src=ATLAS
-OPT_CONFIG='--shared --with-netlib-lapack-tarfile=../../lapack-3.4.2.tgz -b 64 -t -1'
+OPT_CONFIG='--shared --with-netlib-lapack-tarfile=../../lapack-3.4.2.tgz -t -1'
+if [ $arch = "x86_64" ]; then
+    OPT_CONFIG="$OPT_CONFIG -b 64"
+else
+    OPT_CONFIG="$OPT_CONFIG -b 32"
+fi
 DOCS='INSTALL.txt README'
 patchfiles=''
 compress=tgz

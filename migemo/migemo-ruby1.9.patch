@@ -1,0 +1,360 @@
+diff -ur -x .gitignore -x .git -x Makefile.in -x aclocal.m4 -x configure -x migemo-dict.cache -x migemo-dict.cache.idx migemo-0.40/ChangeLog migemo-for-Ruby-1.9/ChangeLog
+--- migemo-0.40/ChangeLog	2003-05-29 17:08:45.000000000 +0900
++++ migemo-for-Ruby-1.9/ChangeLog	2013-03-24 04:30:57.325997797 +0900
+@@ -1,3 +1,14 @@
++2012-04-30  yshl <yshl@takechiyo.net>
++
++	* acinclude.m4: Use RbConfig instead of obsolete Config.
++	* migemo-dict.rb: Delete unused variables.
++
++2010-12-31  yshl <yshl@takechiyo.net>
++
++	* genchars.sh migemo migemo-cache.rb migemo-convert.rb migemo-dict.rb
++	migemo-index.rb migemo.rb.in tests/Makefile.am migemo-grep
++	migemo-server migemo-client: Change for Ruby 1.9
++
+ 2003-05-28  Satoru Takabayashi  <satoru@namazu.org>
+ 
+ 	* Migemo: Version 0.40 Released.
+diff -ur -x .gitignore -x .git -x Makefile.in -x aclocal.m4 -x configure -x migemo-dict.cache -x migemo-dict.cache.idx migemo-0.40/Makefile.am migemo-for-Ruby-1.9/Makefile.am
+--- migemo-0.40/Makefile.am	2003-05-28 21:14:04.000000000 +0900
++++ migemo-for-Ruby-1.9/Makefile.am	2013-03-24 04:30:57.325997797 +0900
+@@ -15,17 +15,17 @@
+ 	sed -e 's!@pkgdatadir@!$(pkgdatadir)!g' migemo.el.in > $@
+ 
+ migemo-dict: # SKK-JISYO.L
+-	ruby -I. migemo-convert.rb SKK-JISYO.L > $@
++	ruby -Eeuc-jp -I. migemo-convert.rb SKK-JISYO.L > $@
+ 
+ migemo-dict.idx: migemo-dict
+-	ruby -I. migemo-index.rb migemo-dict > migemo-dict.idx
++	ruby -Eeuc-jp -I. migemo-index.rb migemo-dict > migemo-dict.idx
+ 
+ migemo-dict.cache: frequent-chars migemo-dict migemo-dict.idx
+-	sort frequent-chars | ruby -I. migemo-cache.rb migemo-dict
++	sort frequent-chars | ruby -Eeuc-jp -I. migemo-cache.rb migemo-dict
+ 
+ frequent-chars: genchars.sh migemo-dict
+ 	sh genchars.sh > tmp.list1
+-	cat tmp.list1 | ruby -rromkan -ne 'puts $$_.to_kunrei' > tmp.list2
++	cat tmp.list1 | ruby -Eeuc-jp -rromkan -ne 'puts $$_.to_kunrei' > tmp.list2
+ 	cat tmp.list1 tmp.list2 | sort | uniq > frequent-chars
+ 
+ clean-local:
+diff -ur -x .gitignore -x .git -x Makefile.in -x aclocal.m4 -x configure -x migemo-dict.cache -x migemo-dict.cache.idx migemo-0.40/acinclude.m4 migemo-for-Ruby-1.9/acinclude.m4
+--- migemo-0.40/acinclude.m4	2001-07-10 13:35:18.000000000 +0900
++++ migemo-for-Ruby-1.9/acinclude.m4	2013-03-24 04:30:57.325997797 +0900
+@@ -123,7 +123,7 @@
+   AC_MSG_CHECKING([where .rb files should go])
+   if test "x$rubydir" = x; then
+     changequote(<<, >>)
+-    rubydir=`ruby -rrbconfig -e 'puts Config::CONFIG["sitedir"]'`
++    rubydir=`ruby -rrbconfig -e 'puts RbConfig::CONFIG["sitedir"]'`
+     changequote([, ])
+   fi
+   AC_MSG_RESULT($rubydir)
+diff -ur -x .gitignore -x .git -x Makefile.in -x aclocal.m4 -x configure -x migemo-dict.cache -x migemo-dict.cache.idx migemo-0.40/genchars.sh migemo-for-Ruby-1.9/genchars.sh
+--- migemo-0.40/genchars.sh	2001-08-13 18:30:48.000000000 +0900
++++ migemo-for-Ruby-1.9/genchars.sh	2013-03-24 04:30:57.329331298 +0900
+@@ -1,6 +1,6 @@
+ #! /bin/sh
+ 
+-ruby -rromkan -nle 'head = split[0]; if /^\w+$/ =~ head then puts head else roma = head.to_roma; puts roma, roma.to_kunrei end' migemo-dict |uniq> tmp.ascii.words
++ruby -Eeuc-jp -rromkan -nle 'head = $_.split[0]; if /^\w+$/ =~ head then puts head else roma = head.to_roma; puts roma, roma.to_kunrei end' migemo-dict |uniq> tmp.ascii.words
+ 
+ # Get the top 500 frequent ngrams.
+ for i in 1 2 3 4 5 6 7 8; do
+diff -ur -x .gitignore -x .git -x Makefile.in -x aclocal.m4 -x configure -x migemo-dict.cache -x migemo-dict.cache.idx migemo-0.40/migemo migemo-for-Ruby-1.9/migemo
+--- migemo-0.40/migemo	2003-05-27 12:01:10.000000000 +0900
++++ migemo-for-Ruby-1.9/migemo	2013-03-24 04:30:57.329331298 +0900
+@@ -10,7 +10,6 @@
+ # the GNU General Public License version 2.
+ #
+ 
+-$KCODE = "e"
+ 
+ require 'migemo'
+ require 'getoptlong'
+@@ -43,6 +42,7 @@
+   -s, --separator=STRING Insert String to each regular expression.
+   -n, --nocache		 Don't use caches.
+   -l, --logging=FILE	 Log patterns to FILE.
++  -e, --encoding=ENC     Use ENC for input/output encoding(default: euc-jp)
+ "
+ end
+ 
+@@ -60,7 +60,8 @@
+ 		     ['--insert', '-i',		GetoptLong::REQUIRED_ARGUMENT],
+ 		     ['--separator', '-s',	GetoptLong::REQUIRED_ARGUMENT],
+ 		     ['--logging', '-l',	GetoptLong::REQUIRED_ARGUMENT],
+-		     ['--nocache', '-n',	GetoptLong::NO_ARGUMENT])
++		     ['--nocache', '-n',	GetoptLong::NO_ARGUMENT],
++		     ['--encoding', '-e',	GetoptLong::REQUIRED_ARGUMENT])
+ 
+   parser.each_option do |name, arg|
+     options[name.sub(/^--/, "")] = arg
+@@ -127,6 +128,11 @@
+     logger = Logger.new(options['logging'])
+   end
+ 
++  encoding = 'euc-jp'
++  if options['encoding']
++    encoding = options['encoding']
++  end
++
+   generate_regex_str = lambda {|pattern, with_paren|
+     migemo = Migemo.new(static_dict, pattern)
+     migemo.user_dict = user_dict if user_dict
+@@ -140,8 +146,10 @@
+   }
+ 
+   $stdout.sync = true
++  $stdin.set_encoding(encoding)
++  $stdout.set_encoding(encoding)
+   while line = gets
+-    pattern = line.chomp
++    pattern = line.encode('euc-jp').chomp
+     segments = segment(pattern)
+     
+     if segments.length <= 1
+@@ -155,7 +163,7 @@
+       regex_str = [regex_str1, regex_str2].join(bar)
+     end
+ 
+-    puts regex_str
++    puts regex_str.encode(encoding)
+     puts options['separator'] if options['separator']
+     logger.puts(pattern) if logger
+   end
+diff -ur -x .gitignore -x .git -x Makefile.in -x aclocal.m4 -x configure -x migemo-dict.cache -x migemo-dict.cache.idx migemo-0.40/migemo-cache.rb migemo-for-Ruby-1.9/migemo-cache.rb
+--- migemo-0.40/migemo-cache.rb	2001-07-15 02:38:56.000000000 +0900
++++ migemo-for-Ruby-1.9/migemo-cache.rb	2013-03-24 04:30:57.329331298 +0900
+@@ -1,5 +1,4 @@
+ require 'migemo'
+-$KCODE="e"
+ raise if ARGV[0] == nil
+ dict = ARGV[0]
+ static_dict = MigemoStaticDict.new(dict)
+@@ -18,10 +17,10 @@
+   migemo = Migemo.new(static_dict, pattern)
+   migemo.optimization = 3
+   data = Marshal.dump(migemo.regex_tree)
+-  output = [pattern.length].pack("N") + pattern + 
+-    [data.length].pack("N") + data
++  output = [pattern.bytesize].pack("N") + pattern.dup.force_encoding("ASCII-8BIT") + 
++    [data.bytesize].pack("N") + data
+   cache.print output
+   index.print [idx].pack("N")
+-  idx += output.length
++  idx += output.bytesize
+ end
+ 
+diff -ur -x .gitignore -x .git -x Makefile.in -x aclocal.m4 -x configure -x migemo-dict.cache -x migemo-dict.cache.idx migemo-0.40/migemo-client migemo-for-Ruby-1.9/migemo-client
+--- migemo-0.40/migemo-client	2001-08-13 18:30:48.000000000 +0900
++++ migemo-for-Ruby-1.9/migemo-client	2013-03-24 04:30:57.329331298 +0900
+@@ -10,7 +10,6 @@
+ # the GNU General Public License version 2.
+ #
+ 
+-$KCODE = "e"
+ require 'net/http'
+ require 'getoptlong'
+ 
+diff -ur -x .gitignore -x .git -x Makefile.in -x aclocal.m4 -x configure -x migemo-dict.cache -x migemo-dict.cache.idx migemo-0.40/migemo-convert.rb migemo-for-Ruby-1.9/migemo-convert.rb
+--- migemo-0.40/migemo-convert.rb	2003-05-26 15:55:22.000000000 +0900
++++ migemo-for-Ruby-1.9/migemo-convert.rb	2013-03-24 04:30:57.329331298 +0900
+@@ -1,3 +1,4 @@
++# -*- encoding:euc-jp -*-
+ #
+ # Ruby/Migemo - a library for Japanese incremental search.
+ #
+@@ -14,7 +15,6 @@
+ #
+ # Convert a SKK's dictionary into Migemo's.
+ #
+-$KCODE= "e"
+ require 'romkan'
+ 
+ HIRAGANA = "[¤¡-¤ó¡¼¡Á]"
+diff -ur -x .gitignore -x .git -x Makefile.in -x aclocal.m4 -x configure -x migemo-dict.cache -x migemo-dict.cache.idx migemo-0.40/migemo-dict.rb migemo-for-Ruby-1.9/migemo-dict.rb
+--- migemo-0.40/migemo-dict.rb	2002-10-22 14:38:14.000000000 +0900
++++ migemo-for-Ruby-1.9/migemo-dict.rb	2013-03-24 04:30:57.379333806 +0900
+@@ -1,3 +1,4 @@
++# -*- encoding:euc-jp -*-
+ #
+ # Ruby/Migemo - a library for Japanese incremental search.
+ #
+@@ -32,8 +33,14 @@
+ end
+ 
+ class MigemoDict
++  class << self
++    def open(filename)
++      File.open(filename, 'r', :external_encoding => 'euc-jp')
++    end
++  end
++
+   def initialize (filename)
+-    @dict  = File.new(filename)
++    @dict  = MigemoDict.open(filename)
+   end
+ 
+   private
+@@ -56,7 +63,7 @@
+ class MigemoStaticDict < MigemoDict
+   def initialize (filename)
+     super(filename)
+-    @index = File.new(filename + ".idx").read.unpack "N*"
++    @index = MigemoDict.open(filename + ".idx").read.unpack "N*"
+   end
+ 
+   private
+@@ -68,7 +75,7 @@
+   public
+   def lookup (pattern)
+     range = @index.bsearch_range do |idx| 
+-      key, values = decompose(get_line(idx))
++      key, * = decompose(get_line(idx))
+       key.prefix_match(pattern)
+     end
+     if range 
+@@ -88,7 +95,7 @@
+ 
+   def lookup (pattern)
+     range = @lines.bsearch_range do |line| 
+-      key, values = decompose(line)
++      key, * = decompose(line)
+       key.prefix_match(pattern)
+     end
+     if range 
+@@ -105,8 +112,8 @@
+ 
+ class MigemoDictCache
+   def initialize (filename)
+-    @dict  = File.new(filename)
+-    @index = File.new(filename + ".idx").read.unpack "N*"
++    @dict  = MigemoDict.open(filename)
++    @index = MigemoDict.open(filename + ".idx").read.unpack "N*"
+   end
+ 
+   def decompose (idx)
+@@ -122,12 +129,12 @@
+   def lookup (pattern)
+     raise if pattern == nil
+     pattern = pattern.downcase
+-    idx = @index.bsearch_first do |idx| 
+-      key, data = decompose(idx)
++    idx = @index.bsearch_first do |idx1| 
++      key, * = decompose(idx1)
+       key <=> pattern 
+     end
+     if idx
+-      key, data = decompose(@index[idx])
++      data = decompose(@index[idx])[1]
+       return data
+     else
+       nil
+diff -ur -x .gitignore -x .git -x Makefile.in -x aclocal.m4 -x configure -x migemo-dict.cache -x migemo-dict.cache.idx migemo-0.40/migemo-grep migemo-for-Ruby-1.9/migemo-grep
+--- migemo-0.40/migemo-grep	2003-05-27 16:43:07.000000000 +0900
++++ migemo-for-Ruby-1.9/migemo-grep	2013-03-24 04:30:57.379333806 +0900
+@@ -9,7 +9,6 @@
+ # You can redistribute it and/or modify it under the terms of 
+ # the GNU General Public License version 2.
+ #
+-$KCODE = "e"
+ 
+ require 'migemo'
+ require 'getoptlong'
+diff -ur -x .gitignore -x .git -x Makefile.in -x aclocal.m4 -x configure -x migemo-dict.cache -x migemo-dict.cache.idx migemo-0.40/migemo-index.rb migemo-for-Ruby-1.9/migemo-index.rb
+--- migemo-0.40/migemo-index.rb	2003-05-26 15:45:53.000000000 +0900
++++ migemo-for-Ruby-1.9/migemo-index.rb	2013-03-24 04:30:57.379333806 +0900
+@@ -19,5 +19,5 @@
+   unless line =~ /^;/
+     print [offset].pack("N")
+   end
+-  offset += line.length
++  offset += line.bytesize
+ end
+diff -ur -x .gitignore -x .git -x Makefile.in -x aclocal.m4 -x configure -x migemo-dict.cache -x migemo-dict.cache.idx migemo-0.40/migemo-regex.rb migemo-for-Ruby-1.9/migemo-regex.rb
+--- migemo-0.40/migemo-regex.rb	2002-10-22 14:10:38.000000000 +0900
++++ migemo-for-Ruby-1.9/migemo-regex.rb	2013-03-24 04:30:57.379333806 +0900
+@@ -1,3 +1,4 @@
++# -*- encoding:euc-jp -*-
+ #
+ # Ruby/Migemo - a library for Japanese incremental search.
+ #
+diff -ur -x .gitignore -x .git -x Makefile.in -x aclocal.m4 -x configure -x migemo-dict.cache -x migemo-dict.cache.idx migemo-0.40/migemo-server migemo-for-Ruby-1.9/migemo-server
+--- migemo-0.40/migemo-server	2001-08-13 18:30:51.000000000 +0900
++++ migemo-for-Ruby-1.9/migemo-server	2013-03-24 04:30:57.379333806 +0900
+@@ -10,7 +10,6 @@
+ # the GNU General Public License version 2.
+ #
+ 
+-$KCODE = "e"
+ require 'migemo'
+ require 'cgi'
+ require 'socket'
+diff -ur -x .gitignore -x .git -x Makefile.in -x aclocal.m4 -x configure -x migemo-dict.cache -x migemo-dict.cache.idx migemo-0.40/migemo.rb.in migemo-for-Ruby-1.9/migemo.rb.in
+--- migemo-0.40/migemo.rb.in	2003-05-28 21:00:52.000000000 +0900
++++ migemo-for-Ruby-1.9/migemo.rb.in	2013-03-24 04:30:57.379333806 +0900
+@@ -1,3 +1,4 @@
++# -*- encoding:euc-jp -*-
+ #
+ # Ruby/Migemo - a library for Japanese incremental search.
+ #
+@@ -14,7 +15,6 @@
+ require 'migemo-dict'
+ require 'migemo-regex'
+ require 'romkan'
+-require 'jcode'
+ include MigemoRegex
+ 
+ class String
+@@ -24,7 +24,7 @@
+   end
+ 
+   def quotemeta
+-    self.gsub(/([^ \w])/, '\\\\\\1')
++    self.gsub(/([[:punct:]])/, '\\\\\\1')
+   end
+ 
+   def first
+@@ -177,7 +177,7 @@
+     expand_kanas.each do |x| 
+       compiler.push(x)
+       compiler.push(x.to_katakana)
+-      expand_words(@static_dict, x).each do |x| compiler.push(x) end
++      expand_words(@static_dict, x).each do |y| compiler.push(y) end
+     end
+     expand_words(@static_dict, @pattern).each do |x| compiler.push(x) end
+     compiler.uniq
+@@ -188,7 +188,7 @@
+   def lookup_user_dict
+     compiler = RegexCompiler.new
+     expand_kanas.each do |x| 
+-      expand_words(@user_dict, x).each do |x| compiler.push(x) end
++      expand_words(@user_dict, x).each do |y| compiler.push(y) end
+     end
+     expand_words(@user_dict, @pattern).each do |x| compiler.push(x) end
+     compiler.uniq
+diff -ur -x .gitignore -x .git -x Makefile.in -x aclocal.m4 -x configure -x migemo-dict.cache -x migemo-dict.cache.idx migemo-0.40/tests/Makefile.am migemo-for-Ruby-1.9/tests/Makefile.am
+--- migemo-0.40/tests/Makefile.am	2001-08-14 02:12:57.000000000 +0900
++++ migemo-for-Ruby-1.9/tests/Makefile.am	2013-03-24 04:30:57.379333806 +0900
+@@ -5,13 +5,13 @@
+ 
+ 
+ test-dict.idx: test-dict ../migemo-index.rb
+-	ruby -I.. ../migemo-index.rb test-dict > test-dict.idx
++	ruby -Eeuc-jp -I.. ../migemo-index.rb test-dict > test-dict.idx
+ 
+ test-dict.cache: test-dict test-dict.idx ../migemo-cache.rb
+-	ruby -rromkan -ne 'puts $$1.to_roma if /^(.+?)	/' test-dict |\
++	ruby -Eeuc-jp -rromkan -ne 'puts $$1.to_roma if /^(.+?)	/' test-dict |\
+ 	while read line; do\
+-	    echo $$line | ruby -ne 'chomp!;1.upto($$_.length) do |x| puts $$_[0,x] end';\
+-	done | ruby -I.. ../migemo-cache.rb test-dict
++	    echo $$line | ruby -Eeuc-jp -ne '$$_.chomp!;1.upto($$_.length) do |x| puts $$_[0,x] end';\
++	done | ruby -Eeuc-jp -I.. ../migemo-cache.rb test-dict
+ 
+ clean-local:
+ 	rm -f tmp.*

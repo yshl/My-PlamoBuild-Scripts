@@ -1,0 +1,4 @@
+Ruby 1.9 対応版 migemo (http://github.com/yshl/migemo-for-Ruby-1.9 パッチ) です。
+* ruby_bsearch と ruby_romkan が必要です。
+* Emacs の方は手をつけていません。
+* 本家の方の Ruby 1.9 対応が動き始めたみたいなので、そちらにした方がいいかもしれません。

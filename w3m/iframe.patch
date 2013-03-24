@@ -1,0 +1,74 @@
+diff -ur w3m-0.5.3/file.c w3m-0.5.3-p1/file.c
+--- w3m-0.5.3/file.c	2011-01-04 18:22:21.000000000 +0900
++++ w3m-0.5.3-p1/file.c	2011-01-16 20:51:48.246951593 +0900
+@@ -5230,6 +5230,16 @@
+ 	    }
+ 	}
+ 	return 1;
++    case HTML_IFRAME:
++	if (view_unseenobject) {
++	    if (parsedtag_get_value(tag, ATTR_SRC, &p)) {
++		Str s;
++		q = html_quote(p);
++		s = Sprintf("<A HREF=\"%s\">iframe(%s)</A>", q, q);
++		HTMLlineproc1(s->ptr, h_env);
++	    }
++	}
++	return 1;
+     case HTML_BODY:
+ 	if (view_unseenobject) {
+ 	    if (parsedtag_get_value(tag, ATTR_BACKGROUND, &p)) {
+diff -ur w3m-0.5.3/html.c w3m-0.5.3-p1/html.c
+--- w3m-0.5.3/html.c	2011-01-04 18:22:21.000000000 +0900
++++ w3m-0.5.3-p1/html.c	2011-01-16 20:49:54.774362888 +0900
+@@ -89,6 +89,9 @@
+ unsigned char ALST_EMBED[] = { ATTR_SRC, ATTR_CORE };
+ #define MAX_EMBED	MAXA_CORE + 1
+ 
++unsigned char ALST_IFRAME[] = { ATTR_SRC, ATTR_CORE };
++#define MAXA_IFRAME	MAXA_CORE + 1
++
+ unsigned char ALST_TEXTAREA_INT[] = { ATTR_TEXTAREANUMBER };
+ #define MAXA_TEXTAREA_INT 1
+ unsigned char ALST_SELECT_INT[] = { ATTR_SELECTNUMBER };
+@@ -250,7 +253,7 @@
+     {"button", ALST_NOP, MAXA_NOP, 0},		/* 124 HTML_BUTTON */
+     {"fieldset", ALST_NOP, MAXA_NOP, 0},	        /* 125 HTML_FIELDSET */
+     {"/fieldset", NULL, 0, TFLG_END},	/* 126 HTML_N_FIELDSET */
+-    {"iframe", ALST_NOP, MAXA_NOP, 0},		/* 127 HTML_IFRAME */
++    {"iframe", ALST_IFRAME, MAXA_IFRAME, 0},		/* 127 HTML_IFRAME */
+     {"label", ALST_NOP, MAXA_NOP, 0}, 		/* 128 HTML_LABEL */
+     {"/label", NULL, 0, TFLG_END},	/* 129 HTML_N_LABEL */
+     {"legend", ALST_NOP, MAXA_NOP, 0},		/* 130 HTML_LEGEND */
+@@ -263,8 +266,8 @@
+     {"param", ALST_NOP, MAXA_NOP, 0},		/* 137 HTML_PARAM */
+     {"small", ALST_NOP, MAXA_NOP, 0}, 		/* 138 HTML_SMALL */
+     {"/small", NULL, 0, TFLG_END},	/* 139 HTML_N_SMALL */
++    {"/iframe", NULL, 0, TFLG_END},		/* 140 HTML_IFRAME */
+ 
+-    {NULL, NULL, 0, 0},		/* 140 Undefined */
+     {NULL, NULL, 0, 0},		/* 141 Undefined */
+     {NULL, NULL, 0, 0},		/* 142 Undefined */
+     {NULL, NULL, 0, 0},		/* 143 Undefined */
+diff -ur w3m-0.5.3/html.h w3m-0.5.3-p1/html.h
+--- w3m-0.5.3/html.h	2011-01-04 18:22:21.000000000 +0900
++++ w3m-0.5.3-p1/html.h	2011-01-16 20:50:29.658034386 +0900
+@@ -229,6 +229,7 @@
+ #define HTML_PARAM      137
+ #define HTML_SMALL      138
+ #define HTML_N_SMALL    139
++#define HTML_N_IFRAME   140
+ 
+    /* pseudo tag */
+ #define HTML_SELECT_INT     160
+diff -ur w3m-0.5.3/tagtable.tab w3m-0.5.3-p1/tagtable.tab
+--- w3m-0.5.3/tagtable.tab	2011-01-04 18:22:23.000000000 +0900
++++ w3m-0.5.3-p1/tagtable.tab	2011-01-16 20:51:28.300511961 +0900
+@@ -179,6 +179,7 @@
+ fieldset	HTML_FIELDSET
+ /fieldset	HTML_N_FIELDSET
+ iframe		HTML_IFRAME
++/iframe 	HTML_N_IFRAME
+ label		HTML_LABEL
+ /label		HTML_N_LABEL
+ legend		HTML_LEGEND

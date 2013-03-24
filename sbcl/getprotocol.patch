@@ -1,0 +1,13 @@
+diff -ur sbcl-1.1.5/contrib/sb-bsd-sockets/inet.lisp build/contrib/sb-bsd-sockets/inet.lisp
+--- sbcl-1.1.5/contrib/sb-bsd-sockets/inet.lisp	2013-02-26 20:42:18.000000000 +0900
++++ build/contrib/sb-bsd-sockets/inet.lisp	2013-03-20 15:56:33.001614825 +0900
+@@ -124,6 +124,9 @@
+                                  (incf buffer-length 1024)
+                                  (when (> buffer-length max-buffer)
+                                    (error "Exceeded max-buffer of ~d" max-buffer)))
++                                ((and (eql errno sb-unix::enoent)
++				      (sb-alien::null-alien (sb-alien:deref result 0)))
++                                 (error 'unknown-protocol :name name))
+                                 (t
+                                  (error "Unexpected errno ~d" errno))))))))
+           (when result-buf

@@ -1,0 +1,21 @@
+diff -ur sbcl-1.1.5/tests/run-program.impure.lisp build/tests/run-program.impure.lisp
+--- sbcl-1.1.5/tests/run-program.impure.lisp	2013-02-26 20:42:20.000000000 +0900
++++ build/tests/run-program.impure.lisp	2013-03-17 21:56:25.449266825 +0900
+@@ -171,7 +171,7 @@
+   (write-line "bar" f))
+ 
+ (defparameter *ed*
+-  (run-program "/bin/ed" (list *tmpfile*) :wait nil :pty t))
++  (run-program "/usr/bin/ed" (list *tmpfile*) :wait nil :pty t))
+ 
+ (defparameter *ed-pipe* (make-two-way-stream (process-pty *ed*) (process-pty *ed*)))
+ (defparameter *ed-in* (make-synonym-stream '*ed-pipe*))
+@@ -259,7 +259,7 @@
+     (flet ((status-hook (proc)
+              (case (sb-ext:process-status proc)
+                (:stopped (setf stopped t)))))
+-      (let ((proc (sb-ext:run-program "/bin/ed" nil :search nil :wait nil
++      (let ((proc (sb-ext:run-program "/usr/bin/ed" nil :search nil :wait nil
+                                       :input t :output t
+                                       :status-hook #'status-hook)))
+         ;; Give the program a generous time to generate the SIGTTIN.

@@ -2,12 +2,14 @@
 ・Plamo のパッケージのうち以下のものが必要です。多分。
   gcc_fortran, ocaml, fftw, pcre, tcl, tk
 ・My-PlamoBuild-Scripts の以下のパッケージも多分必要となるでしょう。
-  blas lapack suitesparse
-  hdf5 pvm matio
-  ant antlr beanshell checkstyle commonsbeanutils flexdock fop
-  gluegen hdf-java javahelp2 jeuclid jgoodies jgraphx jlatexmath
-  jogl jrosetta junit saxon6 skinlf
+  blas lapack suitesparse hdf5 matio
+  ant flexdock fop gluegen javahelp2 jeuclid jgoodies jgraphx jlatexmath
+  jogl jrosetta saxon6 skinlf
+・必須ではないパッケージ
+  pvm antlr beanshell checkstyle commons-beanutils hdf-java junit
 ・Scilab-5.4.0 では
-  ・新たに scirenderer, atpack-ng が必要です。
+  ・新たに scirenderer, arpack-ng が必要です。
   ・gluegen, jogl は version 2 が必要です。My-PlamoBuild-Scripts の jogamp に含まれています。
   ・jgraphx-1.8.0.0 以上、flexdock-1.2.0 以上、jlatexmath-1.0.0 以上が必要です。
+・Scilab-5.4.1 では
+  ・scirenderer-1.1.0, flexdock-1.2.3, jlatexmath-1.0.2 以上が必要です。

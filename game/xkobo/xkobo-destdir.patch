@@ -1,0 +1,28 @@
+diff -ur xkobo-1.11/Imakefile build/Imakefile
+--- xkobo-1.11/Imakefile	1997-01-10 11:29:36.000000000 +0900
++++ build/Imakefile	2013-06-23 17:15:19.164307330 +0900
+@@ -18,7 +18,7 @@
+ 
+ #ifdef SECURE_SCOREFILES
+ /*  ADMINISTER OF THE GAME  */
+-XKOBO_ADMINISTER = games
++XKOBO_ADMINISTER = games:games
+ #endif
+ 
+ /* ------------------------------------------------------------------- */
+@@ -69,11 +69,11 @@
+ 
+ #ifdef SECURE_SCOREFILES
+ install::
+-	if [ -d $(HSCORE_DIR) ]; then chmod 755 $(HSCORE_DIR); \
+-	else mkdirhier $(HSCORE_DIR); chmod 755 $(HSCORE_DIR); fi
+-	chown $(XKOBO_ADMINISTER) $(BINDIR)/xkobo
++	if [ -d $(HSCORE_DIR) ]; then chmod 775 $(HSCORE_DIR); \
++	else mkdirhier $(HSCORE_DIR); chmod 775 $(HSCORE_DIR); fi
++	chown $(XKOBO_ADMINISTER) $(DESTDIR)$(BINDIR)/xkobo
+ 	chown -R $(XKOBO_ADMINISTER) $(HSCORE_DIR)
+-	chmod 4755 $(BINDIR)/xkobo
++	chmod 2755 $(DESTDIR)$(BINDIR)/xkobo
+ #else /* SECURE_SCOREFILES */
+ install::
+ 	if [ -d $(HSCORE_DIR) ]; then chmod 777 $(HSCORE_DIR); \

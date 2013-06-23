@@ -1,0 +1,12 @@
+diff -ur xkobo-1.11/scenes.h build/scenes.h
+--- xkobo-1.11/scenes.h	1996-04-04 06:58:53.000000000 +0900
++++ build/scenes.h	2013-06-23 10:25:08.561158332 +0900
+@@ -39,7 +39,7 @@
+     int x, y, h, v;
+ } _base;
+ 
+-typedef const struct {
++typedef const struct x_scene{
+     int ratio;
+     int startx;
+     int starty;

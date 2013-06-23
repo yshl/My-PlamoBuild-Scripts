@@ -1,0 +1,12 @@
+diff -ur KoboDeluxe-0.5.1/graphics/window.cpp build/graphics/window.cpp
+--- KoboDeluxe-0.5.1/graphics/window.cpp	2007-12-14 18:13:24.000000000 +0900
++++ build/graphics/window.cpp	2013-06-04 00:43:47.912668796 +0900
+@@ -398,7 +398,7 @@
+ 		 */
+ 		if(token)
+ 		{
+-			char *tok = strchr(txt, token);
++			const char *tok = strchr(txt, token);
+ 			if(tok)
+ 				tokpos = tok-txt;
+ 			else

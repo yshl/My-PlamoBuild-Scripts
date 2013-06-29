@@ -1,0 +1,54 @@
+diff -ur scotch_6.0.0_esmumps/src/check/Makefile build/src/check/Makefile
+--- scotch_6.0.0_esmumps/src/check/Makefile	2012-12-01 02:11:35.000000000 +0900
++++ build/src/check/Makefile	2013-06-30 01:50:33.914116575 +0900
+@@ -110,7 +110,7 @@
+ 					$(EXECS) ./test_common_thread
+ 
+ test_common_thread		:	test_common_thread.c		\
+-					$(SCOTCHLIBDIR)/libscotch.a
++					$(SCOTCHLIBDIR)/libscotch$(LIB)
+ 
+ ##
+ 
+@@ -118,7 +118,7 @@
+ 					$(EXECS) ./test_scotch_graph_color data/bump.grf
+ 
+ test_graph_color		:	test_scotch_graph_color.c	\
+-					$(SCOTCHLIBDIR)/libscotch.a
++					$(SCOTCHLIBDIR)/libscotch$(LIB)
+ 
+ ##
+ 
+@@ -126,7 +126,7 @@
+ 					$(EXECS) ./test_strat_seq
+ 
+ test_strat_seq			:	test_strat_seq.c		\
+-					$(SCOTCHLIBDIR)/libscotch.a
++					$(SCOTCHLIBDIR)/libscotch$(LIB)
+ 
+ ##
+ 
+@@ -134,7 +134,7 @@
+ 					$(EXECS) ./test_strat_par
+ 
+ test_strat_par			:	test_strat_par.c		\
+-					$(SCOTCHLIBDIR)/libptscotch.a
++					$(SCOTCHLIBDIR)/libptscotch$(LIB)
+ 
+ ##
+ 
+@@ -142,7 +142,7 @@
+ 					$(EXECP) ./test_scotch_dgraph_band data/bump.grf
+ 
+ test_scotch_dgraph_band		:	test_scotch_dgraph_band.c	\
+-					$(SCOTCHLIBDIR)/libptscotch.a
++					$(SCOTCHLIBDIR)/libptscotch$(LIB)
+ 
+ ##
+ 
+@@ -150,4 +150,4 @@
+ 					$(EXECP) ./test_scotch_dgraph_grow data/bump.grf
+ 
+ test_scotch_dgraph_grow		:	test_scotch_dgraph_grow.c	\
+-					$(SCOTCHLIBDIR)/libptscotch.a
++					$(SCOTCHLIBDIR)/libptscotch$(LIB)

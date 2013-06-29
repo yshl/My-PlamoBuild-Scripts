@@ -1,0 +1,13 @@
+diff -ur scotch_6.0.0_esmumps/src/Makefile build/src/Makefile
+--- scotch_6.0.0_esmumps/src/Makefile	2012-12-01 23:32:46.000000000 +0900
++++ build/src/Makefile	2013-06-30 00:12:56.220217529 +0900
+@@ -115,7 +115,9 @@
+ 					-$(CP) -f ../bin/[agm]*$(EXE) $(bindir)
+ 					-$(CP) -f ../bin/d[agm]*$(EXE) $(bindir)
+ 					-$(CP) -f ../include/*scotch*.h $(includedir)
++					-$(CP) -f ../include/*mumps*.h $(includedir)
+ 					-$(CP) -f ../lib/*scotch*$(LIB) $(libdir)
++					-$(CP) -f ../lib/*mumps*$(LIB) $(libdir)
+ 					-$(CP) -Rf ../man/* $(mandir)
+ 
+ clean				:	required

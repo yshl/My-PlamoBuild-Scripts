@@ -1,0 +1,11 @@
+diff a/src/libscotch/library.h b/src/libscotch/library.h
+--- a/src/libscotch/library.h
++++ b/src/libscotch/library.h
+@@ -64,6 +64,7 @@
+ /*
+ **  The type and structure definitions.
+ */
++#include<stdint.h>
+ 
+ /*+ Version flags. +*/
+ 

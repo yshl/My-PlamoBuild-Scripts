@@ -1,0 +1,77 @@
+diff a/src/Make.inc/Makefile.inc.x86-64_pc_linux2.shlib b/src/Make.inc/Makefile.inc.x86-64_pc_linux2.shlib
+--- a/src/Make.inc/Makefile.inc.x86-64_pc_linux2.shlib
++++ b/src/Make.inc/Makefile.inc.x86-64_pc_linux2.shlib
+@@ -3,7 +3,7 @@ LIB		= .so
+ OBJ		= .o
+ 
+ MAKE		= make
+-AR		= gcc
++AR		= mpicc
+ ARFLAGS		= -shared -o
+ CAT		= cat
+ CCS		= gcc
+diff a/src/esmumps/Makefile b/src/esmumps/Makefile
+--- a/src/esmumps/Makefile
++++ b/src/esmumps/Makefile
+@@ -151,7 +151,7 @@ libesmumps$(LIB)		:	graph_graph$(OBJ)			\
+ 					esmumps$(OBJ)				\
+ 					esmumps_f$(OBJ)				\
+ 					esmumps_strats$(OBJ)
+-					$(AR) $(ARFLAGS) lib$(ESMUMPSLIB)$(LIB) $(?)
++					$(AR) $(ARFLAGS) lib$(ESMUMPSLIB)$(LIB) $(?) -L$(libdir) -l$(SCOTCHLIB) -lscotch $(LDFLAGS)
+ 					-$(RANLIB) lib$(ESMUMPSLIB)$(LIB)
+ 
+ main_esmumps$(EXE)		:	main_esmumps.c				\
+diff a/src/libscotch/Makefile b/src/libscotch/Makefile
+--- a/src/libscotch/Makefile
++++ b/src/libscotch/Makefile
+@@ -2934,25 +2934,25 @@ ptscotchf.h			:	ptdummysizes$(EXE)			\
+ 					./ptdummysizes$(EXE) library_pt_f.h ptscotchf.h
+ 
+ libscotch$(LIB)			:	$(LIBSCOTCHDEPS)
+-					$(AR) $(ARFLAGS) $(@) $(?)
++					$(AR) $(ARFLAGS) $(@) $(?) $(LDFLAGS)
+ 					-$(RANLIB) $(@)
+ 
+ libscotcherr$(LIB)		:	library_error$(OBJ)
+-					$(AR) $(ARFLAGS) $(@) $(?)
++					$(AR) $(ARFLAGS) $(@) $(?) $(LDFLAGS)
+ 					-$(RANLIB) $(@)
+ 
+ libscotcherrexit$(LIB)		:	library_error_exit$(OBJ)
+-					$(AR) $(ARFLAGS) $(@) $(?)
++					$(AR) $(ARFLAGS) $(@) $(?) $(LDFLAGS)
+ 					-$(RANLIB) $(@)
+ 
+ libptscotch$(LIB)		:	$(LIBPTSCOTCHDEPS)
+-					$(AR) $(ARFLAGS) $(@) $(?)
++					$(AR) $(ARFLAGS) $(@) $(?) -L$(libdir) -lscotch $(LDFLAGS)
+ 					-$(RANLIB) $(@)
+ 
+ libptscotcherr$(LIB)		:	library_error_pt$(OBJ)
+-					$(AR) $(ARFLAGS) $(@) $(?)
++					$(AR) $(ARFLAGS) $(@) $(?) $(LDFLAGS)
+ 					-$(RANLIB) $(@)
+ 
+ libptscotcherrexit$(LIB)	:	library_error_exit_pt$(OBJ)
+-					$(AR) $(ARFLAGS) $(@) $(?)
++					$(AR) $(ARFLAGS) $(@) $(?) $(LDFLAGS)
+ 					-$(RANLIB) $(@)
+diff a/src/libscotchmetis/Makefile b/src/libscotchmetis/Makefile
+--- a/src/libscotchmetis/Makefile
++++ b/src/libscotchmetis/Makefile
+@@ -129,12 +129,12 @@ libptscotchparmetis$(LIB)	:	parmetis_dgraph_order$(OBJ)		\
+ 					parmetis_dgraph_order_f$(OBJ)		\
+ 					parmetis_dgraph_part$(OBJ)		\
+ 					parmetis_dgraph_part_f$(OBJ)
+-					$(AR) $(ARFLAGS) $(@) $(^)
++					$(AR) $(ARFLAGS) $(@) $(^) -L$(libdir) -lptscotch -lscotch $(LDFLAGS)
+ 					-$(RANLIB) $(@)
+ 
+ libscotchmetis$(LIB)		:	metis_graph_order$(OBJ)			\
+ 					metis_graph_order_f$(OBJ)		\
+ 					metis_graph_part$(OBJ)			\
+ 					metis_graph_part_f$(OBJ)
+-					$(AR) $(ARFLAGS) $(@) $(^)
++					$(AR) $(ARFLAGS) $(@) $(^) -L$(libdir) -lscotch $(LDFLAGS)
+ 					-$(RANLIB) $(@)

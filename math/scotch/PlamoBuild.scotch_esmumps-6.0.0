@@ -12,8 +12,7 @@ DOCS='INSTALL.txt LICENCE_fr.txt LICENSE_en.txt LISEZ-MOI.txt README.txt
     doc/CeCILL-C_V1-en.txt doc/CeCILL-C_V1-fr.txt doc/ptscotch_user6.0.pdf
     doc/ptscotch_user6.0.ps.gz doc/scotch_example.f doc/scotch_user6.0.pdf
     doc/scotch_user6.0.ps.gz'
-patchfiles='pthread.patch int_t.patch esmumps_ldflags.patch check.patch
-    install_esmumps-6.0.0.patch'
+patchfiles='common.patch static.patch shared.patch sharedlink.patch'
 compress=txz
 ca_directory=$HOME/.certdata
 
@@ -180,7 +179,7 @@ if [ $opt_build -eq 1 ] ; then
   for i in `seq 0 $((${#B[@]} - 1))` ; do
     cd ${B[$i]}
     if [ -f src/Makefile ] ; then
-      export LDFLAGS="-Wl,--as-needed"
+      export LDFLAGS="$LDFLAGS -Wl,--as-needed"
       (cd src; ln -sf Make.inc/$makeinc Makefile.inc)
       make -C src scotch ptscotch
       make -C src/esmumps scotch install
@@ -206,8 +205,12 @@ if [ $opt_package -eq 1 ] ; then
     done
     if [ -f src/Makefile ] ; then
       export LDFLAGS='-Wl,--as-needed'
-      mkdir -p $P/usr
-      make -C src install prefix=$P/usr libdir=$P/usr/$libdir
+      mkdir -p $P/usr/$libdir
+      mkdir -p $P/usr/include/scotch
+      make -C src install prefix=$P/usr libdir=$P/usr/$libdir \
+	  includedir=$P/usr/include/scotch
+      install lib/* $P/usr/$libdir
+      install include/* $P/usr/include/scotch
     fi
   done
 ######################################################################

@@ -1,0 +1,116 @@
+diff -ur MUMPS_4.10.0/Make.inc/Makefile.gfortran.PAR build/Make.inc/Makefile.gfortran.PAR
+--- MUMPS_4.10.0/Make.inc/Makefile.gfortran.PAR	2013-06-30 18:35:21.706944650 +0900
++++ build/Make.inc/Makefile.gfortran.PAR	2013-06-30 18:33:33.243543591 +0900
+@@ -61,14 +61,14 @@
+ ################################################################################
+ 
+ PLAT    =
+-LIBEXT  = .a
++LIBEXT  = .so
+ OUTC    = -o 
+ OUTF    = -o 
+ RM = /bin/rm -f
+ CC = mpicc
+ FC = mpif90
+ FL = mpif90
+-AR = ar vr 
++AR = $(FL) -shared -fPIC -o 
+ #RANLIB = ranlib
+ RANLIB  = echo
+ SCALAP  = -lscalapack
+@@ -86,9 +86,9 @@
+ CDEFS   = -DAdd_
+ 
+ #Begin Optimized options
+-OPTF    = -O -DALLOW_NON_INIT 
+-OPTL    = -O 
+-OPTC    = -O
++OPTF    = -O -DALLOW_NON_INIT -fPIC
++OPTL    = -O -fPIC
++OPTC    = -O -fPIC
+ #End Optimized options
+ INCS = $(INCPAR)
+ LIBS = $(LIBPAR)
+diff -ur MUMPS_4.10.0/Make.inc/Makefile.gfortran.SEQ build/Make.inc/Makefile.gfortran.SEQ
+--- MUMPS_4.10.0/Make.inc/Makefile.gfortran.SEQ	2013-06-30 18:35:21.706944650 +0900
++++ build/Make.inc/Makefile.gfortran.SEQ	2013-06-30 18:34:34.312125102 +0900
+@@ -61,14 +61,14 @@
+ ################################################################################
+ 
+ PLAT    =
+-LIBEXT  = .a
++LIBEXT  = .so
+ OUTC    = -o 
+ OUTF    = -o 
+ RM = /bin/rm -f
+ CC = gcc
+ FC = gfortran
+ FL = gfortran
+-AR = ar vr 
++AR = $(FL) -shared -fPIC -o 
+ #RANLIB = ranlib
+ RANLIB  = echo
+ # See point 17 in the FAQ to have more details on the compilation of mpich with gfortran
+@@ -81,9 +81,9 @@
+ CDEFS   = -DAdd_
+ 
+ #Begin Optimized options
+-OPTF    = -O -DALLOW_NON_INIT 
+-OPTL    = -O 
+-OPTC    = -O
++OPTF    = -O -DALLOW_NON_INIT -fPIC
++OPTL    = -O -fPIC
++OPTC    = -O -fPIC
+ #End Optimized options
+ INCS = $(INCSEQ)
+ LIBS = $(LIBSEQ)
+diff -ur MUMPS_4.10.0/examples/Makefile build/examples/Makefile
+--- MUMPS_4.10.0/examples/Makefile	2011-05-10 21:56:41.000000000 +0900
++++ build/examples/Makefile	2013-06-30 18:23:42.711703218 +0900
+@@ -25,25 +25,25 @@
+ LIBSMUMPS = $(libdir)/libsmumps$(PLAT)$(LIBEXT) $(LIBMUMPS_COMMON)
+ 
+ ssimpletest:  $(LIBSMUMPS)  $$@.o
+-	$(FL) -o $@ $(OPTL) ssimpletest.o  $(LIBSMUMPS) $(LORDERINGS) $(LIBS) $(LIBBLAS) $(LIBOTHERS)
++	$(FL) -o $@ $(OPTL) ssimpletest.o -L$(libdir) $(LIBSMUMPS) $(LORDERINGS) $(LIBS) $(LIBBLAS) $(LIBOTHERS)
+ 
+ 
+ LIBDMUMPS = $(libdir)/libdmumps$(PLAT)$(LIBEXT) $(LIBMUMPS_COMMON)
+ 
+ dsimpletest: $(LIBDMUMPS)  $$@.o 
+-	$(FL) -o $@ $(OPTL) dsimpletest.o  $(LIBDMUMPS) $(LORDERINGS) $(LIBS) $(LIBBLAS) $(LIBOTHERS)
++	$(FL) -o $@ $(OPTL) dsimpletest.o -L$(libdir) $(LIBDMUMPS) $(LORDERINGS) $(LIBS) $(LIBBLAS) $(LIBOTHERS)
+ 
+ 
+ LIBCMUMPS = $(libdir)/libcmumps$(PLAT)$(LIBEXT) $(LIBMUMPS_COMMON)
+ 
+ csimpletest: $(LIBCMUMPS)  $$@.o
+-	$(FL) -o $@ $(OPTL) csimpletest.o  $(LIBCMUMPS) $(LORDERINGS) $(LIBS) $(LIBBLAS) $(LIBOTHERS)
++	$(FL) -o $@ $(OPTL) csimpletest.o -L$(libdir) $(LIBCMUMPS) $(LORDERINGS) $(LIBS) $(LIBBLAS) $(LIBOTHERS)
+ 
+ 
+ LIBZMUMPS = $(libdir)/libzmumps$(PLAT)$(LIBEXT) $(LIBMUMPS_COMMON)
+ 
+ zsimpletest: $(LIBZMUMPS)  $$@.o
+-	$(FL) -o $@ $(OPTL) zsimpletest.o  $(LIBZMUMPS) $(LORDERINGS) $(LIBS) $(LIBBLAS) $(LIBOTHERS)
++	$(FL) -o $@ $(OPTL) zsimpletest.o -L$(libdir) $(LIBZMUMPS) $(LORDERINGS) $(LIBS) $(LIBBLAS) $(LIBOTHERS)
+ 
+ 
+ c_example:	$(LIBDMUMPS) $$@.o
+diff -ur MUMPS_4.10.0/src/Makefile build/src/Makefile
+--- MUMPS_4.10.0/src/Makefile	2011-05-10 21:56:32.000000000 +0900
++++ build/src/Makefile	2013-06-30 18:18:18.844894560 +0900
+@@ -53,11 +53,11 @@
+ 
+ 
+ $(libdir)/libmumps_common$(PLAT)$(LIBEXT):	$(OBJS_COMMON)
+-	$(AR)$@ $?
++	$(AR)$@ $? $(LORDERINGS) $(LIBS) $(LIBBLAS) $(LIBOTHERS)
+ 	$(RANLIB) $@
+ 
+ $(libdir)/lib$(ARITH)mumps$(PLAT)$(LIBEXT):    $(OBJS)
+-	$(AR)$@ $?
++	$(AR)$@ $? -L$(libdir) -lmumps_common $(LORDERINGS) $(LIBS) $(LIBBLAS) $(LIBOTHERS)
+ 	$(RANLIB) $@
+ 
+ $(ARITH)mumps_load.o:		$(ARITH)mumps_comm_buffer.o \

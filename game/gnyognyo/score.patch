@@ -1,0 +1,13 @@
+diff -ur gnyognyo2.1/gnyognyo.el build/gnyognyo.el
+--- gnyognyo2.1/gnyognyo.el	1999-09-14 12:53:37.000000000 +0900
++++ build/gnyognyo.el	2013-07-18 00:01:34.204761154 +0900
+@@ -158,8 +158,7 @@
+ ;;;
+ (defvar gnyo:single-user-mode (eq system-type 'ms-dos)
+   "*スコア登録で同じユーザのスコアを複数登録するか.")
+-(defvar gnyo:directory
+-  (expand-file-name (concat exec-directory "../lisp"))
++(defvar gnyo:directory "/var/games/emacs"
+   "*ぐにょぐにょ関係のファイルを置くディレクトリ.")
+ (defvar gnyo:lock-directory
+   (let ((ed exec-directory) dir)

@@ -1,0 +1,96 @@
+diff -Nur gnyognyo2.1/gnyognyo.el build32/gnyognyo.el
+--- gnyognyo2.1/gnyognyo.el	1999-09-14 12:53:37.000000000 +0900
++++ build32/gnyognyo.el	2013-07-17 22:43:08.892241892 +0900
+@@ -475,7 +475,10 @@
+ 	(/ (- (window-width) (* gnyo:width gnyo:char-width) gnyo:wall-width) 2)
+ 	gnyo:right-edge-x
+ 	(+ gnyo:left-edge-x (* gnyo:width gnyo:char-width) gnyo:wall-width)
+-	gnyo:bottom-edge-y (- (window-height) 3))
++	gnyo:bottom-edge-y
++	(if (eq window-system 'x)
++	  (- (/ (* (window-height) 8) 9) 3)
++	  (- (window-height) 3)))
+   (let ((y 1) (w (window-height)))
+     (while (< y w)
+       (insert-char ? (1- (window-width))) (newline) (setq y (1+ y))))
+@@ -849,7 +852,7 @@
+ 	      (open-network-stream 
+ 	       "*gnyoserv*" buffer host (or port gnyo:port))))
+     (set-buffer buffer)
+-    (buffer-flush-undo (current-buffer))
++    (buffer-disable-undo (current-buffer))
+     (erase-buffer)
+     (while (not (memq (process-status gnyo:server-process) '(open run)))
+       (message "Waiting for server to accept...")
+@@ -1476,7 +1479,7 @@
+   (or arg (setq gnyo:save-config (current-window-configuration)))
+   (delete-other-windows)
+   (switch-to-buffer (get-buffer-create gnyo:buffer))
+-  (buffer-flush-undo (current-buffer))
++  (buffer-disable-undo (current-buffer))
+   (setq major-mode 'gnyognyo mode-name "‚®‚É‚å‚®‚É‚å")
+   (use-local-map gnyo:key-map)
+   (gnyo*init-value)
+diff -Nur gnyognyo2.1/gnyoserv.c build32/gnyoserv.c
+--- gnyognyo2.1/gnyoserv.c	1997-01-17 11:55:09.000000000 +0900
++++ build32/gnyoserv.c	2013-07-17 22:57:01.795290416 +0900
+@@ -13,6 +13,8 @@
+ #include <netdb.h>
+ #include <fcntl.h>
+ #include <memory.h>
++#include <stdlib.h>
++#include <unistd.h>
+ 
+ /* $B$A$g$C$H$&$^$/F0$+$J$$$+$bCN$l$J$$$G$9!#D>$7$F2<$5$$(B ^^; */
+ 
+@@ -179,7 +181,7 @@
+     fd_set fds;
+     char buffer[BUFLEN], tmpbuf[BUFLEN], *p;
+     static struct sockaddr_in cliaddr;
+-    int cliaddrlen = sizeof(cliaddr);
++    socklen_t cliaddrlen = sizeof(cliaddr);
+ #define SAD struct sockaddr
+     while (!done) {
+         FD_ZERO(&fds);
+@@ -246,7 +248,7 @@
+                 switch (gnyoquery(c, rfd, tmpbuf)) {
+                 case 1:
+                     shutdown(rfd, 2);
+-                    close(rfd, 2);
++                    close(rfd);
+                     clisofd[c] = 0;
+                     if (clinames[c]) free(clinames[c]);
+                     if (--clients == 0) done=1;
+@@ -273,7 +275,7 @@
+     exit(0);
+ }
+ 
+-main(int argc, char* argv[])
++int main(int argc, char* argv[])
+ {
+     char hostname[MAXHOSTNAMELEN];
+     static struct hostent *host;
+diff -Nur gnyognyo2.1/gnyoup.c build32/gnyoup.c
+--- gnyognyo2.1/gnyoup.c	1970-01-01 09:00:00.000000000 +0900
++++ build32/gnyoup.c	2013-07-17 23:02:05.436179002 +0900
+@@ -0,0 +1,20 @@
++ /* gnyoup.c
++    DOSˆÈŠO‚Å‚Í‚±‚ê‚ðƒRƒ“ƒpƒCƒ‹‚µ‚Ä $EMACS/etc ‚É’u‚­B
++    ƒXƒRƒAƒtƒ@ƒCƒ‹‚ÌƒI[ƒi[‚Ì setuid ‚ð—§‚Ä‚éB*/
++
++#include <stdio.h>
++#include <stdlib.h>
++int main(argc, argv)
++ int argc;
++ char **argv;
++{
++	char c;
++	FILE *fp;
++	if (NULL == (fp=fopen(argv[1], "w"))) {
++		fprintf(stderr, "%s: Cannot open %s.\n", argv[0], argv[1]);
++		abort();
++	}
++	while (EOF != (c=getchar())) fputc(c, fp);
++	fclose(fp);
++	return 0;
++}

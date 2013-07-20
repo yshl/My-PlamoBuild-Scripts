@@ -1,0 +1,49 @@
+diff -ur snownews-1.5.11-orig/xmlparse.c snownews-1.5.11/xmlparse.c
+--- snownews-1.5.11-orig/xmlparse.c	2009-03-19 21:16:44.000000000 +0900
++++ snownews-1.5.11/xmlparse.c	2009-03-29 16:41:21.000000000 +0900
+@@ -42,6 +42,11 @@
+ /* Wird während des Parsens aufgerufen, falls wir auf ein <channel> Element
+    treffen. Die Funktion gibt ein neues Struct für den Newsfeed zurück. */
+ 
++int hasprefix(xmlNodePtr node)
++{
++	return node->ns!=NULL && node->ns->prefix!=NULL && xmlStrcmp(node->ns->prefix,"")!=0;
++}
++
+ void parse_rdf10_channel(struct feed * feed, xmlDocPtr doc, xmlNodePtr node) {
+ 	xmlNodePtr cur;
+ 	
+@@ -90,7 +95,10 @@
+ 			}
+ 		}
+ 		else if (xmlStrcmp(cur->name, (unsigned char *)"link") == 0) {
+-			feed->link = (char *)xmlNodeListGetString(doc, cur->children, 1);
++ 			if(!hasprefix(cur)){
++				feed->link = (char *)xmlNodeListGetString(doc, cur->children, 1);
++ 			}
++
+ 			/* Remove trailing newline */
+ 			if (feed->link != NULL) {
+ 				if (strlen(feed->link) > 1) {
+@@ -156,7 +164,9 @@
+ 			}
+ 		}
+ 		else if (xmlStrcmp(cur->name, (unsigned char *)"link") == 0) {
+-			feed->link = (char *)xmlNodeListGetString(doc, cur->children, 1);
++ 			if(!hasprefix(cur)){
++				feed->link = (char *)xmlNodeListGetString(doc, cur->children, 1);
++ 			}
+ 			/* Remove trailing newline */
+ 			if (feed->link != NULL) {
+ 				if (strlen(feed->link) > 1) {
+@@ -220,7 +230,9 @@
+ 			}
+ /* link */
+ 		} else if (xmlStrcmp(cur->name, (unsigned char *)"link") == 0) {
+-			item->data->link = (char *)xmlNodeListGetString(doc, cur->children, 1);
++ 			if(!hasprefix(cur)){
++				item->data->link = (char *)xmlNodeListGetString(doc, cur->children, 1);
++ 			}
+ 			/* Remove trailing newline */
+ 			if (item->data->link != NULL) {
+ 				if (strlen(item->data->link) > 1) {

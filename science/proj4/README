@@ -1,0 +1,3 @@
+Plamo 4.7 で aaa_proj としてパッケージされていた PROJ.4 です。パッケージ名は proj となっています。
+
+VTK で使用している libproj4 は API が異なっていますので、VTK_USE_SYSTEM_LIBPROJ4=ON とすることはできません。

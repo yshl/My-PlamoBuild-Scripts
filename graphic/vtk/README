@@ -1,2 +1,4 @@
 ビルドには cmake 2.8 以上が必要です。
 ビルドスクリプトで VTK_USE_SYSTEM_HDF5 を有効にしています。あらかじめインストールするか、オプションを無効にしてください。
+
+vtk-install.patch は http://www.vtk.org/Bug/view.php?id=14157 より

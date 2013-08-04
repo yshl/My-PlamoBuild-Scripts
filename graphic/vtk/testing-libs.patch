@@ -1,0 +1,20 @@
+diff -ur VTK6.0.0/Filters/ParallelFlowPaths/Testing/Cxx/CMakeLists.txt build/Filters/ParallelFlowPaths/Testing/Cxx/CMakeLists.txt
+--- VTK6.0.0/Filters/ParallelFlowPaths/Testing/Cxx/CMakeLists.txt	2013-06-13 04:47:10.000000000 +0900
++++ build/Filters/ParallelFlowPaths/Testing/Cxx/CMakeLists.txt	2013-08-04 12:43:56.249815176 +0900
+@@ -1,4 +1,5 @@
+ vtk_module_test_executable(TestPStream TestPStream.cxx)
++target_link_libraries(TestPStream vtkIOGeometry)
+ 
+ add_test(NAME ${vtk-module}Cxx-TestPStream-image
+   COMMAND ${MPIEXEC} ${MPIEXEC_NUMPROC_FLAG} 2 ${MPIEXEC_PREFLAGS}
+diff -ur VTK6.0.0/IO/ParallelNetCDF/Testing/Cxx/CMakeLists.txt build/IO/ParallelNetCDF/Testing/Cxx/CMakeLists.txt
+--- VTK6.0.0/IO/ParallelNetCDF/Testing/Cxx/CMakeLists.txt	2013-06-13 04:47:10.000000000 +0900
++++ build/IO/ParallelNetCDF/Testing/Cxx/CMakeLists.txt	2013-08-04 04:04:05.277691295 +0900
+@@ -5,6 +5,7 @@
+ )
+ 
+ vtk_module_test_executable(${vtk-module}CxxTests ${Tests})
++target_link_libraries(${vtk-module}CxxTests vtkInteractionStyle)
+ 
+ if(VTK_LARGE_DATA_ROOT)
+   add_test(NAME vtkIOParallelNetCDFCxx-TestPNetCDFPOPReader

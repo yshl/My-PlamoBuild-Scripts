@@ -27,9 +27,32 @@ OPT_CONFIG='
     -DVTK_USE_SYSTEM_OGGTHEORA=ON
     -DVTK_USE_SYSTEM_PNG=ON
     -DVTK_USE_SYSTEM_TIFF=ON
-    -DVTK_USE_SYSTEM_ZLIB=ON'
-DOCS='Copyright.txt README.html Testing.txt'
-patchfiles='parallelnetcdftesting.patch'
+    -DVTK_USE_SYSTEM_ZLIB=ON
+    -DModule_vtkCosmo=ON
+    -DModule_vtkFiltersCosmo=ON
+    -DModule_vtkFiltersParallelFlowPaths=ON
+    -DModule_vtkFiltersParallelStatistics=ON
+    -DModule_vtkFiltersReebGraph=ON
+    -DModule_vtkFiltersStatisticsGnuR=ON
+    -DR_LIBRARY_BLAS=/usr/lib64/libsatlas.so
+    -DModule_vtkIOFFMPEG=ON
+    -DModule_vtkIOODBC=ON
+    -DModule_vtkIOParallelExodus=ON
+    -DModule_vtkIOParallelLSDyna=ON
+    -DModule_vtkVPIC=ON
+    -DModule_vtkIOVPIC=ON
+    -DModule_vtkxdmf2=ON
+    -DModule_vtkIOXdmf2=ON
+    -DModule_vtkInfovisBoost=ON
+    -DModule_vtkInfovisBoostGraphAlgorithms=ON
+    -DModule_vtkPythonInterpreter=ON
+    -DModule_vtkWrappingPythonCore=ON
+    -DModule_vtkRenderingFreeTypeFontConfig=ON
+    -DModule_vtkRenderingParallel=ON
+    -DModule_vtkWrappingTcl=ON
+    '
+DOCS='Copyright.txt README.html'
+patchfiles='testing-libs.patch vtk-install.patch'
 compress=txz
 ##############################################################
 
@@ -168,7 +191,7 @@ if [ $opt_config -eq 1 ] ; then
          export LDFLAGS='-Wl,--as-needed' 
          export CC="gcc -isystem /usr/include $target" 
          export CXX="g++ -isystem /usr/include $target "
-         cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr ${OPT_CONFIG[$i]} .
+         cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DVTK_INSTALL_LIBRARY_DIR=/usr/${libdir} -DVTK_PYTHON_SETUP_ARGS="--root=$P" ${OPT_CONFIG[$i]} .
      fi
       if [ $? != 0 ]; then
 	  echo "configure error. $0 script stop"
@@ -181,7 +204,7 @@ if [ $opt_build -eq 1 ] ; then
     cd ${B[$i]}
     if [ -f Makefile ] ; then
       export LDFLAGS='-Wl,--as-needed'
-      make -j3
+      make
     fi
   done
 fi

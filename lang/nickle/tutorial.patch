@@ -1,0 +1,22 @@
+diff -ur nickle-2.77/doc/tutorial/advanced/concurrency.sgml nickle-2.77-p1/doc/tutorial/advanced/concurrency.sgml
+--- nickle-2.77/doc/tutorial/advanced/concurrency.sgml	2012-11-05 14:42:49.000000000 +0900
++++ nickle-2.77-p1/doc/tutorial/advanced/concurrency.sgml	2014-02-08 20:15:56.789458583 +0900
+@@ -222,6 +222,7 @@
+ <literal>wait</literal> merely decrements the count of <literal>s</literal>, which starts with the initial value specified by <literal>new</literal>.
+ If the count, after the decrement, is positive, the thread continues to run; if it is negative, it blocks until the count becomes positive again.
+ This will occur when one of the running threads calls <literal>signal</literal>, which increments the count of <literal>s</literal> and wakes up another thread if any are waiting.
++</para>
+ </sect3>
+ 
+ <sect3><title>Negative initial counts</title>
+diff -ur nickle-2.77/doc/tutorial/intro/variables.sgml nickle-2.77-p1/doc/tutorial/intro/variables.sgml
+--- nickle-2.77/doc/tutorial/intro/variables.sgml	2012-11-05 14:42:49.000000000 +0900
++++ nickle-2.77-p1/doc/tutorial/intro/variables.sgml	2014-02-08 20:15:18.012623167 +0900
+@@ -297,6 +297,7 @@
+ separate key from value.  Eliding the key specifies the
+ "default" value -- used to instantiate newly created elements in the hash.
+ </para>
++</sect3>
+ 
+ <sect3><title>Pointers</title>
+ <para>

@@ -1,1 +1,6 @@
+gcc-4.7.1:
 インストールには mpc ppl cloog のインストールと gmp mpfr のアップデートが必要だったような気がします。
+
+gcc-4.8:
+パッケージ名 gcc48 で /usr/local 以下にインストールします。
+gmp, mpfr, mpc, cloog, isl のインストールが必要です。

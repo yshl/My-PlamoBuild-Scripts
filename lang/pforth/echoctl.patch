@@ -1,0 +1,11 @@
+diff -ur pforth_v27/csrc/posix/pf_io_posix.c pforth_v27_p1/csrc/posix/pf_io_posix.c
+--- pforth_v27/csrc/posix/pf_io_posix.c	2009-03-18 07:40:47.000000000 +0900
++++ pforth_v27_p1/csrc/posix/pf_io_posix.c	2014-05-25 23:41:08.718920474 +0900
+@@ -19,6 +19,7 @@
+ ** 090220 PLB Fixed broken sdQueryTerminal on Mac. It always returned true.
+ ***************************************************************/
+ 
++#define _BSD_SOURCE
+ #include "../pf_all.h"
+ 
+ /* Configure console so that characters are not buffered.

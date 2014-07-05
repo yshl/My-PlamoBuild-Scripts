@@ -1,0 +1,12 @@
+diff -ur pforth_v27/build/unix/Makefile pforth_v27_p1/build/unix/Makefile
+--- pforth_v27/build/unix/Makefile	2010-08-28 02:50:07.000000000 +0900
++++ pforth_v27_p1/build/unix/Makefile	2014-05-25 23:30:05.806393644 +0900
+@@ -24,7 +24,7 @@
+ WIDTHOPT=
+ 
+ FULL_WARNINGS =  \
+-        -c89 \
++        -std=c89 \
+         -fsigned-char \
+         -fno-builtin \
+         -fno-unroll-loops \

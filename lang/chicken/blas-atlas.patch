@@ -1,0 +1,19 @@
+diff -ur chicken-egg-blas/blas/blas.setup build/blas/blas.setup
+--- chicken-egg-blas/blas/blas.setup	2013-07-31 01:45:12.447453250 +0900
++++ build/blas/blas.setup	2013-07-31 01:46:38.444931985 +0900
+@@ -6,6 +6,7 @@
+ (define (blas-try-compile header ldflags)
+   (and (try-compile 
+ 	(string-append "#include " header "\n" 
++		       "#include<stddef.h>\n"
+ 		       "int main() { cblas_ddot(0, NULL, 0, NULL, 0); return 0; }\n")
+ 	ldflags: ldflags)
+        ldflags ))
+@@ -19,6 +20,7 @@
+ (define ld-options
+   (or (blas-test  ("<cblas.h>" "-lblas -lm"))
+       (blas-test  ("<cblas.h>" "-lcblas -lm"))
++      (blas-test  ("<cblas.h>" "-lsatlas -lm"))
+       (blas-test  ("<gsl/gsl_cblas.h>" "-lgsl -lgslcblas -lm"))
+       (blas-test  ("<atlas/cblas.h>" "-lcblas -lm"))
+       (blas-test  ("<lapack/cblas.h>" "-lcblas -lm"))

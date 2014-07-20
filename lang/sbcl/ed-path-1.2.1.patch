@@ -1,0 +1,30 @@
+diff -ur sbcl-1.2.1/tests/run-program.impure.lisp build/tests/run-program.impure.lisp
+--- sbcl-1.2.1/tests/run-program.impure.lisp	2014-06-29 05:46:27.000000000 +0900
++++ build/tests/run-program.impure.lisp	2014-07-19 20:34:18.195621209 +0900
+@@ -162,7 +162,7 @@
+ 
+ #-win32
+ (with-test (:name :is-/bin/ed-installed?)
+-  (assert (probe-file "/bin/ed")))
++  (assert (probe-file "/usr/bin/ed")))
+ 
+ #-win32
+ (progn
+@@ -174,7 +174,7 @@
+                        :if-exists :supersede)
+       (write-line "bar" f))
+     (unwind-protect
+-         (let* ((ed (run-program "/bin/ed" (list *tmpfile*) :wait nil :pty t))
++         (let* ((ed (run-program "/usr/bin/ed" (list *tmpfile*) :wait nil :pty t))
+                 (ed-in (process-pty ed))
+                 (ed-out (process-pty ed)))
+            (labels ((read-linish (stream)
+@@ -256,7 +256,7 @@
+     (flet ((status-hook (proc)
+              (case (sb-ext:process-status proc)
+                (:stopped (setf stopped t)))))
+-      (let ((proc (sb-ext:run-program "/bin/ed" nil :search nil :wait nil
++      (let ((proc (sb-ext:run-program "/usr/bin/ed" nil :search nil :wait nil
+                                       :input t :output t
+                                       :status-hook #'status-hook)))
+         ;; Give the program a generous time to generate the SIGTTIN.

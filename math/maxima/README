@@ -1,4 +1,5 @@
 OPT_CONFIG はお手持ちの common lisp に合わせて適当に書き換えてください。
 
+5.26.0 について
 パッチ ecl-xerprn.patch は ECL でビルドする場合に当ててください。
 http://maxima.git.sourceforge.net/git/gitweb.cgi?p=maxima/maxima;a=commit;h=6b6bc4026f6b2c474ce692666b72ebc859c535d3

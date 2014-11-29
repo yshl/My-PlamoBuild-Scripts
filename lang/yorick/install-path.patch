@@ -1,0 +1,14 @@
+diff -ur yorick-y_2_2_03/ysite.sh build/ysite.sh
+--- yorick-y_2_2_03/ysite.sh	2014-04-01 11:44:06.000000000 +0900
++++ build/ysite.sh	2014-11-29 23:12:05.627708791 +0900
+@@ -1,8 +1,8 @@
+ #!/bin/sh
+-prefix="."
++prefix="/usr"
+ Y_PLATFORM="."
+ Y_SITE="."
+-Y_HOME="relocate"
++Y_HOME="."
+ 
+ # -------------- DO NOT CHANGE THIS LINE OR BELOW -----------------------
+ # ysite.sh -- $Id: ysite.sh,v 1.4 2010-02-28 21:52:28 dhmunro Exp $

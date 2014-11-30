@@ -1,0 +1,12 @@
+diff -ur bigforth-orig/Makefile.in bigforth/Makefile.in
+--- bigforth-orig/Makefile.in	2013-03-04 00:34:21.685873215 +0900
++++ bigforth/Makefile.in	2013-03-04 00:34:41.179038028 +0900
+@@ -29,7 +29,7 @@
+ CP = cp
+ MV = mv
+ EXE = @EXEEXT@
+-CFLAGS = -g -O2 -Wall -DVERSION_DATE='"'"$(DATE)"'"' -DINSTDIR='"'"$(INSTDIR)"'"' -fno-strict-aliasing @EXTFLAGS@
++CFLAGS = -g -O2 -Wall -DVERSION_DATE='"'"$(DATE)"'"' -DINSTDIR='"'"$(INSTDIR)"'"' -fno-strict-aliasing -fno-omit-frame-pointer @EXTFLAGS@
+ LDLIBS = @LIBS@
+ ARCH = @ARCH@
+ SHELL = @BASH@

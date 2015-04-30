@@ -3,3 +3,16 @@
 個人的にインストールしているソフトウェアの Plamo Linux ( http://plamo.linet.gr.jp/drupal6/ ) 用パッケージを作成するシェルスクリプトです。
 既存パッケージの PlamoBuild スクリプトをいじったり、 make_PlamoBuild_new.py ( ftp://plamo.linet.gr.jp/pub/Plamo-src/admin/ ) で作成したものをいじったりして作った物です。
 4.73 用と 5.0 用が混在しています。
+
+extract32package.py は x86_64 環境用の i[56]86 パッケージを作るスクリプトです。
+実際にやっていることは i[56]86 パッケージから x86_64 に含まれているファイルを取り除いているだけです。
+使い方
+
+# i[56]86 パッケージと x86_64 を同じディレクトリに置きます。
+$ ls glibc*
+glibc-2.20-i686-P1.txz glibc-2.20-x86_64-P1.txz
+# i[56]86 パッケージを引数にしてスクリプトを実行します。
+$ ./extract32package.py glibc-2.20-i686-P1.txz
+# パッケージが作成されます。パッケージ名はオリジナルの後に 32 を追加したものになります。
+$ ls glibc32*
+glibc32-2.20-i686-P1.txz 

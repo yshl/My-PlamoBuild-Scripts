@@ -7,7 +7,7 @@ arch=x86_64
 # arch=i586
 build=P1
 src=hdf5-1.8.14
-OPT_CONFIG='--enable-cxx --enable-fortran --disable-static --with-szlib'
+OPT_CONFIG='--enable-cxx --enable-fortran --enable-fortran2003 --disable-static --with-szlib'
 if [ $arch = "x86_64" ]; then
     OPT_CONFIG="$OPT_CONFIG AM_LDFLAGS=-L/usr/lib64"
 fi

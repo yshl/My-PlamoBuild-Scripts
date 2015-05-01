@@ -1,0 +1,476 @@
+diff -ur SuiteSparse/AMD/Demo/Makefile build/AMD/Demo/Makefile
+--- SuiteSparse/AMD/Demo/Makefile	2014-03-22 04:21:59.000000000 +0900
++++ build/AMD/Demo/Makefile	2015-05-02 07:45:58.550090439 +0900
+@@ -10,7 +10,7 @@
+ 
+ INC = ../Include/amd.h ../../SuiteSparse_config/SuiteSparse_config.h
+ 
+-LIB2 = ../../SuiteSparse_config/libsuitesparseconfig.a $(LIB)
++LIB2 = -Wl,-rpath=../../SuiteSparse_config -lsuitesparseconfig $(LIB)
+ 
+ library:
+ 	( cd ../../SuiteSparse_config ; $(MAKE) )
+@@ -26,22 +26,22 @@
+ dist:
+ 
+ amd_demo: amd_demo.c library $(INC)
+-	$(C) -o amd_demo amd_demo.c ../Lib/libamd.a $(LIB2)
++	$(C) -o amd_demo amd_demo.c -Wl,-rpath=../Lib -lamd $(LIB2)
+ 	./amd_demo > my_amd_demo.out
+ 	- diff amd_demo.out my_amd_demo.out
+ 
+ amd_l_demo: amd_l_demo.c library $(INC)
+-	$(C) -o amd_l_demo amd_l_demo.c ../Lib/libamd.a $(LIB2)
++	$(C) -o amd_l_demo amd_l_demo.c -Wl,-rpath=../Lib -lamd $(LIB2)
+ 	./amd_l_demo > my_amd_l_demo.out
+ 	- diff amd_l_demo.out my_amd_l_demo.out
+ 
+ amd_demo2: amd_demo2.c library $(INC)
+-	$(C) -o amd_demo2 amd_demo2.c ../Lib/libamd.a $(LIB2)
++	$(C) -o amd_demo2 amd_demo2.c -Wl,-rpath=../Lib -lamd $(LIB2)
+ 	./amd_demo2 > my_amd_demo2.out
+ 	- diff amd_demo2.out my_amd_demo2.out
+ 
+ amd_simple: amd_simple.c library $(INC)
+-	$(C) -o amd_simple amd_simple.c ../Lib/libamd.a $(LIB2)
++	$(C) -o amd_simple amd_simple.c -Wl,-rpath=../Lib -lamd $(LIB2)
+ 	./amd_simple > my_amd_simple.out
+ 	- diff amd_simple.out my_amd_simple.out
+ 
+@@ -54,23 +54,23 @@
+ cross: amd_f77cross
+ 
+ amd_f77demo: amd_f77demo.f f77lib
+-	$(F77) $(F77FLAGS) -o amd_f77demo amd_f77demo.f ../Lib/libamdf77.a \
++	$(F77) $(F77FLAGS) -o amd_f77demo amd_f77demo.f -Wl,-rpath=../Lib -lamdf77 \
+ 	    $(F77LIB)
+ 	./amd_f77demo > my_amd_f77demo.out
+ 	- diff amd_f77demo.out my_amd_f77demo.out
+ 
+ amd_f77simple: amd_f77simple.f f77lib
+ 	$(F77) $(F77FLAGS) -o amd_f77simple amd_f77simple.f \
+-	    ../Lib/libamdf77.a $(F77LIB)
++	    -Wl,-rpath=../Lib -lamdf77 $(F77LIB)
+ 	./amd_f77simple > my_amd_f77simple.out
+ 	- diff amd_f77simple.out my_amd_f77simple.out
+ 
+ amd_f77wrapper.o: amd_f77wrapper.c
+ 	$(C) -DDINT -c amd_f77wrapper.c
+ 
+-amd_f77cross:  amd_f77cross.f amd_f77wrapper.o ../Lib/libamd.a
++amd_f77cross:  amd_f77cross.f amd_f77wrapper.o -L../Lib -lamd
+ 	$(F77) $(F77FLAGS) -o amd_f77cross amd_f77cross.f amd_f77wrapper.o \
+-	    ../Lib/libamd.a $(F77LIB)
++	    -Wl,-rpath=../Lib -lamd $(F77LIB)
+ 	./amd_f77cross > my_amd_f77cross.out
+ 	- diff amd_f77cross.out my_amd_f77cross.out
+ 
+diff -ur SuiteSparse/CAMD/Demo/Makefile build/CAMD/Demo/Makefile
+--- SuiteSparse/CAMD/Demo/Makefile	2014-03-22 04:21:52.000000000 +0900
++++ build/CAMD/Demo/Makefile	2015-05-02 07:45:58.550090439 +0900
+@@ -10,7 +10,7 @@
+ 
+ INC = ../Include/camd.h ../../SuiteSparse_config/SuiteSparse_config.h
+ 
+-LIB2 = ../../SuiteSparse_config/libsuitesparseconfig.a $(LIB)
++LIB2 = -Wl,-rpath=../../SuiteSparse_config -lsuitesparseconfig $(LIB)
+ 
+ library:
+ 	( cd ../../SuiteSparse_config ; $(MAKE) )
+@@ -23,22 +23,22 @@
+ dist:
+ 
+ camd_demo: camd_demo.c library $(INC)
+-	$(C) -o camd_demo camd_demo.c ../Lib/libcamd.a $(LIB2)
++	$(C) -o camd_demo camd_demo.c -Wl,-rpath=../Lib -lcamd $(LIB2)
+ 	./camd_demo > my_camd_demo.out
+ 	- diff camd_demo.out my_camd_demo.out
+ 
+ camd_l_demo: camd_l_demo.c library $(INC)
+-	$(C) -o camd_l_demo camd_l_demo.c ../Lib/libcamd.a $(LIB2)
++	$(C) -o camd_l_demo camd_l_demo.c -Wl,-rpath=../Lib -lcamd $(LIB2)
+ 	./camd_l_demo > my_camd_l_demo.out
+ 	- diff camd_l_demo.out my_camd_l_demo.out
+ 
+ camd_demo2: camd_demo2.c library $(INC)
+-	$(C) -o camd_demo2 camd_demo2.c ../Lib/libcamd.a $(LIB2)
++	$(C) -o camd_demo2 camd_demo2.c -Wl,-rpath=../Lib -lcamd $(LIB2)
+ 	./camd_demo2 > my_camd_demo2.out
+ 	- diff camd_demo2.out my_camd_demo2.out
+ 
+ camd_simple: camd_simple.c library $(INC)
+-	$(C) -o camd_simple camd_simple.c ../Lib/libcamd.a $(LIB2)
++	$(C) -o camd_simple camd_simple.c -Wl,-rpath=../Lib -lcamd $(LIB2)
+ 	./camd_simple > my_camd_simple.out
+ 	- diff camd_simple.out my_camd_simple.out
+ 
+diff -ur SuiteSparse/CCOLAMD/Demo/Makefile build/CCOLAMD/Demo/Makefile
+--- SuiteSparse/CCOLAMD/Demo/Makefile	2014-03-22 04:21:07.000000000 +0900
++++ build/CCOLAMD/Demo/Makefile	2015-05-02 07:45:58.550090439 +0900
+@@ -10,7 +10,7 @@
+ 
+ C = $(CC) $(CF) $(I)
+ 
+-LIB2 = ../../SuiteSparse_config/libsuitesparseconfig.a $(LIB)
++LIB2 = -Wl,-rpath=../../SuiteSparse_config -lsuitesparseconfig $(LIB)
+ 
+ library:
+ 	( cd ../../SuiteSparse_config ; $(MAKE) )
+@@ -23,12 +23,12 @@
+ dist:
+ 
+ ccolamd_example: ccolamd_example.c library
+-	$(C) -o ccolamd_example ccolamd_example.c ../Lib/libccolamd.a $(LIB2)
++	$(C) -o ccolamd_example ccolamd_example.c -Wl,-rpath=../Lib -lccolamd $(LIB2)
+ 	- ./ccolamd_example > my_ccolamd_example.out
+ 	- diff ccolamd_example.out my_ccolamd_example.out
+ 
+ ccolamd_l_example: ccolamd_l_example.c library
+-	$(C) -o ccolamd_l_example ccolamd_l_example.c ../Lib/libccolamd.a $(LIB2)
++	$(C) -o ccolamd_l_example ccolamd_l_example.c -Wl,-rpath=../Lib -lccolamd $(LIB2)
+ 	- ./ccolamd_l_example > my_ccolamd_l_example.out
+ 	- diff ccolamd_l_example.out my_ccolamd_l_example.out
+ 
+diff -ur SuiteSparse/CHOLMOD/Demo/Makefile build/CHOLMOD/Demo/Makefile
+--- SuiteSparse/CHOLMOD/Demo/Makefile	2015-05-02 07:11:11.431337583 +0900
++++ build/CHOLMOD/Demo/Makefile	2015-05-02 07:46:54.530772795 +0900
+@@ -22,7 +22,7 @@
+         ifeq (../../CCOLAMD, $(wildcard ../../CCOLAMD))
+             # CAMD and CCOLAMD are requested and available
+             LIB_WITH_PARTITION = \
+-                        ../../CCOLAMD/Lib/libccolamd.a ../../CAMD/Lib/libcamd.a
++                        -Wl,-rpath=../../CCOLAMD/Lib:../../CAMD/Lib -lccolamd -lcamd
+             I_WITH_PARTITION = \
+                         -I../../CCOLAMD/Include -I../../CAMD/Include
+             CONFIG = -DNPARTITION
+@@ -32,7 +32,7 @@
+                 ifeq ($(METIS_PATH), $(wildcard $(METIS_PATH)))
+                     # METIS is available
+                     LIB_WITH_PARTITION = $(METIS) \
+-                        ../../CCOLAMD/Lib/libccolamd.a ../../CAMD/Lib/libcamd.a
++                        -Wl,-rpath=../../CCOLAMD/Lib:../../CAMD/Lib -lccolamd -lcamd
+                     I_WITH_PARTITION = -I$(METIS_PATH)/Lib \
+                         -I../../CCOLAMD/Include -I../../CAMD/Include
+                     CONFIG =
+@@ -44,8 +44,9 @@
+ 
+ #-------------------------------------------------------------------------------
+ 
+-LIB2 = ../Lib/libcholmod.a ../../AMD/Lib/libamd.a ../../COLAMD/Lib/libcolamd.a \
+-        ../../SuiteSparse_config/libsuitesparseconfig.a \
++LIB2 = -Wl,-rpath=../Lib:../../AMD/Lib:../../COLAMD/Lib:../../SuiteSparse_config \
++        -L../Lib -lcholmod -lamd -lcolamd \
++        -L../../SuiteSparse_config -lsuitesparseconfig \
+ 	$(LIB_WITH_PARTITION) $(LAPACK) $(BLAS) $(XERBLA) $(LIB)
+ 
+ #-------------------------------------------------------------------------------
+diff -ur SuiteSparse/COLAMD/Demo/Makefile build/COLAMD/Demo/Makefile
+--- SuiteSparse/COLAMD/Demo/Makefile	2014-03-22 04:13:38.000000000 +0900
++++ build/COLAMD/Demo/Makefile	2015-05-02 07:45:58.553423813 +0900
+@@ -10,7 +10,7 @@
+ 
+ C = $(CC) $(CF) $(I)
+ 
+-LIB2 = ../../SuiteSparse_config/libsuitesparseconfig.a $(LIB)
++LIB2 = -Wl,-rpath=../../SuiteSparse_config -lsuitesparseconfig $(LIB)
+ 
+ library:
+ 	( cd ../../SuiteSparse_config ; $(MAKE) )
+@@ -23,12 +23,12 @@
+ dist:
+ 
+ colamd_example: colamd_example.c library
+-	$(C) -o colamd_example colamd_example.c ../Lib/libcolamd.a $(LIB2)
++	$(C) -o colamd_example colamd_example.c -Wl,-rpath=../Lib -lcolamd $(LIB2)
+ 	- ./colamd_example > my_colamd_example.out
+ 	- diff colamd_example.out my_colamd_example.out
+ 
+ colamd_l_example: colamd_l_example.c library
+-	$(C) -o colamd_l_example colamd_l_example.c ../Lib/libcolamd.a $(LIB2)
++	$(C) -o colamd_l_example colamd_l_example.c -Wl,-rpath=../Lib -lcolamd $(LIB2)
+ 	- ./colamd_l_example > my_colamd_l_example.out
+ 	- diff colamd_l_example.out my_colamd_l_example.out
+ 
+diff -ur SuiteSparse/CSparse/Demo/Makefile build/CSparse/Demo/Makefile
+--- SuiteSparse/CSparse/Demo/Makefile	2014-03-22 04:14:17.000000000 +0900
++++ build/CSparse/Demo/Makefile	2015-05-02 07:45:58.553423813 +0900
+@@ -1,7 +1,7 @@
+ CF = $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -O
+ I = -I../Include
+ 
+-CS = ../Lib/libcsparse.a
++CS = -Wl,-rpath=../Lib -L../Lib -lcsparse
+ 
+ all: lib cs_demo1 cs_demo2 cs_demo3
+ 	- ./cs_demo1 < ../Matrix/t1
+diff -ur SuiteSparse/CXSparse/Demo/Makefile build/CXSparse/Demo/Makefile
+--- SuiteSparse/CXSparse/Demo/Makefile	2014-03-22 04:21:44.000000000 +0900
++++ build/CXSparse/Demo/Makefile	2015-05-02 07:45:58.556757187 +0900
+@@ -7,7 +7,7 @@
+ 
+ I = -I../Include -I../../SuiteSparse_config
+ 
+-CS = ../Lib/libcxsparse.a
++CS = -Wl,-rpath=../Lib -lcxsparse
+ 
+ all: $(CS) cs_demo1 cs_demo2 cs_demo3 \
+ 	cs_di_demo1 cs_di_demo2 cs_di_demo3 \
+diff -ur SuiteSparse/CXSparse_newfiles/Demo/Makefile build/CXSparse_newfiles/Demo/Makefile
+--- SuiteSparse/CXSparse_newfiles/Demo/Makefile	2014-03-22 04:21:44.000000000 +0900
++++ build/CXSparse_newfiles/Demo/Makefile	2015-05-02 07:45:58.556757187 +0900
+@@ -7,7 +7,7 @@
+ 
+ I = -I../Include -I../../SuiteSparse_config
+ 
+-CS = ../Lib/libcxsparse.a
++CS = -Wl,-rpath=../Lib -lcxsparse
+ 
+ all: $(CS) cs_demo1 cs_demo2 cs_demo3 \
+ 	cs_di_demo1 cs_di_demo2 cs_di_demo3 \
+diff -ur SuiteSparse/KLU/Demo/Makefile build/KLU/Demo/Makefile
+--- SuiteSparse/KLU/Demo/Makefile	2014-03-22 04:21:27.000000000 +0900
++++ build/KLU/Demo/Makefile	2015-05-02 07:47:21.197764500 +0900
+@@ -8,9 +8,11 @@
+ CLIB = ../Lib/libklu.a  ../../BTF/Lib/libbtf.a \
+ 	../../AMD/Lib/libamd.a ../../COLAMD/Lib/libcolamd.a \
+         ../../SuiteSparse_config/libsuitesparseconfig.a
++CLIBSO = -Wl,-rpath=../Lib:../../BTF/Lib:../../AMD/Lib:../../COLAMD/Lib:../../SuiteSparse_config \
++        -lklu -lbtf -lamd -lcolamd -lsuitesparseconfig
+ 
+ CHOLMOD_LIB = ../../CHOLMOD/Lib/libcholmod.a
+-CHOLMOD = $(CHOLMOD_LIB) $(LAPACK) $(BLAS) $(XERBLA)
++CHOLMOD = -Wl,-rpath=../../CHOLMOD/Lib -lcholmod $(LAPACK) $(BLAS) $(XERBLA)
+ 
+ ifneq ($(GPU_CONFIG),)
+ CHOLMOD += $(CUDART_LIB) $(CUBLAS_LIB) 
+@@ -65,11 +67,11 @@
+ 	- $(RM) $(CLEAN)
+ 
+ kludemo: kludemo.c Makefile $(CLIB)
+-	$(CC) $(CF) $(I) kludemo.c -o kludemo $(CLIB) $(CHOLMOD) $(LIB)
++	$(CC) $(CF) $(I) kludemo.c -o kludemo $(CLIBSO) $(CHOLMOD) $(LIB)
+ 
+ kluldemo: kludemo.c Makefile $(CLIB)
+-	$(CC) $(CF) $(I) kluldemo.c -o kluldemo $(CLIB) $(CHOLMOD) $(LIB)
++	$(CC) $(CF) $(I) kluldemo.c -o kluldemo $(CLIBSO) $(CHOLMOD) $(LIB)
+ 
+ klu_simple: klu_simple.c Makefile $(CLIB)
+-	$(CC) $(CF) $(I) klu_simple.c -o klu_simple $(CLIB) $(LIB)
++	$(CC) $(CF) $(I) klu_simple.c -o klu_simple $(CLIBSO) $(LIB)
+ 	- ./klu_simple
+diff -ur SuiteSparse/LDL/Demo/Makefile build/LDL/Demo/Makefile
+--- SuiteSparse/LDL/Demo/Makefile	2014-03-22 04:21:12.000000000 +0900
++++ build/LDL/Demo/Makefile	2015-05-02 07:45:58.560090561 +0900
+@@ -12,7 +12,7 @@
+ 
+ all: ldlsimple ldllsimple ldlmain ldllmain ldlamd ldllamd
+ 
+-LIB2 = ../../SuiteSparse_config/libsuitesparseconfig.a $(LIB)
++LIB2 = -Wl,-rpath=../../SuiteSparse_config -lsuitesparseconfig $(LIB)
+ 
+ library:
+ 	( cd ../../SuiteSparse_config ; $(MAKE) library )
+@@ -24,34 +24,34 @@
+ #-------------------------------------------------------------------------------
+ 
+ ldlmain:  ldlmain.c library
+-	$(C) ldlmain.c ../Lib/libldl.a -o ldlmain $(LIB2)
++	$(C) ldlmain.c -Wl,-rpath=../Lib -lldl -o ldlmain $(LIB2)
+ 	- ./ldlmain > my_ldlmain.out
+ 	- diff ldlmain.out my_ldlmain.out
+ 
+ ldllmain:  ldlmain.c library
+-	$(C) -DLDL_LONG ldlmain.c ../Lib/libldl.a -o ldllmain $(LIB2)
++	$(C) -DLDL_LONG ldlmain.c -Wl,-rpath=../Lib -lldl -o ldllmain $(LIB2)
+ 	- ./ldllmain > my_ldllmain.out
+ 	- diff ldlmain.out my_ldllmain.out
+ 
+ ldlsimple:  ldlsimple.c library
+-	$(C) ldlsimple.c ../Lib/libldl.a -o ldlsimple $(LIB2)
++	$(C) ldlsimple.c -Wl,-rpath=../Lib -lldl -o ldlsimple $(LIB2)
+ 	- ./ldlsimple > my_ldlsimple.out
+ 	- diff ldlsimple.out my_ldlsimple.out
+ 
+ ldllsimple:  ldlsimple.c library
+-	$(C) $(I) -DLDL_LONG ldlsimple.c ../Lib/libldl.a -o ldllsimple $(LIB2)
++	$(C) $(I) -DLDL_LONG ldlsimple.c -Wl,-rpath=../Lib -lldl -o ldllsimple $(LIB2)
+ 	- ./ldllsimple > my_ldllsimple.out
+ 	- diff ldlsimple.out my_ldllsimple.out
+ 
+ ldlamd:  ldlmain.c library
+ 	- $(C) -I../../AMD/Include -DUSE_AMD \
+-		ldlmain.c ../../AMD/Lib/libamd.a ../Lib/libldl.a -o ldlamd $(LIB2)
++		ldlmain.c -Wl,-rpath=../../AMD/Lib -lamd -Wl,-rpath=../Lib -lldl -o ldlamd $(LIB2)
+ 	- ./ldlamd > my_ldlamd.out
+ 	- diff ldlamd.out my_ldlamd.out
+ 
+ ldllamd:  ldlmain.c library
+ 	- $(C) -DLDL_LONG $(I) -I../../AMD/Include -DUSE_AMD \
+-		ldlmain.c ../../AMD/Lib/libamd.a ../Lib/libldl.a -o ldllamd $(LIB2)
++		ldlmain.c -Wl,-rpath=../../AMD/Lib -lamd -Wl,-rpath=../Lib -lldl -o ldllamd $(LIB2)
+ 	- ./ldllamd > my_ldllamd.out
+ 	- diff ldllamd.out my_ldllamd.out
+ 
+diff -ur SuiteSparse/RBio/Demo/Makefile build/RBio/Demo/Makefile
+--- SuiteSparse/RBio/Demo/Makefile	2014-03-22 04:22:02.000000000 +0900
++++ build/RBio/Demo/Makefile	2015-05-02 07:45:58.563423935 +0900
+@@ -6,7 +6,7 @@
+ 
+ include ../../SuiteSparse_config/SuiteSparse_config.mk
+ 
+-CLIB = ../Lib/librbio.a ../../SuiteSparse_config/libsuitesparseconfig.a $(LIB)
++CLIB = -Wl,-rpath=../Lib:../../SuiteSparse_config -lrbio -L../../SuiteSparse_config -lsuitesparseconfig $(LIB)
+ 
+ C = $(CC) $(CF)
+ 
+diff -ur SuiteSparse/SPQR/Demo/Makefile build/SPQR/Demo/Makefile
+--- SuiteSparse/SPQR/Demo/Makefile	2015-03-25 08:54:30.000000000 +0900
++++ build/SPQR/Demo/Makefile	2015-05-02 07:50:40.336858218 +0900
+@@ -20,8 +20,8 @@
+         ifeq (../../CAMD, $(wildcard ../../CAMD))
+             ifeq (../../CCOLAMD, $(wildcard ../../CCOLAMD))
+                 # METIS, CAMD, and CCOLAMD are available
+-                LIB_WITH_PARTITION = $(METIS) ../../CCOLAMD/Lib/libccolamd.a \
+-                    ../../CAMD/Lib/libcamd.a
++                LIB_WITH_PARTITION = $(METIS) -Wl,-rpath=../../CCOLAMD/Lib -lccolamd \
++                    -Wl,-rpath=../../CAMD/Lib -lcamd
+                 I_WITH_PARTITION = -I$(METIS_PATH)/Lib \
+                     -I../../CCOLAMD/Include -I../../CAMD/Include
+                 CONFIG_PARTITION =
+@@ -35,8 +35,8 @@
+ # the optional SPQRGPU module requires CUDA, SuiteSparse_GPURuntime, GPUQREngine
+ ifneq ($(GPU_CONFIG),)
+     LIB_WITH_SPQRGPU = $(CUDART_LIB) $(CUBLAS_LIB) \
+-        ../../SuiteSparse_GPURuntime/Lib/libSuiteSparse_GPURuntime.a \
+-        ../../GPUQREngine/Lib/libGPUQREngine.a
++        -Wl,-rpath=../../SuiteSparse_GPURuntime/Lib -lSuiteSparse_GPURuntime \
++        -Wl,-rpath=../../GPUQREngine/Lib -lGPUQREngine
+     I_WITH_SPQRGPU = -I../../SuiteSparse_GPURuntime/Include \
+         -I../../GPUQREngine/Include \
+         -I$(CUDA_INC_PATH)
+@@ -47,10 +47,8 @@
+ 
+ #-------------------------------------------------------------------------------
+ 
+-CLIB = ../Lib/libspqr.a \
+-       ../../SuiteSparse_config/libsuitesparseconfig.a \
+-       ../../CHOLMOD/Lib/libcholmod.a ../../AMD/Lib/libamd.a \
+-       ../../COLAMD/Lib/libcolamd.a \
++CLIB = -Wl,-rpath=../Lib:../../SuiteSparse_config:../../CHOLMOD/Lib:../../AMD/Lib:../../COLAMD/Lib \
++       -lspqr -lsuitesparseconfig -lcholmod -lamd -lcolamd \
+        $(LIB_WITH_PARTITION) \
+        $(LIB_WITH_SPQRGPU)
+ 
+diff -ur SuiteSparse/UMFPACK/Demo/Makefile build/UMFPACK/Demo/Makefile
+--- SuiteSparse/UMFPACK/Demo/Makefile	2015-05-02 07:11:11.461337947 +0900
++++ build/UMFPACK/Demo/Makefile	2015-05-02 07:48:37.922032970 +0900
+@@ -29,6 +29,8 @@
+             CONFIG1 =
+             LIB_WITH_CHOLMOD = ../../CHOLMOD/Lib/libcholmod.a \
+                 ../../COLAMD/Lib/libcolamd.a
++            LIB_WITH_CHOLMOD_SO = -Wl,-rpath=../../CHOLMOD/Lib -lcholmod \
++                -Wl,-rpath=../../COLAMD/Lib -lcolamd
+             # check if METIS is requested and available
+             ifeq (,$(findstring -DNPARTITION, $(CHOLMOD_CONFIG)))
+                 # METIS is requested.  See if it is available
+@@ -39,6 +41,9 @@
+                             LIB_WITH_PARTITION = $(METIS) \
+                                 ../../CCOLAMD/Lib/libccolamd.a \
+                                 ../../CAMD/Lib/libcamd.a
++                            LIB_WITH_PARTITION_SO = $(METIS) \
++                                -Wl,-rpath=../../CCOLAMD/Lib -lccolamd \
++                                -Wl,-rpath=../../CAMD/Lib -lcamd
+                             I_WITH_PARTITION = -I$(METIS_PATH)/Lib \
+                                 -I../../CCOLAMD/Include -I../../CAMD/Include
+                             CONFIG2 =
+@@ -56,7 +61,7 @@
+ 
+ INC = ../Include/umfpack.h ../../AMD/Include/amd.h ../../SuiteSparse_config/SuiteSparse_config.h
+ 
+-LIBS = $(LAPACK) $(BLAS) $(XERBLA) $(LIB) $(LIB_WITH_CHOLMOD) $(LIB_WITH_PARTITION) $(CUBLAS_LIB) $(CUDART_LIB)
++LIBS = $(LAPACK) $(BLAS) $(XERBLA) $(LIB) $(CUBLAS_LIB) $(CUDART_LIB)
+ 
+ ../Lib/libumfpack.a:
+ 	( cd ../Lib ; $(MAKE) )
+@@ -86,6 +91,9 @@
+ UMFPACK = ../Lib/libumfpack.a ../../AMD/Lib/libamd.a \
+     ../../SuiteSparse_config/libsuitesparseconfig.a \
+     $(LIB_WITH_CHOLMOD) $(LIB_WITH_PARTITION) 
++UMFPACKSO = -Wl,-rpath=../Lib:../../AMD/Lib:../../SuiteSparse_config \
++    -lumfpack -lamd -lsuitesparseconfig \
++    $(LIB_WITH_CHOLMOD_SO) $(LIB_WITH_PARTITION_SO)
+ 
+ libs: $(UMFPACK)
+ 
+@@ -96,7 +104,7 @@
+ dist: umfpack_di_demo.c umfpack_dl_demo.c umfpack_zi_demo.c umfpack_zl_demo.c
+ 
+ umfpack_simple: umfpack_simple.c $(INC) $(UMFPACK)
+-	$(C) -o umfpack_simple umfpack_simple.c $(UMFPACK) $(LIBS)
++	$(C) -o umfpack_simple umfpack_simple.c $(UMFPACKSO) $(LIBS)
+ 
+ # the GNU rules are simpler:
+ # umfpack_%_demo.c: umfpack_xx_demo.c umfpack_%_demo.sed
+@@ -113,28 +121,28 @@
+ 	- sed -f umfpack_di_demo.sed < umfpack_xx_demo.c > umfpack_di_demo.c
+ 
+ umfpack_di_demo: umfpack_di_demo.c $(INC) $(UMFPACK)
+-	$(C) -o umfpack_di_demo umfpack_di_demo.c $(UMFPACK) $(LIBS)
++	$(C) -o umfpack_di_demo umfpack_di_demo.c $(UMFPACKSO) $(LIBS)
+ 
+ # double-precision, SuiteSparse_long verion:
+ umfpack_dl_demo.c: umfpack_xx_demo.c umfpack_dl_demo.sed
+ 	- sed -f umfpack_dl_demo.sed < umfpack_xx_demo.c > umfpack_dl_demo.c
+ 
+ umfpack_dl_demo: umfpack_dl_demo.c $(INC) $(UMFPACK)
+-	$(C) -o umfpack_dl_demo umfpack_dl_demo.c $(UMFPACK) $(LIBS)
++	$(C) -o umfpack_dl_demo umfpack_dl_demo.c $(UMFPACKSO) $(LIBS)
+ 
+ # complex, int verion:
+ umfpack_zi_demo.c: umfpack_xx_demo.c umfpack_zi_demo.sed
+ 	- sed -f umfpack_zi_demo.sed < umfpack_xx_demo.c > umfpack_zi_demo.c
+ 
+ umfpack_zi_demo: umfpack_zi_demo.c $(INC) $(UMFPACK)
+-	$(C) -o umfpack_zi_demo umfpack_zi_demo.c $(UMFPACK) $(LIBS)
++	$(C) -o umfpack_zi_demo umfpack_zi_demo.c $(UMFPACKSO) $(LIBS)
+ 
+ # complex, SuiteSparse_long verion:
+ umfpack_zl_demo.c: umfpack_xx_demo.c umfpack_zl_demo.sed
+ 	- sed -f umfpack_zl_demo.sed < umfpack_xx_demo.c > umfpack_zl_demo.c
+ 
+ umfpack_zl_demo: umfpack_zl_demo.c $(INC) $(UMFPACK)
+-	$(C) -o umfpack_zl_demo umfpack_zl_demo.c $(UMFPACK) $(LIBS)
++	$(C) -o umfpack_zl_demo umfpack_zl_demo.c $(UMFPACKSO) $(LIBS)
+ 
+ run: umfpack_di_demo umfpack_zi_demo umfpack_dl_demo umfpack_zl_demo umfpack_simple
+ 	./umfpack_simple
+@@ -176,7 +184,7 @@
+ 	- ./umf4 a 1e-6
+ 
+ umf4: umf4.c $(UMFPACK)
+-	$(C) -o umf4 umf4.c $(UMFPACK) $(LIBS)
++	$(C) -o umf4 umf4.c $(UMFPACKSO) $(LIBS)
+ 
+ readhb:  readhb.f
+ 	$(F77) $(F77FLAGS) -o readhb readhb.f $(F77LIB)
+@@ -194,17 +202,17 @@
+ # This doesn't seem to work on the Mac (Snow Leopard, OS X 10.6.1)
+ fortran: $(UMFPACK) umf4hb.f umf4_f77wrapper.o umf4zhb.f umf4_f77zwrapper.o $(UMFPACK)
+ 	$(F77) $(F77FLAGS) -o umf4hb umf4hb.f umf4_f77wrapper.o \
+-	    $(UMFPACK) $(LIBS)
++	    $(UMFPACKSO) $(LIBS)
+ 	- ./umf4hb < HB/west0067.rua > my_umf4hb.out
+ 	- diff my_umf4hb.out umf4hb.out
+ 	$(F77) $(F77FLAGS) -o umf4zhb umf4zhb.f umf4_f77zwrapper.o \
+-	    $(UMFPACK) $(LIBS)
++	    $(UMFPACKSO) $(LIBS)
+ 	- ./umf4zhb < HB/qc324.cua > my_umf4zhb.out
+ 	- diff my_umf4zhb.out umf4zhb.out
+ 
+ fortran64: $(UMFPACK) umf4hb64.f umf4_f77wrapper64.o umf4_f77zwrapper64.o $(UMFPACK)
+ 	$(F77) $(F77FLAGS) -o umf4hb64 umf4hb64.f umf4_f77wrapper64.o \
+-	    $(UMFPACK) $(LIBS)
++	    $(UMFPACKSO) $(LIBS)
+ 	- ./umf4hb64 < HB/west0067.rua > my_umf4hb64.out
+ 	- diff my_umf4hb64.out umf4hb64.out
+ 

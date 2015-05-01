@@ -1,0 +1,69 @@
+diff -ur SuiteSparse/CHOLMOD/Demo/Makefile build/CHOLMOD/Demo/Makefile
+--- SuiteSparse/CHOLMOD/Demo/Makefile	2015-01-08 04:39:19.000000000 +0900
++++ build/CHOLMOD/Demo/Makefile	2015-05-01 22:55:46.862136485 +0900
+@@ -104,7 +104,7 @@
+ endif
+ ifneq (,$(findstring -DNPARTITION, $(CONFIG)))
+ else
+-	( cd $(METIS_PATH) && $(MAKE) )
++	-( cd $(METIS_PATH) && $(MAKE) )
+ endif
+ 
+ #-------------------------------------------------------------------------------
+diff -ur SuiteSparse/CHOLMOD/Tcov/Makefile build/CHOLMOD/Tcov/Makefile
+--- SuiteSparse/CHOLMOD/Tcov/Makefile	2015-03-26 02:39:41.000000000 +0900
++++ build/CHOLMOD/Tcov/Makefile	2015-05-01 22:51:07.148693075 +0900
+@@ -1258,4 +1258,4 @@
+ #-------------------------------------------------------------------------------
+ 
+ $(METIS):
+-	( cd ../../metis-4.0/Lib && $(MAKE) )
++	-( cd ../../metis-4.0/Lib && $(MAKE) )
+diff -ur SuiteSparse/KLU/Tcov/Makefile build/KLU/Tcov/Makefile
+--- SuiteSparse/KLU/Tcov/Makefile	2014-09-16 03:40:57.000000000 +0900
++++ build/KLU/Tcov/Makefile	2015-05-01 22:51:07.212027188 +0900
+@@ -44,7 +44,7 @@
+ 	( cd ../../COLAMD && $(MAKE) library )
+ 	( cd ../../CAMD && $(MAKE) library )
+ 	( cd ../../CCOLAMD && $(MAKE) library )
+-	( cd ../../metis-4.0 && $(MAKE) )
++	-( cd ../../metis-4.0 && $(MAKE) )
+ 	( cd ../../CHOLMOD && $(MAKE) library )
+ 	( cd ../../SuiteSparse_config && $(MAKE) library )
+ 
+diff -ur SuiteSparse/SPQR/Tcov/Makefile build/SPQR/Tcov/Makefile
+--- SuiteSparse/SPQR/Tcov/Makefile	2015-03-26 03:12:00.000000000 +0900
++++ build/SPQR/Tcov/Makefile	2015-05-01 22:51:07.335362042 +0900
+@@ -341,7 +341,7 @@
+ #-------------------------------------------------------------------------------
+ 
+ $(METIS):
+-	( cd ../../metis-4.0/Lib && $(MAKE) )
++	-( cd ../../metis-4.0/Lib && $(MAKE) )
+ 
+ ../../CHOLMOD/Lib/libcholmod.a:
+ 	( cd ../../CHOLMOD && $(MAKE) library )
+diff -ur SuiteSparse/UMFPACK/Demo/Makefile build/UMFPACK/Demo/Makefile
+--- SuiteSparse/UMFPACK/Demo/Makefile	2014-03-22 11:19:44.000000000 +0900
++++ build/UMFPACK/Demo/Makefile	2015-05-01 22:51:07.348695539 +0900
+@@ -81,7 +81,7 @@
+ 	- ( cd ../../CAMD && $(MAKE) library )
+ 
+ $(METIS):
+-	( cd $(METIS_PATH) && $(MAKE) )
++	-( cd $(METIS_PATH) && $(MAKE) )
+ 
+ UMFPACK = ../Lib/libumfpack.a ../../AMD/Lib/libamd.a \
+     ../../SuiteSparse_config/libsuitesparseconfig.a \
+diff -ur SuiteSparse/UMFPACK/Tcov/Demo_Makefile build/UMFPACK/Tcov/Demo_Makefile
+--- SuiteSparse/UMFPACK/Tcov/Demo_Makefile	2014-03-22 23:38:30.000000000 +0900
++++ build/UMFPACK/Tcov/Demo_Makefile	2015-05-01 22:51:07.375362534 +0900
+@@ -38,7 +38,7 @@
+ 	( cd ../../CAMD && $(MAKE) library )
+ 
+ ../../metis-4.0/libmetis.a:
+-	( cd ../../metis-4.0/Lib && $(MAKE) )
++	-( cd ../../metis-4.0/Lib && $(MAKE) )
+ 
+ UMFPACK = ../Lib/libumfpack.a ../../AMD/Lib/libamd.a \
+     ../../CHOLMOD/Lib/libcholmod.a ../../COLAMD/Lib/libcolamd.a \

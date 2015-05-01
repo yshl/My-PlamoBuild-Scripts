@@ -1,0 +1,600 @@
+diff -ur SuiteSparse/AMD/Lib/GNUmakefile build/AMD/Lib/GNUmakefile
+--- SuiteSparse/AMD/Lib/GNUmakefile	2014-03-22 04:22:00.000000000 +0900
++++ build/AMD/Lib/GNUmakefile	2015-05-02 07:07:42.725469412 +0900
+@@ -2,7 +2,7 @@
+ # AMD Makefile for compiling on Unix systems (for GNU make only)
+ #-------------------------------------------------------------------------------
+ 
+-default: libamd.a
++default: libamd.a libamd.so
+ 
+ include ../../SuiteSparse_config/SuiteSparse_config.mk
+ 
+@@ -43,12 +43,14 @@
+ libamd.a: $(AMDI) $(AMDL)
+ 	$(ARCHIVE) libamd.a $^
+ 	- $(RANLIB) libamd.a
++libamd.so: libamd.a
++	$(CC) -fPIC -shared -Wl,-soname,$@ -o $@ -Wl,--whole-archive $< -Wl,--no-whole-archive -lm -L../../SuiteSparse_config -lsuitesparseconfig
+ 
+ #-------------------------------------------------------------------------------
+ # compile the Fortran versions and the libamdf77.a library
+ #-------------------------------------------------------------------------------
+ 
+-fortran: libamdf77.a
++fortran: libamdf77.a libamdf77.so
+ 
+ AMDF77 = amd.o amdbar.o
+ 
+@@ -61,6 +63,8 @@
+ libamdf77.a: $(AMDF77)
+ 	$(ARCHIVE) libamdf77.a $^
+ 	- $(RANLIB) libamdf77.a
++libamdf77.so: libamdf77.a
++	$(F77) -fPIC -shared -Wl,-soname,$@ -o $@ -Wl,--whole-archive $< -Wl,--no-whole-archive -lm -L../../SuiteSparse_config -lsuitesparseconfig
+ 
+ #-------------------------------------------------------------------------------
+ # Remove all but the files in the original distribution
+diff -ur SuiteSparse/AMD/Makefile build/AMD/Makefile
+--- SuiteSparse/AMD/Makefile	2014-10-10 04:28:15.000000000 +0900
++++ build/AMD/Makefile	2015-05-02 07:07:42.725469412 +0900
+@@ -62,6 +62,8 @@
+ install:
+ 	$(CP) Lib/libamd.a $(INSTALL_LIB)/libamd.$(VERSION).a
+ 	( cd $(INSTALL_LIB) ; ln -sf libamd.$(VERSION).a libamd.a )
++	$(CP) Lib/libamd.so $(INSTALL_LIB)/libamd.so.$(VERSION)
++	( cd $(INSTALL_LIB) ; ln -sf libamd.so.$(VERSION) libamd.so )
+ 	$(CP) Include/amd.h $(INSTALL_INCLUDE)
+ 	chmod 644 $(INSTALL_LIB)/libamd*
+ 	chmod 644 $(INSTALL_INCLUDE)/amd.h
+diff -ur SuiteSparse/BTF/Lib/Makefile build/BTF/Lib/Makefile
+--- SuiteSparse/BTF/Lib/Makefile	2014-03-22 04:13:35.000000000 +0900
++++ build/BTF/Lib/Makefile	2015-05-02 07:07:42.728802786 +0900
+@@ -15,7 +15,7 @@
+ 
+ all: library
+ 
+-library: libbtf.a
++library: libbtf.a libbtf.so
+ 
+ OBJ = btf_order.o btf_maxtrans.o btf_strongcomp.o \
+     btf_l_order.o btf_l_maxtrans.o btf_l_strongcomp.o
+@@ -23,6 +23,8 @@
+ libbtf.a: $(OBJ)
+ 	$(ARCHIVE)  libbtf.a $(OBJ)
+ 	- $(RANLIB) libbtf.a
++libbtf.so: libbtf.a
++	$(CC) -fPIC -shared -Wl,-soname,$@ -o $@ -Wl,--whole-archive $< -Wl,--no-whole-archive
+ 
+ $(OBJ): $(INC)
+ 
+diff -ur SuiteSparse/BTF/Makefile build/BTF/Makefile
+--- SuiteSparse/BTF/Makefile	2014-10-10 04:37:31.000000000 +0900
++++ build/BTF/Makefile	2015-05-02 07:07:42.728802786 +0900
+@@ -25,6 +25,8 @@
+ install:
+ 	$(CP) Lib/libbtf.a $(INSTALL_LIB)/libbtf.$(VERSION).a
+ 	( cd $(INSTALL_LIB) ; ln -sf libbtf.$(VERSION).a libbtf.a )
++	$(CP) Lib/libbtf.so $(INSTALL_LIB)/libbtf.so.$(VERSION)
++	( cd $(INSTALL_LIB) ; ln -sf libbtf.so.$(VERSION) libbtf.so )
+ 	$(CP) Include/btf.h $(INSTALL_INCLUDE)
+ 	chmod 644 $(INSTALL_LIB)/libbtf*.a
+ 	chmod 644 $(INSTALL_INCLUDE)/btf.h
+diff -ur SuiteSparse/CAMD/Lib/GNUmakefile build/CAMD/Lib/GNUmakefile
+--- SuiteSparse/CAMD/Lib/GNUmakefile	2014-03-22 04:21:52.000000000 +0900
++++ build/CAMD/Lib/GNUmakefile	2015-05-02 07:07:42.732136160 +0900
+@@ -2,7 +2,7 @@
+ # CAMD Makefile for compiling on Unix systems (for GNU make only)
+ #-------------------------------------------------------------------------------
+ 
+-default: libcamd.a
++default: libcamd.a libcamd.so
+ 
+ include ../../SuiteSparse_config/SuiteSparse_config.mk
+ 
+@@ -42,6 +42,8 @@
+ libcamd.a: $(CAMDI) $(CAMDL)
+ 	$(ARCHIVE)  libcamd.a $^
+ 	- $(RANLIB) libcamd.a
++libcamd.so: libcamd.a
++	$(CC) -fPIC -shared -Wl,-soname,$@ -o $@ -Wl,--whole-archive $< -Wl,--no-whole-archive -L../../SuiteSparse_config -lsuitesparseconfig -lm
+ 
+ #-------------------------------------------------------------------------------
+ # Remove all but the files in the original distribution
+diff -ur SuiteSparse/CAMD/Makefile build/CAMD/Makefile
+--- SuiteSparse/CAMD/Makefile	2014-10-10 04:43:08.000000000 +0900
++++ build/CAMD/Makefile	2015-05-02 07:07:42.732136160 +0900
+@@ -52,6 +52,8 @@
+ install:
+ 	$(CP) Lib/libcamd.a $(INSTALL_LIB)/libcamd.$(VERSION).a
+ 	( cd $(INSTALL_LIB) ; ln -sf libcamd.$(VERSION).a libcamd.a )
++	$(CP) Lib/libcamd.so $(INSTALL_LIB)/libcamd.so.$(VERSION)
++	( cd $(INSTALL_LIB) ; ln -sf libcamd.so.$(VERSION) libcamd.so )
+ 	$(CP) Include/camd.h $(INSTALL_INCLUDE)
+ 	chmod 644 $(INSTALL_LIB)/libcamd*.a
+ 	chmod 644 $(INSTALL_INCLUDE)/camd.h
+diff -ur SuiteSparse/CCOLAMD/Lib/Makefile build/CCOLAMD/Lib/Makefile
+--- SuiteSparse/CCOLAMD/Lib/Makefile	2014-03-22 04:21:07.000000000 +0900
++++ build/CCOLAMD/Lib/Makefile	2015-05-02 07:07:42.735469533 +0900
+@@ -2,7 +2,7 @@
+ # CCOLAMD Makefile
+ #-------------------------------------------------------------------------------
+ 
+-default: libccolamd.a
++default: libccolamd.a libccolamd.so
+ 
+ include ../../SuiteSparse_config/SuiteSparse_config.mk
+ 
+@@ -18,10 +18,12 @@
+ 	$(CC) $(CF) $(I) -c ../Source/ccolamd.c -DDLONG -o ccolamd_l.o
+ 	$(ARCHIVE)  libccolamd.a ccolamd.o ccolamd_l.o
+ 	- $(RANLIB) libccolamd.a 
++libccolamd.so: libccolamd.a
++	$(CC) -fPIC -shared -Wl,-soname,$@ -o $@ -Wl,--whole-archive $< -Wl,--no-whole-archive -L../../SuiteSparse_config -lsuitesparseconfig -lm
+ 
+-ccode: libccolamd.a
++ccode: libccolamd.a libccolamd.so
+ 
+-library: libccolamd.a
++library: libccolamd.a libccolamd.so
+ 
+ clean:
+ 	- $(RM) $(CLEAN)
+diff -ur SuiteSparse/CCOLAMD/Makefile build/CCOLAMD/Makefile
+--- SuiteSparse/CCOLAMD/Makefile	2014-10-10 04:45:49.000000000 +0900
++++ build/CCOLAMD/Makefile	2015-05-02 07:07:42.735469533 +0900
+@@ -45,6 +45,8 @@
+ install:
+ 	$(CP) Lib/libccolamd.a $(INSTALL_LIB)/libccolamd.$(VERSION).a
+ 	( cd $(INSTALL_LIB) ; ln -sf libccolamd.$(VERSION).a libccolamd.a )
++	$(CP) Lib/libccolamd.so $(INSTALL_LIB)/libccolamd.so.$(VERSION)
++	( cd $(INSTALL_LIB) ; ln -sf libccolamd.so.$(VERSION) libccolamd.so )
+ 	$(CP) Include/ccolamd.h $(INSTALL_INCLUDE)
+ 	chmod 644 $(INSTALL_LIB)/libccolamd*.a
+ 	chmod 644 $(INSTALL_INCLUDE)/ccolamd.h
+diff -ur SuiteSparse/CHOLMOD/Lib/Makefile build/CHOLMOD/Lib/Makefile
+--- SuiteSparse/CHOLMOD/Lib/Makefile	2014-09-05 03:44:03.000000000 +0900
++++ build/CHOLMOD/Lib/Makefile	2015-05-02 07:07:42.738802908 +0900
+@@ -21,7 +21,7 @@
+         ifeq (../../CCOLAMD, $(wildcard ../../CCOLAMD))
+             # CAMD and CCOLAMD are requested and available
+             LIB_WITH_PARTITION = \
+-                        ../../CCOLAMD/Lib/libccolamd.a ../../CAMD/Lib/libcamd.a
++                        -L../../CCOLAMD/Lib -lccolamd -L../../CAMD/Lib -lcamd
+             I_WITH_PARTITION = \
+                         -I../../CCOLAMD/Include -I../../CAMD/Include
+             CONFIG = -DNPARTITION
+@@ -31,7 +31,7 @@
+                 ifeq ($(METIS_PATH), $(wildcard $(METIS_PATH)))
+                     # METIS is available
+                     LIB_WITH_PARTITION = $(METIS) \
+-                        ../../CCOLAMD/Lib/libccolamd.a ../../CAMD/Lib/libcamd.a
++                        -L../../CCOLAMD/Lib -lccolamd -L=../../CAMD/Lib -lcamd
+                     I_WITH_PARTITION = -I$(METIS_PATH)/Lib \
+                         -I../../CCOLAMD/Include -I../../CAMD/Include
+                     CONFIG =
+@@ -50,9 +50,9 @@
+ 
+ C = $(CC) $(CF) $(CHOLMOD_CONFIG) $(CONFIG)
+ 
+-all: libcholmod.a
++all: libcholmod.a libcholmod.so
+ 
+-library: libcholmod.a
++library: libcholmod.a libcholmod.so
+ 
+ purge: distclean
+ 
+@@ -167,6 +167,12 @@
+ libcholmod.a: $(OBJ)
+ 	$(ARCHIVE)  libcholmod.a $(OBJ)
+ 	- $(RANLIB) libcholmod.a
++libcholmod.so: libcholmod.a
++	( cd ../../AMD ; $(MAKE) library )
++	( cd ../../COLAMD ; $(MAKE) library )
++	( cd ../../CCOLAMD ; $(MAKE) library )
++	( cd ../../CAMD ; $(MAKE) library )
++	$(CC) -fPIC -shared -Wl,-soname,$@ -o $@ -Wl,--whole-archive $< -Wl,--no-whole-archive -L../../AMD/Lib -lamd -L../../COLAMD/Lib -lcolamd $(LIB_WITH_PARTITION) -L=../../SuiteSparse_config -lsuitesparseconfig $(LAPACK) $(BLAS) -lm
+ 
+ $(OBJ): $(INC)
+ 
+diff -ur SuiteSparse/CHOLMOD/Makefile build/CHOLMOD/Makefile
+--- SuiteSparse/CHOLMOD/Makefile	2015-01-20 08:36:45.000000000 +0900
++++ build/CHOLMOD/Makefile	2015-05-02 07:07:42.738802908 +0900
+@@ -63,6 +63,8 @@
+ install:
+ 	$(CP) Lib/libcholmod.a $(INSTALL_LIB)/libcholmod.$(VERSION).a
+ 	( cd $(INSTALL_LIB) ; ln -sf libcholmod.$(VERSION).a libcholmod.a )
++	$(CP) Lib/libcholmod.so $(INSTALL_LIB)/libcholmod.so.$(VERSION)
++	( cd $(INSTALL_LIB) ; ln -sf libcholmod.so.$(VERSION) libcholmod.so )
+ 	$(CP) Include/cholmod*.h $(INSTALL_INCLUDE)
+ 	$(RM) $(INSTALL_INCLUDE)/cholmod_internal.h
+ 	chmod 644 $(INSTALL_LIB)/libcholmod*.a
+diff -ur SuiteSparse/COLAMD/Lib/Makefile build/COLAMD/Lib/Makefile
+--- SuiteSparse/COLAMD/Lib/Makefile	2014-03-22 04:13:38.000000000 +0900
++++ build/COLAMD/Lib/Makefile	2015-05-02 07:07:42.742136281 +0900
+@@ -2,7 +2,7 @@
+ # COLAMD Makefile
+ #-------------------------------------------------------------------------------
+ 
+-default: libcolamd.a
++default: libcolamd.a libcolamd.so
+ 
+ include ../../SuiteSparse_config/SuiteSparse_config.mk
+ 
+@@ -18,10 +18,12 @@
+ 	$(CC) $(CF) $(I) -c ../Source/colamd.c -DDLONG -o colamd_l.o
+ 	$(ARCHIVE)  libcolamd.a colamd.o colamd_l.o
+ 	- $(RANLIB) libcolamd.a
++libcolamd.so: libcolamd.a
++	$(CC) -fPIC -shared -Wl,-soname,$@ -o $@ -Wl,--whole-archive $< -Wl,--no-whole-archive -L../../SuiteSparse_config -lsuitesparseconfig -lm
+ 
+-ccode: libcolamd.a
++ccode: libcolamd.a libcolamd.so
+ 
+-library: libcolamd.a
++library: libcolamd.a libcolamd.so
+ 
+ clean:
+ 	- $(RM) $(CLEAN)
+diff -ur SuiteSparse/COLAMD/Makefile build/COLAMD/Makefile
+--- SuiteSparse/COLAMD/Makefile	2014-10-10 04:57:09.000000000 +0900
++++ build/COLAMD/Makefile	2015-05-02 07:07:42.745469655 +0900
+@@ -45,6 +45,8 @@
+ install:
+ 	$(CP) Lib/libcolamd.a $(INSTALL_LIB)/libcolamd.$(VERSION).a
+ 	( cd $(INSTALL_LIB) ; ln -sf libcolamd.$(VERSION).a libcolamd.a )
++	$(CP) Lib/libcolamd.so $(INSTALL_LIB)/libcolamd.so.$(VERSION)
++	( cd $(INSTALL_LIB) ; ln -sf libcolamd.so.$(VERSION) libcolamd.so )
+ 	$(CP) Include/colamd.h $(INSTALL_INCLUDE)
+ 	chmod 644 $(INSTALL_LIB)/libcolamd*.a
+ 	chmod 644 $(INSTALL_INCLUDE)/colamd.h
+diff -ur SuiteSparse/CSparse/Lib/Makefile build/CSparse/Lib/Makefile
+--- SuiteSparse/CSparse/Lib/Makefile	2014-03-22 04:14:17.000000000 +0900
++++ build/CSparse/Lib/Makefile	2015-05-02 07:07:42.745469655 +0900
+@@ -1,9 +1,9 @@
+-CF = $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -O
++CF = $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -O -fexceptions -fPIC
+ I = -I../Include
+ RANLIB = ranlib
+ ARCHIVE = $(AR) $(ARFLAGS)
+ 
+-all: libcsparse.a
++all: libcsparse.a libcsparse.so
+ 
+ CS = cs_add.o cs_amd.o cs_chol.o cs_cholsol.o cs_counts.o cs_cumsum.o \
+ 	cs_droptol.o cs_dropzeros.o cs_dupl.o cs_entry.o \
+@@ -23,6 +23,8 @@
+ libcsparse.a: $(CS)
+ 	$(ARCHIVE)  libcsparse.a $(CS)
+ 	- $(RANLIB) libcsparse.a
++libcsparse.so: libcsparse.a
++	$(CC) -fPIC -shared -Wl,-soname,$@ -o $@ -Wl,--whole-archive $< -Wl,--no-whole-archive -lm
+ 
+ clean:
+ 	- $(RM) *.o
+diff -ur SuiteSparse/CXSparse/Lib/Makefile build/CXSparse/Lib/Makefile
+--- SuiteSparse/CXSparse/Lib/Makefile	2014-03-22 04:21:44.000000000 +0900
++++ build/CXSparse/Lib/Makefile	2015-05-02 07:07:42.748803029 +0900
+@@ -7,7 +7,7 @@
+ 
+ I = -I../../SuiteSparse_config -I../Include
+ 
+-all: libcxsparse.a
++all: libcxsparse.a libcxsparse.so
+ 
+ CS_SOURCE = cs_add.c cs_amd.c cs_chol.c cs_cholsol.c cs_counts.c cs_cumsum.c \
+ 	cs_droptol.c cs_dropzeros.c cs_dupl.c cs_entry.c \
+@@ -89,6 +89,8 @@
+ libcxsparse.a: $(CS)
+ 	$(ARCHIVE)  libcxsparse.a $(CS)
+ 	- $(RANLIB) libcxsparse.a
++libcxsparse.so: libcxsparse.a
++	$(CC) -fPIC -shared -Wl,-soname,$@ -o $@ -Wl,--whole-archive $< -Wl,--no-whole-archive -lm
+ 
+ clean:
+ 	- $(RM) *.o
+diff -ur SuiteSparse/CXSparse/Makefile build/CXSparse/Makefile
+--- SuiteSparse/CXSparse/Makefile	2014-10-10 05:06:29.000000000 +0900
++++ build/CXSparse/Makefile	2015-05-02 07:07:42.748803029 +0900
+@@ -40,6 +40,8 @@
+ install:
+ 	$(CP) Lib/libcxsparse.a $(INSTALL_LIB)/libcxsparse.$(VERSION).a
+ 	( cd $(INSTALL_LIB) ; ln -sf libcxsparse.$(VERSION).a libcxsparse.a )
++	$(CP) Lib/libcxsparse.so $(INSTALL_LIB)/libcxsparse.so.$(VERSION)
++	( cd $(INSTALL_LIB) ; ln -sf libcxsparse.so.$(VERSION) libcxsparse.so )
+ 	$(CP) Include/cs.h $(INSTALL_INCLUDE)
+ 	chmod 644 $(INSTALL_LIB)/libcxsparse*.a
+ 	chmod 644 $(INSTALL_INCLUDE)/cs.h
+diff -ur SuiteSparse/CXSparse_newfiles/Lib/Makefile build/CXSparse_newfiles/Lib/Makefile
+--- SuiteSparse/CXSparse_newfiles/Lib/Makefile	2014-03-22 04:21:44.000000000 +0900
++++ build/CXSparse_newfiles/Lib/Makefile	2015-05-02 07:07:42.752136402 +0900
+@@ -7,7 +7,7 @@
+ 
+ I = -I../../SuiteSparse_config -I../Include
+ 
+-all: libcxsparse.a
++all: libcxsparse.a libcxsparse.so
+ 
+ CS_SOURCE = cs_add.c cs_amd.c cs_chol.c cs_cholsol.c cs_counts.c cs_cumsum.c \
+ 	cs_droptol.c cs_dropzeros.c cs_dupl.c cs_entry.c \
+@@ -89,6 +89,8 @@
+ libcxsparse.a: $(CS)
+ 	$(ARCHIVE)  libcxsparse.a $(CS)
+ 	- $(RANLIB) libcxsparse.a
++libcxsparse.so: libcxsparse.a
++	$(CC) -fPIC -shared -Wl,-soname,$@ -o $@ -Wl,--whole-archive $< -Wl,--no-whole-archive -lm
+ 
+ clean:
+ 	- $(RM) *.o
+diff -ur SuiteSparse/CXSparse_newfiles/Makefile build/CXSparse_newfiles/Makefile
+--- SuiteSparse/CXSparse_newfiles/Makefile	2014-10-10 05:06:29.000000000 +0900
++++ build/CXSparse_newfiles/Makefile	2015-05-02 07:07:42.752136402 +0900
+@@ -40,6 +40,8 @@
+ install:
+ 	$(CP) Lib/libcxsparse.a $(INSTALL_LIB)/libcxsparse.$(VERSION).a
+ 	( cd $(INSTALL_LIB) ; ln -sf libcxsparse.$(VERSION).a libcxsparse.a )
++	$(CP) Lib/libcxsparse.so $(INSTALL_LIB)/libcxsparse.so.$(VERSION)
++	( cd $(INSTALL_LIB) ; ln -sf libcxsparse.so.$(VERSION) libcxsparse.so )
+ 	$(CP) Include/cs.h $(INSTALL_INCLUDE)
+ 	chmod 644 $(INSTALL_LIB)/libcxsparse*.a
+ 	chmod 644 $(INSTALL_INCLUDE)/cs.h
+diff -ur SuiteSparse/KLU/Lib/Makefile build/KLU/Lib/Makefile
+--- SuiteSparse/KLU/Lib/Makefile	2014-03-22 04:21:27.000000000 +0900
++++ build/KLU/Lib/Makefile	2015-05-02 07:07:42.755469777 +0900
+@@ -17,7 +17,7 @@
+ 
+ all: library
+ 
+-library: libklu.a
++library: libklu.a libklu.so
+ 
+ KLU_D = klu_d.o klu_d_kernel.o klu_d_dump.o \
+     klu_d_factor.o klu_d_free_numeric.o klu_d_solve.o \
+@@ -50,6 +50,11 @@
+ libklu.a: $(OBJ)
+ 	$(ARCHIVE)  libklu.a $(OBJ)
+ 	- $(RANLIB) libklu.a
++libklu.so: libklu.a
++	( cd ../../AMD ; $(MAKE) library )
++	( cd ../../BTF ; $(MAKE) library )
++	( cd ../../COLAMD ; $(MAKE) library )
++	$(CC) -fPIC -shared -Wl,-soname,$@ -o $@ -Wl,--whole-archive $< -Wl,--no-whole-archive -L../../AMD/Lib -lamd -L../../BTF/Lib -lbtf -L../../COLAMD/Lib -lcolamd -L../../SuiteSparse_config -lsuitesparseconfig -lm
+ 
+ $(OBJ): $(INC)
+ 
+diff -ur SuiteSparse/KLU/Makefile build/KLU/Makefile
+--- SuiteSparse/KLU/Makefile	2014-10-24 00:23:34.000000000 +0900
++++ build/KLU/Makefile	2015-05-02 07:07:42.755469777 +0900
+@@ -43,6 +43,8 @@
+ install:
+ 	$(CP) Lib/libklu.a $(INSTALL_LIB)/libklu.$(VERSION).a
+ 	( cd $(INSTALL_LIB) ; ln -sf libklu.$(VERSION).a libklu.a )
++	$(CP) Lib/libklu.so $(INSTALL_LIB)/libklu.so.$(VERSION)
++	( cd $(INSTALL_LIB) ; ln -sf libklu.so.$(VERSION) libklu.so )
+ 	$(CP) Include/klu.h $(INSTALL_INCLUDE)
+ 	chmod 644 $(INSTALL_LIB)/libklu*.a
+ 	chmod 644 $(INSTALL_INCLUDE)/klu.h
+diff -ur SuiteSparse/LDL/Lib/Makefile build/LDL/Lib/Makefile
+--- SuiteSparse/LDL/Lib/Makefile	2014-03-22 04:21:12.000000000 +0900
++++ build/LDL/Lib/Makefile	2015-05-02 07:07:42.758803150 +0900
+@@ -10,7 +10,7 @@
+ 
+ C = $(CC) $(CF) $(I)
+ 
+-all: libldl.a
++all: libldl.a libldl.so
+ 
+ #-------------------------------------------------------------------------------
+ # the ldl library:
+@@ -21,6 +21,8 @@
+ 	$(C) -DLDL_LONG -c ../Source/ldl.c -o ldll.o
+ 	$(ARCHIVE)  libldl.a ldl.o ldll.o
+ 	- $(RANLIB) libldl.a
++libldl.so: libldl.a
++	$(CC) -fPIC -shared -Wl,-soname,$@ -o $@ -Wl,--whole-archive $< -Wl,--no-whole-archive
+ 
+ distclean: purge
+ 
+diff -ur SuiteSparse/LDL/Makefile build/LDL/Makefile
+--- SuiteSparse/LDL/Makefile	2014-10-10 05:29:33.000000000 +0900
++++ build/LDL/Makefile	2015-05-02 07:07:42.758803150 +0900
+@@ -52,6 +52,8 @@
+ install:
+ 	$(CP) Lib/libldl.a $(INSTALL_LIB)/libldl.$(VERSION).a
+ 	( cd $(INSTALL_LIB) ; ln -sf libldl.$(VERSION).a libldl.a )
++	$(CP) Lib/libldl.so $(INSTALL_LIB)/libldl.so.$(VERSION)
++	( cd $(INSTALL_LIB) ; ln -sf libldl.so.$(VERSION) libldl.so )
+ 	$(CP) Include/ldl.h $(INSTALL_INCLUDE)
+ 	chmod 644 $(INSTALL_LIB)/libldl*.a
+ 	chmod 644 $(INSTALL_INCLUDE)/ldl.h
+diff -ur SuiteSparse/RBio/Lib/Makefile build/RBio/Lib/Makefile
+--- SuiteSparse/RBio/Lib/Makefile	2014-03-22 04:22:02.000000000 +0900
++++ build/RBio/Lib/Makefile	2015-05-02 07:07:42.762136524 +0900
+@@ -10,9 +10,9 @@
+ 
+ C = $(CC) $(CF)
+ 
+-all: librbio.a
++all: librbio.a librbio.so
+ 
+-library: librbio.a
++library: librbio.a librbio.so
+ 
+ purge: distclean
+ 
+@@ -48,6 +48,8 @@
+ librbio.a: $(OBJ)
+ 	$(ARCHIVE)  librbio.a $(OBJ)
+ 	- $(RANLIB) librbio.a
++librbio.so: librbio.a
++	$(CC) -fPIC -shared -Wl,-soname,$@ -o $@ -Wl,--whole-archive $< -Wl,--no-whole-archive -L../../SuiteSparse_config -lsuitesparseconfig
+ 
+ $(OBJ): $(INC)
+ 
+diff -ur SuiteSparse/RBio/Makefile build/RBio/Makefile
+--- SuiteSparse/RBio/Makefile	2014-10-10 05:35:53.000000000 +0900
++++ build/RBio/Makefile	2015-05-02 07:07:42.762136524 +0900
+@@ -53,6 +53,8 @@
+ install:
+ 	$(CP) Lib/librbio.a $(INSTALL_LIB)/librbio.$(VERSION).a
+ 	( cd $(INSTALL_LIB) ; ln -sf librbio.$(VERSION).a librbio.a )
++	$(CP) Lib/librbio.so $(INSTALL_LIB)/librbio.so.$(VERSION)
++	( cd $(INSTALL_LIB) ; ln -sf librbio.so.$(VERSION) librbio.so )
+ 	$(CP) Include/RBio.h $(INSTALL_INCLUDE)
+ 	chmod 644 $(INSTALL_LIB)/librbio*.a
+ 	chmod 644 $(INSTALL_INCLUDE)/RBio.h
+diff -ur SuiteSparse/SPQR/Lib/Makefile build/SPQR/Lib/Makefile
+--- SuiteSparse/SPQR/Lib/Makefile	2014-09-18 05:29:37.000000000 +0900
++++ build/SPQR/Lib/Makefile	2015-05-02 07:07:42.765469898 +0900
+@@ -20,8 +20,8 @@
+         ifeq (../../CAMD, $(wildcard ../../CAMD))
+             ifeq (../../CCOLAMD, $(wildcard ../../CCOLAMD))
+                 # METIS, CAMD, and CCOLAMD are available
+-                LIB_WITH_PARTITION = $(METIS) ../../CCOLAMD/Lib/libccolamd.a \
+-                    ../../CAMD/Lib/libcamd.a
++                LIB_WITH_PARTITION = $(METIS) -L../../CCOLAMD/Lib -lccolamd \
++                    -L../../CAMD/Lib -lcamd
+                 I_WITH_PARTITION = -I$(METIS_PATH)/Lib \
+                     -I../../CCOLAMD/Include -I../../CAMD/Include
+                 CONFIG_PARTITION =
+@@ -39,9 +39,9 @@
+ # 	-Wredundant-decls -Wdisabled-optimization \
+ # 	-ansi -fexceptions
+ 
+-all: libspqr.a
++all: libspqr.a libspqr.so
+ 
+-library: libspqr.a
++library: libspqr.a libspqr.so
+ 
+ purge: distclean
+ 
+@@ -119,6 +119,9 @@
+ libspqr.a: $(OBJ)
+ 	$(ARCHIVE)  libspqr.a $(OBJ)
+ 	- $(RANLIB) libspqr.a
++libspqr.so: libspqr.a
++	( cd ../../CHOLMOD; $(MAKE) library )
++	$(CC) -fPIC -shared -Wl,-soname,$@ -o $@ -Wl,--whole-archive $< -Wl,--no-whole-archive -L../../CHOLMOD/Lib -lcholmod -L../../SuiteSparse_config -lsuitesparseconfig $(LAPACK) $(BLAS) -lm
+ 
+ spqr_1colamd.o: ../Source/spqr_1colamd.cpp
+ 	$(C) -c $<
+diff -ur SuiteSparse/SPQR/Makefile build/SPQR/Makefile
+--- SuiteSparse/SPQR/Makefile	2015-03-25 08:55:46.000000000 +0900
++++ build/SPQR/Makefile	2015-05-02 07:07:42.765469898 +0900
+@@ -45,6 +45,8 @@
+ install:
+ 	$(CP) Lib/libspqr.a $(INSTALL_LIB)/libspqr.$(VERSION).a
+ 	( cd $(INSTALL_LIB) ; ln -sf libspqr.$(VERSION).a libspqr.a )
++	$(CP) Lib/libspqr.so $(INSTALL_LIB)/libspqr.so.$(VERSION)
++	( cd $(INSTALL_LIB) ; ln -sf libspqr.so.$(VERSION) libspqr.so )
+ 	$(CP) Include/SuiteSparseQR.hpp $(INSTALL_INCLUDE)
+ 	$(CP) Include/SuiteSparseQR_C.h $(INSTALL_INCLUDE)
+ 	$(CP) Include/SuiteSparseQR_definitions.h $(INSTALL_INCLUDE)
+diff -ur SuiteSparse/SuiteSparse_config/Makefile build/SuiteSparse_config/Makefile
+--- SuiteSparse/SuiteSparse_config/Makefile	2015-03-25 03:27:25.000000000 +0900
++++ build/SuiteSparse_config/Makefile	2015-05-02 07:07:42.765469898 +0900
+@@ -8,17 +8,19 @@
+ 
+ include SuiteSparse_config.mk
+ 
+-ccode: libsuitesparseconfig.a
++ccode: libsuitesparseconfig.a libsuitesparseconfig.so
+ 
+-all: libsuitesparseconfig.a
++all: libsuitesparseconfig.a libsuitesparseconfig.so
+ 
+-library: libsuitesparseconfig.a
++library: libsuitesparseconfig.a libsuitesparseconfig.so
+ 
+ libsuitesparseconfig.a: SuiteSparse_config.c SuiteSparse_config.h
+ 	$(CC) $(CF) -c SuiteSparse_config.c
+ 	$(ARCHIVE) libsuitesparseconfig.a SuiteSparse_config.o
+ 	$(RANLIB) libsuitesparseconfig.a
+ 	- $(RM) SuiteSparse_config.o
++libsuitesparseconfig.so: libsuitesparseconfig.a
++	$(CC) -fPIC -shared -Wl,-soname,$@ -o $@ -Wl,--whole-archive $< -Wl,--no-whole-archive
+ 
+ distclean: purge
+ 
+@@ -32,6 +34,8 @@
+ install:
+ 	$(CP) libsuitesparseconfig.a $(INSTALL_LIB)/libsuitesparseconfig.$(VERSION).a
+ 	( cd $(INSTALL_LIB) ; ln -sf libsuitesparseconfig.$(VERSION).a libsuitesparseconfig.a )
++	$(CP) libsuitesparseconfig.so $(INSTALL_LIB)/libsuitesparseconfig.so.$(VERSION)
++	( cd $(INSTALL_LIB) ; ln -sf libsuitesparseconfig.so.$(VERSION) libsuitesparseconfig.so )
+ 	$(CP) SuiteSparse_config.h $(INSTALL_INCLUDE)
+ 	chmod 644 $(INSTALL_LIB)/libsuitesparseconfig*.a
+ 	chmod 644 $(INSTALL_INCLUDE)/SuiteSparse_config.h
+diff -ur SuiteSparse/SuiteSparse_config/xerbla/Makefile build/SuiteSparse_config/xerbla/Makefile
+--- SuiteSparse/SuiteSparse_config/xerbla/Makefile	2014-03-22 04:15:24.000000000 +0900
++++ build/SuiteSparse_config/xerbla/Makefile	2015-05-02 07:07:42.768803272 +0900
+@@ -4,11 +4,11 @@
+ 
+ include ../SuiteSparse_config.mk
+ 
+-ccode: libcerbla.a
++ccode: libcerbla.a libcerbla.so
+ 
+-fortran: libxerbla.a 
++fortran: libxerbla.a libxerbla.so
+ 
+-all: libxerbla.a libcerbla.a
++all: libxerbla.a libcerbla.a libxerbla.so libcerbla.so
+ 
+ # Fortran version:
+ libxerbla.a: xerbla.f
+@@ -16,6 +16,8 @@
+ 	$(ARCHIVE)  libxerbla.a xerbla.o
+ 	- $(RANLIB) libxerbla.a
+ 	- $(RM) xerbla.o
++libxerbla.so: libxerbla.a
++	$(F77) -fPIC -shared -Wl,-soname,$@ -o $@ -Wl,--whole-archive $< -Wl,--no-whole-archive -lm
+ 
+ # C version:
+ libcerbla.a: xerbla.c xerbla.h
+@@ -23,6 +25,8 @@
+ 	$(ARCHIVE)  libcerbla.a xerbla.o
+ 	- $(RANLIB) libcerbla.a
+ 	- $(RM) xerbla.o
++libcerbla.so: libcerbla.a
++	$(CC) -fPIC -shared -Wl,-soname,$@ -o $@ -Wl,--whole-archive $< -Wl,--no-whole-archive -lm
+ 
+ distclean: purge
+ 
+diff -ur SuiteSparse/UMFPACK/Lib/GNUmakefile build/UMFPACK/Lib/GNUmakefile
+--- SuiteSparse/UMFPACK/Lib/GNUmakefile	2014-03-22 04:16:16.000000000 +0900
++++ build/UMFPACK/Lib/GNUmakefile	2015-05-02 07:07:42.772136646 +0900
+@@ -2,7 +2,7 @@
+ # UMFPACK Makefile for compiling on Unix systems (for GNU Make)
+ #-------------------------------------------------------------------------------
+ 
+-default: libumfpack.a
++default: libumfpack.a libumfpack.so
+ 
+ include ../../SuiteSparse_config/SuiteSparse_config.mk
+ 
+@@ -256,6 +256,10 @@
+ libumfpack.a: $(II) $(LL) $(GN) $(DI) $(DL) $(ZI) $(ZL)
+ 	$(ARCHIVE)  libumfpack.a $^
+ 	- $(RANLIB) libumfpack.a
++libumfpack.so: libumfpack.a
++	( cd ../../AMD; $(MAKE) library )
++	( cd ../../CHOLMOD; $(MAKE) library )
++	$(CC) -fPIC -shared -Wl,-soname,$@ -o $@ -Wl,--whole-archive $< -Wl,--no-whole-archive -L../../SuiteSparse_config -lsuitesparseconfig -L../../AMD/Lib -lamd -L../../CHOLMOD/Lib -lcholmod $(LAPACK) $(BLAS) -lm
+ 
+ so: $(II) $(LL) $(GN) $(DI) $(DL) $(ZI) $(ZL)
+ 	gcc -shared -Wl,-soname,libumfpack.so -o libumfpack.so $^
+diff -ur SuiteSparse/UMFPACK/Makefile build/UMFPACK/Makefile
+--- SuiteSparse/UMFPACK/Makefile	2014-10-10 07:13:00.000000000 +0900
++++ build/UMFPACK/Makefile	2015-05-02 07:07:42.772136646 +0900
+@@ -69,6 +69,8 @@
+ install:
+ 	$(CP) Lib/libumfpack.a $(INSTALL_LIB)/libumfpack.$(VERSION).a
+ 	( cd $(INSTALL_LIB) ; ln -sf libumfpack.$(VERSION).a libumfpack.a )
++	$(CP) Lib/libumfpack.so $(INSTALL_LIB)/libumfpack.so.$(VERSION)
++	( cd $(INSTALL_LIB) ; ln -sf libumfpack.so.$(VERSION) libumfpack.so )
+ 	$(CP) Include/*.h $(INSTALL_INCLUDE)
+ 	chmod 644 $(INSTALL_LIB)/libumfpack*.a
+ 	chmod 644 $(INSTALL_INCLUDE)/umfpack*.h

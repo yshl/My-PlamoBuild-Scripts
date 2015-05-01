@@ -9,7 +9,7 @@ build=P1
 src=vim74
 OPT_CONFIG='--enable-multibyte --enable-xim --enable-fontset --with-features=big --without-x --disable-gui'
 DOCS='README.txt README_*.txt uninstal.txt'
-#patchfiles='syntax_diff_vim.patch'
+patchfiles='syntax_diff_vim_74.patch'
 for i in `seq -f %03g 1 712`
 do
     patchfiles="$patchfiles 7.4.$i"

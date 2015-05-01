@@ -1,0 +1,13 @@
+diff -ur ../vim74/runtime/syntax/diff.vim runtime/syntax/diff.vim
+--- ../vim74/runtime/syntax/diff.vim	2013-07-24 18:47:50.000000000 +0900
++++ runtime/syntax/diff.vim	2015-05-02 00:14:45.627087202 +0900
+@@ -62,7 +62,7 @@
+ syn match diffDiffer	"^Τα αρχεία .* και .* διαφέρουν$"
+ syn match diffBDiffer	"^Τα αρχεία .* και .* διαφέρουν$"
+ syn match diffIsA	"^Το αρχείο .* είναι .* ενώ το αρχείο .* είναι .*"
+-syn match diffNoEOL	"^\\ Δεν υπάρχει χαρακτήρας νέας γραμμής στο τέλος του αρχείου"
++syn match diffNoEOL	"^\\ Δεν υπάρχει χαρακτήρας νέας γραμμής στο τέλος του αρχείου.*"
+ syn match diffCommon	"^Οι υποκατάλογοι .* και .* είναι ταυτόσημοι$"
+ 
+ " eo
+runtime/syntax������ȯ��: diff.vim.orig

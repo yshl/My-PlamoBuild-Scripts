@@ -1,4 +1,4 @@
-・Java JDK 6 が必要となりますので、インストールしてください。
+・Java JDK が必要となりますので、インストールしてください。
 ・Plamo のパッケージのうち以下のものが必要です。多分。
   gcc_fortran, ocaml, fftw, pcre, tcl, tk
 ・My-PlamoBuild-Scripts の以下のパッケージも多分必要となるでしょう。
@@ -13,3 +13,6 @@
   ・jgraphx-1.8.0.0 以上、flexdock-1.2.0 以上、jlatexmath-1.0.0 以上が必要です。
 ・Scilab-5.4.1 では
   ・scirenderer-1.1.0, flexdock-1.2.3, jlatexmath-1.0.2 以上が必要です。
+・Scilab-5.5.0 では
+  ・新たに freefep-util が必要です。
+  ・jlatexmath-1.0.3 以上、jogamp-2.2、flexdock-1.2.4 以上、jgraphx-2.0.0.1 以上、matio-1.5.0 以上が必要です。

@@ -1,0 +1,296 @@
+diff -ur octave-3.8.2/libinterp/dldfcn/amd.cc build/libinterp/dldfcn/amd.cc
+--- octave-3.8.2/libinterp/dldfcn/amd.cc	2014-08-07 02:57:55.000000000 +0900
++++ build/libinterp/dldfcn/amd.cc	2015-05-02 15:25:40.371544508 +0900
+@@ -164,11 +164,11 @@
+ 
+               // FIXME: how can we manage the memory allocation of amd
+               //        in a cleaner manner?
+-              amd_malloc = malloc;
+-              amd_free = free;
+-              amd_calloc = calloc;
+-              amd_realloc = realloc;
+-              amd_printf = printf;
++              SuiteSparse_config.malloc_func = malloc;
++              SuiteSparse_config.free_func = free;
++              SuiteSparse_config.calloc_func = calloc;
++              SuiteSparse_config.realloc_func = realloc;
++              SuiteSparse_config.printf_func = printf;
+ 
+               octave_idx_type result = AMD_NAME (_order) (n_col, cidx, ridx, P,
+                                                           Control, Info);
+diff -ur octave-3.8.2/libinterp/dldfcn/symbfact.cc build/libinterp/dldfcn/symbfact.cc
+--- octave-3.8.2/libinterp/dldfcn/symbfact.cc	2014-08-07 02:54:15.000000000 +0900
++++ build/libinterp/dldfcn/symbfact.cc	2015-05-02 15:33:39.334095062 +0900
+@@ -39,6 +39,10 @@
+ #include "oct-obj.h"
+ #include "utils.h"
+ 
++#ifdef HAVE_CHOLMOD
++#include <suitesparse/cholmod_function.h>
++#endif
++
+ DEFUN_DLD (symbfact, args, nargout,
+            "-*- texinfo -*-\n\
+ @deftypefn  {Loadable Function} {[@var{count}, @var{h}, @var{parent}, @var{post}, @var{r}] =} symbfact (@var{S})\n\
+@@ -114,17 +118,17 @@
+   if (spu == 0.)
+     {
+       cm->print = -1;
+-      cm->print_function = 0;
++      CHOLMOD_FUNCTION_PRINTF(cm) = 0;
+     }
+   else
+     {
+       cm->print = static_cast<int> (spu) + 2;
+-      cm->print_function =&SparseCholPrint;
++      CHOLMOD_FUNCTION_PRINTF(cm) =&SparseCholPrint;
+     }
+ 
+   cm->error_handler = &SparseCholError;
+-  cm->complex_divide = CHOLMOD_NAME(divcomplex);
+-  cm->hypotenuse = CHOLMOD_NAME(hypot);
++  CHOLMOD_FUNCTION_DIVCOMPLEX(cm) = CHOLMOD_NAME(divcomplex);
++  CHOLMOD_FUNCTION_HYPOTENUSE(cm) = CHOLMOD_NAME(hypot);
+ 
+   double dummy;
+   cholmod_sparse Astore;
+diff -ur octave-3.8.2/liboctave/array/CSparse.cc build/liboctave/array/CSparse.cc
+--- octave-3.8.2/liboctave/array/CSparse.cc	2014-08-07 02:57:55.000000000 +0900
++++ build/liboctave/array/CSparse.cc	2015-05-02 09:08:57.174302475 +0900
+@@ -63,6 +63,10 @@
+ #include "sparse-dmsolve.cc"
+ #endif
+ 
++#ifdef HAVE_CHOLMOD
++#include <suitesparse/cholmod_function.h>
++#endif
++
+ // Fortran functions we call.
+ extern "C"
+ {
+@@ -5664,17 +5668,17 @@
+           if (spu == 0.)
+             {
+               cm->print = -1;
+-              cm->print_function = 0;
++              CHOLMOD_FUNCTION_PRINTF(cm) = 0;
+             }
+           else
+             {
+               cm->print = static_cast<int> (spu) + 2;
+-              cm->print_function =&SparseCholPrint;
++              CHOLMOD_FUNCTION_PRINTF(cm) =&SparseCholPrint;
+             }
+ 
+           cm->error_handler = &SparseCholError;
+-          cm->complex_divide = CHOLMOD_NAME(divcomplex);
+-          cm->hypotenuse = CHOLMOD_NAME(hypot);
++          CHOLMOD_FUNCTION_DIVCOMPLEX(cm) = CHOLMOD_NAME(divcomplex);
++          CHOLMOD_FUNCTION_HYPOTENUSE(cm) = CHOLMOD_NAME(hypot);
+ 
+           cm->final_ll = true;
+ 
+@@ -5907,17 +5911,17 @@
+           if (spu == 0.)
+             {
+               cm->print = -1;
+-              cm->print_function = 0;
++              CHOLMOD_FUNCTION_PRINTF(cm) = 0;
+             }
+           else
+             {
+               cm->print = static_cast<int> (spu) + 2;
+-              cm->print_function =&SparseCholPrint;
++              CHOLMOD_FUNCTION_PRINTF(cm) =&SparseCholPrint;
+             }
+ 
+           cm->error_handler = &SparseCholError;
+-          cm->complex_divide = CHOLMOD_NAME(divcomplex);
+-          cm->hypotenuse = CHOLMOD_NAME(hypot);
++          CHOLMOD_FUNCTION_DIVCOMPLEX(cm) = CHOLMOD_NAME(divcomplex);
++          CHOLMOD_FUNCTION_HYPOTENUSE(cm) = CHOLMOD_NAME(hypot);
+ 
+           cm->final_ll = true;
+ 
+@@ -6198,17 +6202,17 @@
+           if (spu == 0.)
+             {
+               cm->print = -1;
+-              cm->print_function = 0;
++              CHOLMOD_FUNCTION_PRINTF(cm) = 0;
+             }
+           else
+             {
+               cm->print = static_cast<int> (spu) + 2;
+-              cm->print_function =&SparseCholPrint;
++              CHOLMOD_FUNCTION_PRINTF(cm) =&SparseCholPrint;
+             }
+ 
+           cm->error_handler = &SparseCholError;
+-          cm->complex_divide = CHOLMOD_NAME(divcomplex);
+-          cm->hypotenuse = CHOLMOD_NAME(hypot);
++          CHOLMOD_FUNCTION_DIVCOMPLEX(cm) = CHOLMOD_NAME(divcomplex);
++          CHOLMOD_FUNCTION_HYPOTENUSE(cm) = CHOLMOD_NAME(hypot);
+ 
+           cm->final_ll = true;
+ 
+@@ -6420,17 +6424,17 @@
+           if (spu == 0.)
+             {
+               cm->print = -1;
+-              cm->print_function = 0;
++              CHOLMOD_FUNCTION_PRINTF(cm) = 0;
+             }
+           else
+             {
+               cm->print = static_cast<int> (spu) + 2;
+-              cm->print_function =&SparseCholPrint;
++              CHOLMOD_FUNCTION_PRINTF(cm) =&SparseCholPrint;
+             }
+ 
+           cm->error_handler = &SparseCholError;
+-          cm->complex_divide = CHOLMOD_NAME(divcomplex);
+-          cm->hypotenuse = CHOLMOD_NAME(hypot);
++          CHOLMOD_FUNCTION_DIVCOMPLEX(cm) = CHOLMOD_NAME(divcomplex);
++          CHOLMOD_FUNCTION_HYPOTENUSE(cm) = CHOLMOD_NAME(hypot);
+ 
+           cm->final_ll = true;
+ 
+diff -ur octave-3.8.2/liboctave/array/dSparse.cc build/liboctave/array/dSparse.cc
+--- octave-3.8.2/liboctave/array/dSparse.cc	2014-08-07 02:57:55.000000000 +0900
++++ build/liboctave/array/dSparse.cc	2015-05-02 09:15:42.302490111 +0900
+@@ -63,6 +63,10 @@
+ #include "sparse-dmsolve.cc"
+ #endif
+ 
++#ifdef HAVE_CHOLMOD
++#include <suitesparse/cholmod_function.h>
++#endif
++
+ // Fortran functions we call.
+ extern "C"
+ {
+@@ -5866,17 +5870,17 @@
+           if (spu == 0.)
+             {
+               cm->print = -1;
+-              cm->print_function = 0;
++              CHOLMOD_FUNCTION_PRINTF(cm) = 0;
+             }
+           else
+             {
+               cm->print = static_cast<int> (spu) + 2;
+-              cm->print_function =&SparseCholPrint;
++              CHOLMOD_FUNCTION_PRINTF(cm) =&SparseCholPrint;
+             }
+ 
+           cm->error_handler = &SparseCholError;
+-          cm->complex_divide = CHOLMOD_NAME(divcomplex);
+-          cm->hypotenuse = CHOLMOD_NAME(hypot);
++          CHOLMOD_FUNCTION_DIVCOMPLEX(cm) = CHOLMOD_NAME(divcomplex);
++          CHOLMOD_FUNCTION_HYPOTENUSE(cm) = CHOLMOD_NAME(hypot);
+ 
+           cm->final_ll = true;
+ 
+@@ -6083,17 +6087,17 @@
+           if (spu == 0.)
+             {
+               cm->print = -1;
+-              cm->print_function = 0;
++              CHOLMOD_FUNCTION_PRINTF(cm) = 0;
+             }
+           else
+             {
+               cm->print = static_cast<int> (spu) + 2;
+-              cm->print_function =&SparseCholPrint;
++              CHOLMOD_FUNCTION_PRINTF(cm) =&SparseCholPrint;
+             }
+ 
+           cm->error_handler = &SparseCholError;
+-          cm->complex_divide = CHOLMOD_NAME(divcomplex);
+-          cm->hypotenuse = CHOLMOD_NAME(hypot);
++          CHOLMOD_FUNCTION_DIVCOMPLEX(cm) = CHOLMOD_NAME(divcomplex);
++          CHOLMOD_FUNCTION_HYPOTENUSE(cm) = CHOLMOD_NAME(hypot);
+ 
+           cm->final_ll = true;
+ 
+@@ -6345,17 +6349,17 @@
+           if (spu == 0.)
+             {
+               cm->print = -1;
+-              cm->print_function = 0;
++              CHOLMOD_FUNCTION_PRINTF(cm) = 0;
+             }
+           else
+             {
+               cm->print = static_cast<int> (spu) + 2;
+-              cm->print_function =&SparseCholPrint;
++              CHOLMOD_FUNCTION_PRINTF(cm) =&SparseCholPrint;
+             }
+ 
+           cm->error_handler = &SparseCholError;
+-          cm->complex_divide = CHOLMOD_NAME(divcomplex);
+-          cm->hypotenuse = CHOLMOD_NAME(hypot);
++          CHOLMOD_FUNCTION_DIVCOMPLEX(cm) = CHOLMOD_NAME(divcomplex);
++          CHOLMOD_FUNCTION_HYPOTENUSE(cm) = CHOLMOD_NAME(hypot);
+ 
+           cm->final_ll = true;
+ 
+@@ -6579,17 +6583,17 @@
+           if (spu == 0.)
+             {
+               cm->print = -1;
+-              cm->print_function = 0;
++              CHOLMOD_FUNCTION_PRINTF(cm) = 0;
+             }
+           else
+             {
+               cm->print = static_cast<int> (spu) + 2;
+-              cm->print_function =&SparseCholPrint;
++              CHOLMOD_FUNCTION_PRINTF(cm) =&SparseCholPrint;
+             }
+ 
+           cm->error_handler = &SparseCholError;
+-          cm->complex_divide = CHOLMOD_NAME(divcomplex);
+-          cm->hypotenuse = CHOLMOD_NAME(hypot);
++          CHOLMOD_FUNCTION_DIVCOMPLEX(cm) = CHOLMOD_NAME(divcomplex);
++          CHOLMOD_FUNCTION_HYPOTENUSE(cm) = CHOLMOD_NAME(hypot);
+ 
+           cm->final_ll = true;
+ 
+diff -ur octave-3.8.2/liboctave/numeric/sparse-base-chol.cc build/liboctave/numeric/sparse-base-chol.cc
+--- octave-3.8.2/liboctave/numeric/sparse-base-chol.cc	2014-08-07 02:54:14.000000000 +0900
++++ build/liboctave/numeric/sparse-base-chol.cc	2015-05-02 09:39:34.923331701 +0900
+@@ -34,6 +34,10 @@
+ #include "MatrixType.h"
+ 
+ #ifdef HAVE_CHOLMOD
++#include <suitesparse/cholmod_function.h>
++#endif
++
++#ifdef HAVE_CHOLMOD
+ // Can't use CHOLMOD_NAME(drop)(0.0, S, cm). It doesn't treat complex matrices
+ template <class chol_type, class chol_elt, class p_type>
+ void
+@@ -105,17 +109,17 @@
+   if (spu == 0.)
+     {
+       cm->print = -1;
+-      cm->print_function = 0;
++      CHOLMOD_FUNCTION_PRINTF(cm) = 0;
+     }
+   else
+     {
+       cm->print = static_cast<int> (spu) + 2;
+-      cm->print_function =&SparseCholPrint;
++      CHOLMOD_FUNCTION_PRINTF(cm) =&SparseCholPrint;
+     }
+ 
+   cm->error_handler = &SparseCholError;
+-  cm->complex_divide = CHOLMOD_NAME(divcomplex);
+-  cm->hypotenuse = CHOLMOD_NAME(hypot);
++  CHOLMOD_FUNCTION_DIVCOMPLEX(cm) = CHOLMOD_NAME(divcomplex);
++  CHOLMOD_FUNCTION_HYPOTENUSE(cm) = CHOLMOD_NAME(hypot);
+ 
+   cm->final_asis = false;
+   cm->final_super = false;

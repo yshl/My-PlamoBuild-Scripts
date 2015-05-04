@@ -1,0 +1,13 @@
+diff -ur parmetis-4.0.3/libparmetis/CMakeLists.txt build/libparmetis/CMakeLists.txt
+--- parmetis-4.0.3/libparmetis/CMakeLists.txt	2013-03-31 01:24:50.000000000 +0900
++++ build/libparmetis/CMakeLists.txt	2015-05-05 03:27:49.274554047 +0900
+@@ -9,6 +9,6 @@
+ set_target_properties(parmetis PROPERTIES LINK_FLAGS "${MPI_LINK_FLAGS}")
+ 
+ install(TARGETS parmetis
+-  LIBRARY DESTINATION lib
+-  RUNTIME DESTINATION lib
+-  ARCHIVE DESTINATION lib)
++  LIBRARY DESTINATION lib64
++  RUNTIME DESTINATION lib64
++  ARCHIVE DESTINATION lib64)

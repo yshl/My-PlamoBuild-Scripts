@@ -5,11 +5,12 @@ pkgbase=fltk
 vers=1.3.3
 arch=x86_64
 # arch=i586
-build=P1
+build=P2
 src=fltk-1.3.3
 OPT_CONFIG='--enable-shared --enable-cairo'
+#OPT_CONFIG='-DOPTION_BUILD_SHARED_LIBS=on -DOPTION_CAIRO=on'
 DOCS='COPYING README README.CMake.txt README.Cairo.txt README.MSWindows.txt README.OSX.txt README.Unix.txt'
-patchfiles=''
+patchfiles='Fl_XFont_On_Demand.patch'
 compress=txz
 ##############################################################
 
@@ -157,7 +158,7 @@ if [ $opt_config -eq 1 ] ; then
          export LDFLAGS='-Wl,--as-needed' 
          export CC="gcc -isystem /usr/include $target" 
          export CXX="g++ -isystem /usr/include $target "
-         cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DLIB_INSTALL_DIR:PATH=/usr/${libdir} -DLIB_SUFFIX=$suffix ${OPT_CONFIG[$i]} .
+         cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCMAKE_INSTALL_LIBDIR:PATH=/usr/${libdir} ${OPT_CONFIG[$i]} .
      fi
       if [ $? != 0 ]; then
 	  echo "configure error. $0 script stop"

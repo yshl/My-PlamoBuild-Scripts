@@ -1,0 +1,80 @@
+diff -ur MUMPS_5.0.0/Make.inc/Makefile.inc.generic build/Make.inc/Makefile.inc.generic
+--- MUMPS_5.0.0/Make.inc/Makefile.inc.generic	2015-05-06 04:11:43.230839572 +0900
++++ build/Make.inc/Makefile.inc.generic	2015-05-06 04:11:20.503895011 +0900
+@@ -91,7 +91,7 @@
+ PLAT    = 
+ # Library extension, + C and Fortran "-o" option
+ # may be different under Windows
+-LIBEXT  = .a
++LIBEXT  = .so
+ OUTC    = -o 
+ OUTF    = -o 
+ # RM : remove files
+@@ -104,11 +104,11 @@
+ FL      = mpif90
+ # AR : Archive object in a library
+ #      keep a space at the end if options have to be separated from lib name
+-AR      = ar vr 
++AR      = $(FL) -fPIC -shared -o 
+ # RANLIB : generate index of an archive file
+ #   (optionnal use "RANLIB = echo" in case of problem)
+-RANLIB  = ranlib
+-#RANLIB  = echo
++#RANLIB  = ranlib
++RANLIB  = echo
+ 
+ # SCALAP should define the SCALAPACK and  BLACS libraries.
+ SCALAP  = -lscalapack
+@@ -146,9 +146,9 @@
+ CDEFS = -DAdd_
+ 
+ #COMPILER OPTIONS
+-OPTF    = -O
+-OPTC    = -O -I.
+-OPTL    = -O
++OPTF    = -O -fPIC
++OPTC    = -O -fPIC -I.
++OPTL    = -O -fPIC
+ 
+ # CHOOSE BETWEEN USING THE SEQUENTIAL OR THE PARALLEL VERSION.
+ 
+diff -ur MUMPS_5.0.0/Make.inc/Makefile.inc.generic.SEQ build/Make.inc/Makefile.inc.generic.SEQ
+--- MUMPS_5.0.0/Make.inc/Makefile.inc.generic.SEQ	2015-05-06 04:11:43.230839572 +0900
++++ build/Make.inc/Makefile.inc.generic.SEQ	2015-05-06 04:11:20.503895011 +0900
+@@ -94,7 +94,7 @@
+ PLAT    = 
+ # Library extension, + C and Fortran "-o" option
+ # may be different under Windows
+-LIBEXT  = .a
++LIBEXT  = .so
+ OUTC    = -o 
+ OUTF    = -o 
+ # RM : remove files
+@@ -107,11 +107,11 @@
+ FL      = gfortran
+ # AR : Archive object in a library
+ #      keep a space at the end if options have to be separated from lib name
+-AR      = ar vr 
++AR      = $(FL) -fPIC -shared -o 
+ # RANLIB : generate index of an archive file
+ #   (optionnal use "RANLIB = echo" in case of problem)
+-RANLIB  = ranlib
+-#RANLIB  = echo
++#RANLIB  = ranlib
++RANLIB  = echo
+ 
+ # The next two lines should not be modified. They concern
+ # the sequential library provided by MUMPS, to use instead
+@@ -141,9 +141,9 @@
+ 
+ #COMPILER OPTIONS
+ 
+-OPTF    = -O
+-OPTC    = -O -I.
+-OPTL    = -O
++OPTF    = -O -fPIC
++OPTC    = -O -fPIC -I.
++OPTL    = -O -fPIC
+ 
+ #Sequential:
+ 

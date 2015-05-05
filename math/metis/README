@@ -1,2 +1,5 @@
-metis ( http://glaros.dtc.umn.edu/gkhome/views/metis ) の使用と再配布には
+METIS ( http://glaros.dtc.umn.edu/gkhome/views/metis ) の使用と再配布には
 制限があります。ライセンス条項に同意してからインストールを行ってください。
+
+metis-5 でインターフェイスが変わりました。
+旧バージョンの metis-4.0.3 のパッケージ名を metis4 としました。

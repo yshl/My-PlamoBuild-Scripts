@@ -5,7 +5,7 @@ pkgbase=scotch
 vers=6.0.4
 arch=x86_64
 # arch=i586
-build=P1
+build=P2
 src=scotch_6.0.4
 OPT_CONFIG=''
 DOCS='INSTALL.txt LICENCE_fr.txt LICENSE_en.txt LISEZ-MOI.txt README.txt
@@ -214,7 +214,8 @@ if [ $opt_package -eq 1 ] ; then
       make -C src install prefix=$P/usr libdir=$P/usr/$libdir \
 	  includedir=$P/usr/include/scotch
       install lib/* $P/usr/$libdir
-      install include/* $P/usr/include/scotch
+      install include/*scotch* $P/usr/include/scotch
+      install include/*esmumps* $P/usr/include/scotch
     fi
   done
 ######################################################################

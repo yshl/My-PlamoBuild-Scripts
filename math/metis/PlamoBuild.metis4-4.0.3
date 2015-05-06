@@ -5,7 +5,7 @@ pkgbase=metis4
 vers=4.0.3
 arch=x86_64
 # arch=i586
-build=P3
+build=P4
 src=metis-4.0.3
 OPT_CONFIG=''
 DOCS='INSTALL LICENSE'
@@ -15,6 +15,7 @@ compress=txz
 metisdir="/usr/metis"
 staticlib="libmetis.a"
 sharedlib="libmetis.so"
+soname="libmetis.so.4"
 programs="pmetis kmetis oemetis onmetis partnmesh partdmesh mesh2nodal mesh2dual graphchk"
 manual="Doc/manual.ps"
 ##############################################################
@@ -197,7 +198,9 @@ if [ $opt_package -eq 1 ] ; then
     # lib
     mkdir -p $P/usr/${libdir}
     install $staticlib $P/$metisdir/
-    install $sharedlib $P/$metisdir/$sharedlib.$vers
+    install $soname $P/$metisdir/$soname
+    ln -s $metisdir/$soname $P/$metisdir/$sharedlib
+    ln -s $metisdir/$soname $P/usr/${libdir}/$soname
     # header
     mkdir -p $P/$metisdir/Lib
     install -m 644 Lib/*.h $P/$metisdir/Lib/

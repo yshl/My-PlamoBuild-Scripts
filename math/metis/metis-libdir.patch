@@ -1,7 +1,14 @@
 diff -ur metis-5.1.0/libmetis/CMakeLists.txt build/libmetis/CMakeLists.txt
 --- metis-5.1.0/libmetis/CMakeLists.txt	2013-03-31 01:24:45.000000000 +0900
-+++ build/libmetis/CMakeLists.txt	2015-05-05 02:24:09.150049368 +0900
-@@ -10,7 +10,7 @@
++++ build/libmetis/CMakeLists.txt	2015-05-06 09:25:44.688378156 +0900
+@@ -4,13 +4,14 @@
+ file(GLOB metis_sources *.c)
+ # Build libmetis.
+ add_library(metis ${METIS_LIBRARY_TYPE} ${GKlib_sources} ${metis_sources})
++set_target_properties(metis PROPERTIES VERSION 5.1.0 SOVERSION 5)
+ if(UNIX)
+   target_link_libraries(metis m)
+ endif()
  
  if(METIS_INSTALL)
    install(TARGETS metis

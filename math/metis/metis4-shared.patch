@@ -1,6 +1,6 @@
 diff -ur metis-4.0.3/Lib/Makefile build/Lib/Makefile
 --- metis-4.0.3/Lib/Makefile	2006-08-31 21:22:01.000000000 +0900
-+++ build/Lib/Makefile	2015-05-06 06:23:56.643712764 +0900
++++ build/Lib/Makefile	2015-05-06 08:29:14.210570302 +0900
 @@ -2,9 +2,10 @@
  
  INCLUDES = -I.
@@ -13,12 +13,14 @@ diff -ur metis-4.0.3/Lib/Makefile build/Lib/Makefile
  
  OBJS = coarsen.o fm.o initpart.o match.o ccgraph.o memory.o \
         pmetis.o pqueue.o refine.o util.o timing.o debug.o \
-@@ -24,6 +25,9 @@
+@@ -24,6 +25,11 @@
  	$(AR) $@ $(OBJS)
  	$(RANLIB) $@
  
++SONAME=libmetis.so.4
 +../libmetis.so: $(OBJS)
-+	$(CC) -fPIC -shared -o $@ $(OBJS) -lm
++	$(CC) -fPIC -shared -Wl,-soname=$(SONAME) -o ../$(SONAME) $(OBJS) -lm
++	ln -sf $(SONAME) $@
 +
  clean:
  	rm -f *.o

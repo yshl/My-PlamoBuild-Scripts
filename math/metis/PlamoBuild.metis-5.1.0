@@ -5,7 +5,7 @@ pkgbase=metis
 vers=5.1.0
 arch=x86_64
 # arch=i586
-build=P2
+build=P3
 src=metis-5.1.0
 OPT_CONFIG='-DCMAKE_INSTALL_PREFIX=/usr -DSHARED=ON -DGKLIB_PATH=GKlib -DOPENMP=ON -DPCRE=ON'
 DOCS='BUILD-Windows.txt BUILD.txt Changelog Install.txt LICENSE.txt'

@@ -1,0 +1,12 @@
+diff -ur dmd2/src/dmd/posix.mak build/src/dmd/posix.mak
+--- dmd2/src/dmd/posix.mak	2015-04-25 12:20:26.000000000 +0900
++++ build/src/dmd/posix.mak	2015-05-06 18:33:25.909960892 +0900
+@@ -400,7 +400,7 @@
+ 	$(eval bin_dir=$(if $(filter $(OS),osx), bin, bin$(MODEL)))
+ 	mkdir -p $(INSTALL_DIR)/$(OS)/$(bin_dir)
+ 	cp dmd $(INSTALL_DIR)/$(OS)/$(bin_dir)/dmd
+-	cp ../ini/$(OS)/$(bin_dir)/dmd.conf $(INSTALL_DIR)/$(OS)/$(bin_dir)/dmd.conf
++	cp dmd.conf $(INSTALL_DIR)/$(OS)/$(bin_dir)/dmd.conf
+ 	cp backendlicense.txt $(INSTALL_DIR)/dmd-backendlicense.txt
+ 	cp boostlicense.txt $(INSTALL_DIR)/dmd-boostlicense.txt
+ 

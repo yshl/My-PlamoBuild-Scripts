@@ -9,7 +9,7 @@ diff -ur MUMPS_5.0.0/Make.inc/Makefile.inc.generic build/Make.inc/Makefile.inc.g
 -#ISCOTCH    = -I$(SCOTCHDIR)/include 
 +SCOTCHDIR  = /usr
 +ISCOTCH    = -I$(SCOTCHDIR)/include/scotch
-+LSCOTCH    = $(SCOTCHDIR)/lib
++LSCOTCHDIR = $(SCOTCHDIR)/lib
  # You have to choose one among the following two lines depending on
  # the type of analysis you want to perform. If you want to perform only
  # sequential analysis choose the first (remember to add -Dscotch in the ORDERINGSF
@@ -18,7 +18,7 @@ diff -ur MUMPS_5.0.0/Make.inc/Makefile.inc.generic build/Make.inc/Makefile.inc.g
  
  #LSCOTCH    = -L$(SCOTCHDIR)/lib -lesmumps -lscotch -lscotcherr
 -#LSCOTCH    = -L$(SCOTCHDIR)/lib -lptesmumps -lptscotch -lptscotcherr -lscotch
-+LSCOTCH    = -L$(LSCOTCH) -lptesmumps -lptscotch -lptscotcherr -lscotch
++LSCOTCH    = -L$(LSCOTCHDIR) -lptesmumps -lptscotch -lptscotcherr -lscotch
  
  
  LPORDDIR = $(topdir)/PORD/lib/
@@ -106,7 +106,7 @@ diff -ur MUMPS_5.0.0/Make.inc/Makefile.inc.generic.SEQ build/Make.inc/Makefile.i
 -#ISCOTCH    = -I$(SCOTCHDIR)/include 
 +SCOTCHDIR  = /usr
 +ISCOTCH    = -I$(SCOTCHDIR)/include/scotch
-+LSCOTCH    = $(SCOTCHDIR)/lib
++LSCOTCHDIR = $(SCOTCHDIR)/lib
  # You have to choose one among the following two lines depending on
  # the type of analysis you want to perform. If you want to perform only
  # sequential analysis choose the first (remember to add -Dscotch in the ORDERINGSF
@@ -114,7 +114,7 @@ diff -ur MUMPS_5.0.0/Make.inc/Makefile.inc.generic.SEQ build/Make.inc/Makefile.i
  # line (remember to add -Dptscotch in the ORDERINGSF variable below)
  
 -#LSCOTCH    = -L$(SCOTCHDIR)/lib -lesmumps -lscotch -lscotcherr
-+LSCOTCH    = -L$(LSCOTCH) -lesmumps -lscotch -lscotcherr
++LSCOTCH    = -L$(LSCOTCHDIR) -lesmumps -lscotch -lscotcherr
  #LSCOTCH    = -L$(SCOTCHDIR)/lib -lptesmumps -lptscotch -lptscotcherr -lscotch
  
  

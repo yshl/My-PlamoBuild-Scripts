@@ -2,7 +2,7 @@
 ##############################################################
 url=''
 pkgbase=chicken_egg_vector
-vers=20130425
+vers=20150506
 arch=x86_64
 # arch=i586
 build=P1
@@ -174,8 +174,14 @@ if [ $opt_build -eq 1 ] ; then
       export LDFLAGS='-Wl,--as-needed'
       make -j3
     fi
-    mkdir -p usr
+    mkdir -p usr/$libdir
+    if [ $libdir != lib ]; then
+      (cd usr && ln -s $libdir lib)
+    fi
     chicken-install -prefix ./usr $packages
+    if [ $libdir != lib ]; then
+      rm usr/lib
+    fi
   done
 fi
 if [ $opt_package -eq 1 ] ; then

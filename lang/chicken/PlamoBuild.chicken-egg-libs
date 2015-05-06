@@ -2,7 +2,7 @@
 ##############################################################
 url=''
 pkgbase=chicken_egg_libs
-vers=20130730
+vers=20150506
 arch=x86_64
 # arch=i586
 build=P1
@@ -197,8 +197,8 @@ if [ $opt_package -eq 1 ] ; then
       export LDFLAGS='-Wl,--as-needed'
       make install DESTDIR=$P
     fi
-    mkdir -p $P/usr
-    cp -r ./usr/* $P/usr/
+    mkdir -p $P/usr/$libdir
+    cp -r ./usr/lib/* $P/usr/$libdir/
   done
 ######################################################################
 # * make install でコピーされないファイルがある場合はここに記述します。

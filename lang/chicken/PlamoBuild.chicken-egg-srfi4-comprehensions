@@ -1,16 +1,16 @@
 #!/bin/sh
 ##############################################################
 url=''
-pkgbase=chicken_egg_coops
+pkgbase=chicken_egg_srfi4_comprehensions
 vers=20150506
 arch=x86_64
 # arch=i586
 build=P1
-src=chicken-egg-coops
+src=chicken-egg-srfi4_comprehensions
 OPT_CONFIG=''
 DOCS=''
 patchfiles=''
-packages="coops"
+packages="srfi-4-comprehensions"
 compress=txz
 ##############################################################
 
@@ -174,8 +174,14 @@ if [ $opt_build -eq 1 ] ; then
       export LDFLAGS='-Wl,--as-needed'
       make -j3
     fi
-    mkdir -p usr
+    mkdir -p usr/$libdir
+    if [ $libdir != lib ]; then
+      (cd usr; ln -s $libdir lib)
+    fi
     chicken-install -prefix ./usr $packages
+    if [ $libdir != lib ]; then
+      rm usr/lib
+    fi
   done
 fi
 if [ $opt_package -eq 1 ] ; then
@@ -197,8 +203,8 @@ if [ $opt_package -eq 1 ] ; then
       export LDFLAGS='-Wl,--as-needed'
       make install DESTDIR=$P
     fi
-    mkdir -p $P/usr/$libdir
-    cp -r ./usr/lib/* $P/usr/$libdir/
+    mkdir -p $P/usr
+    cp -r ./usr/* $P/usr/
   done
 ######################################################################
 # * make install でコピーされないファイルがある場合はここに記述します。

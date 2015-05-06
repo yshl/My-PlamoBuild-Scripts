@@ -1,16 +1,15 @@
 #!/bin/sh
 ##############################################################
-url=''
-pkgbase=chicken_egg_coops
-vers=20150506
+url='http://code.call-cc.org/releases/4.9.0/chicken-4.9.0.1.tar.gz'
+pkgbase=chicken
+vers=4.9.0.1
 arch=x86_64
 # arch=i586
 build=P1
-src=chicken-egg-coops
+src=chicken-4.9.0.1
 OPT_CONFIG=''
-DOCS=''
+DOCS='LICENSE NEWS README'
 patchfiles=''
-packages="coops"
 compress=txz
 ##############################################################
 
@@ -127,7 +126,6 @@ if [ $opt_download -eq 1 ] ; then
     jar) mkdir -p $src; cp -f ${i##*/} $src/ ;;
     esac
   done
-  mkdir -p $src
 fi
 
 if [ $opt_config -eq 1 ] ; then
@@ -172,10 +170,8 @@ if [ $opt_build -eq 1 ] ; then
     cd ${B[$i]}
     if [ -f Makefile ] ; then
       export LDFLAGS='-Wl,--as-needed'
-      make -j3
+      make PLATFORM=linux PREFIX=/usr LIBDIR=/usr/$libdir
     fi
-    mkdir -p usr
-    chicken-install -prefix ./usr $packages
   done
 fi
 if [ $opt_package -eq 1 ] ; then
@@ -195,10 +191,8 @@ if [ $opt_package -eq 1 ] ; then
     done
     if [ -f Makefile ] ; then
       export LDFLAGS='-Wl,--as-needed'
-      make install DESTDIR=$P
+      make install PLATFORM=linux PREFIX=/usr LIBDIR=/usr/$libdir DESTDIR=$P
     fi
-    mkdir -p $P/usr/$libdir
-    cp -r ./usr/lib/* $P/usr/$libdir/
   done
 ######################################################################
 # * make install でコピーされないファイルがある場合はここに記述します。

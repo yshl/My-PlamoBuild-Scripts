@@ -5,9 +5,9 @@ pkgbase=suitesparse
 vers=4.4.4
 arch=x86_64
 # arch=i586
-build=P1
+build=P2
 src=SuiteSparse
-OPT_CONFIG='BLAS=-lsatlas LAPACK=-llapack FFLAGS=-fPIC METIS_PATH=/usr/metis METIS=-lmetis'
+OPT_CONFIG='BLAS=-lsatlas LAPACK=-llapack FFLAGS=-fPIC METIS_PATH=/usr/metis METIS=/usr/metis/libmetis.a'
 DOCS='README.txt'
 patchfiles='use-system-metis-4.4.4.patch suitesparse-shared-4.4.4.patch suitesparse-shared-demo-4.4.4.patch'
 compress=txz

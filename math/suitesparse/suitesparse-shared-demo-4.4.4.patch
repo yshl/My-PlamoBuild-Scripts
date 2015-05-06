@@ -239,7 +239,7 @@ diff -ur SuiteSparse/KLU/Demo/Makefile build/KLU/Demo/Makefile
  
  CHOLMOD_LIB = ../../CHOLMOD/Lib/libcholmod.a
 -CHOLMOD = $(CHOLMOD_LIB) $(LAPACK) $(BLAS) $(XERBLA)
-+CHOLMOD = -Wl,-rpath=../../CHOLMOD/Lib -lcholmod $(LAPACK) $(BLAS) $(XERBLA)
++CHOLMOD = -Wl,-rpath=../../CHOLMOD/Lib -L../../CHOLMOD/Lib -lcholmod $(LAPACK) $(BLAS) $(XERBLA)
  
  ifneq ($(GPU_CONFIG),)
  CHOLMOD += $(CUDART_LIB) $(CUBLAS_LIB) 

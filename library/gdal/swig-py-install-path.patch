@@ -1,0 +1,12 @@
+diff -ur gdal-1.11.2/swig/python/GNUmakefile build/swig/python/GNUmakefile
+--- gdal-1.11.2/swig/python/GNUmakefile	2015-02-10 21:12:08.000000000 +0900
++++ build/swig/python/GNUmakefile	2015-05-09 11:34:12.319011569 +0900
+@@ -68,7 +68,7 @@
+ install:
+ 
+ ifeq ($(PY_HAVE_SETUPTOOLS),1)
+-	$(PYTHON) setup.py install 
++	$(PYTHON) setup.py install --root=$(DESTDIR)
+ else
+ 	$(PYTHON) setup.py install --prefix=$(DESTDIR)$(prefix)
+ endif

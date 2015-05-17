@@ -1,0 +1,12 @@
+diff -ur FTGL/include/FTTextureGlyph.h build32/include/FTTextureGlyph.h
+--- FTGL/include/FTTextureGlyph.h	2004-10-17 09:40:13.000000000 +0900
++++ build32/include/FTTextureGlyph.h	2012-10-14 22:55:32.280441348 +0900
+@@ -52,7 +52,7 @@
+          * Reset the currently active texture to zero to get into a known state before
+          * drawing a string. This is to get round possible threading issues.
+          */
+-        static void FTTextureGlyph::ResetActiveTexture(){ activeTextureID = 0;}
++        static void ResetActiveTexture(){ activeTextureID = 0;}
+         
+     private:
+         /**

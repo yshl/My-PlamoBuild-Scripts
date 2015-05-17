@@ -1,0 +1,12 @@
+diff -ur scilab-5.3.3/modules/shell/src/c/others/zzledt.c build32/modules/shell/src/c/others/zzledt.c
+--- scilab-5.3.3/modules/shell/src/c/others/zzledt.c	2011-07-20 17:16:04.000000000 +0900
++++ build32/modules/shell/src/c/others/zzledt.c	2012-07-01 14:42:20.974458339 +0900
+@@ -246,7 +246,7 @@
+ static char *KS=NULL;            /* enable keypad */
+ static char *KE=NULL;            /* disable keypad */
+ static char *CE=NULL;            /* clear to end of line */
+-char *BC=NULL;            /* backspace */
++extern char *BC;            /* backspace */
+ static char *IM=NULL;            /* start insert mode */
+ static char *IC=NULL;            /* insert character */
+ static char *EI=NULL;            /* end insert mode */

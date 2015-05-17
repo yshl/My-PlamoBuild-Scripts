@@ -1,0 +1,31 @@
+diff -ur libproj4/Makefile build/Makefile
+--- libproj4/Makefile	2008-11-21 02:40:28.000000000 +0900
++++ build/Makefile	2013-08-02 22:59:11.136775942 +0900
+@@ -134,7 +134,7 @@
+ thrf = -DPROJ_HAVE_THREADS=1
+ endif
+ 
+-CFLAGS = -g -O -I./ $(gslf) $(thrf)
++CFLAGS = -g -O2 -fPIC -I./ $(gslf) $(thrf)
+ #CFLAGS = -g -I./ $(gslf) $(thrf)
+ 
+ LDFLAGS = -L./ -lproj4 $(gsll) $(thrl) -lm
+@@ -146,6 +146,10 @@
+ 
+ libproj4: $(RLIB)
+ 	if [ -f /usr/bin/ranlib -o -f /bin/ranlib ] ; then ranlib $L ; fi
++	$(MAKE) libproj4.so
++
++libproj4.so: $(RLIB)
++	$(CC) -fPIC -shared -o $@ *.o $(gsll) $(thrl)
+ 
+ $(RLIB): lib_proj.h
+ 
+@@ -155,6 +159,7 @@
+ 
+ install:
+ 	install -D libproj4.a $(LIB)/libproj4.a
++	install -D libproj4.so $(LIB)/libproj4.so
+ 	install -D lproj $(BIN)/lproj
+ 	install -D lib_proj.h $(INC)/lib_proj.h
+ 

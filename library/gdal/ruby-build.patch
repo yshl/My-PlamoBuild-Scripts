@@ -1,0 +1,16 @@
+diff -ur gdal-1.11.2/swig/ruby/RubyMakefile.mk build/swig/ruby/RubyMakefile.mk
+--- gdal-1.11.2/swig/ruby/RubyMakefile.mk	2015-02-10 21:12:08.000000000 +0900
++++ build/swig/ruby/RubyMakefile.mk	2015-05-09 12:40:13.050580581 +0900
+@@ -70,9 +70,12 @@
+ 
+ %.o: %.cpp
+ 	$(CXX) $(CFLAGS) $(GDAL_INCLUDE) $(RUBY_INCLUDE)  -c $<
++	ln .libs/$@ $@
+ 
+ %.o: %.cxx
+ 	$(CXX) $(CFLAGS) $(GDAL_INCLUDE) $(RUBY_INCLUDE) -c $<
++	ln .libs/$@ $@
+ 
+ %.o: %.c
+ 	$(CC) $(CFLAGS) $(GDAL_INCLUDE)  $(RUBY_INCLUDE) -c $<
++	ln .libs/$@ $@

@@ -1,0 +1,12 @@
+diff -ur libdnet-libdnet-1.12/src/Makefile.in build/src/Makefile.in
+--- libdnet-libdnet-1.12/src/Makefile.in	2007-01-20 21:30:22.000000000 +0900
++++ build/src/Makefile.in	2016-01-17 17:51:40.468225112 +0900
+@@ -109,7 +109,7 @@
+ 
+ libdnet_la_LIBADD = @LTLIBOBJS@
+ 
+-libdnet_la_LDFLAGS = -version-info 1:1:0
++libdnet_la_LDFLAGS = -shrext ".so" -version-info 1:1:0
+ subdir = src
+ mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
+ CONFIG_HEADER = $(top_builddir)/include/config.h

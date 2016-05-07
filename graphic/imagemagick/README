@@ -1,1 +1,6 @@
+* ImageMagick 6.9.3-10
+/usr にインストールします。GraphicsMagick と衝突するものは /opt/imagemagick/bin にインストールします。
+* ImageMagick 6.9.3-7
+/usr/local にインストールします。
+* ImageMagick 6.8.9-5, 6.9.1-10
 /opt/imagemagick にインストールします。

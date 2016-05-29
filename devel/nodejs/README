@@ -1,0 +1,2 @@
+configure のオプションで libuv はインストール済みの物を使用するようにしています。
+libuv をインストールしていない場合は OPT_CONFIG から --shared-libuv を除外してください。
